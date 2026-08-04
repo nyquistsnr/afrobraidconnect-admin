@@ -129,16 +129,7 @@ export function LoginForm({
         callbackUrl={callbackUrl}
       />
 
-      <div className="mt-8 space-y-2 text-center text-sm text-muted-foreground">
-        <p>
-          {dict.noAccount}{" "}
-          <Link
-            href={`/${lang}/signup`}
-            className="font-medium text-brand hover:underline"
-          >
-            {dict.signUpProfessional}
-          </Link>
-        </p>
+      <div className="mt-8 text-center text-sm text-muted-foreground">
         <p>
           {dict.notVerified}{" "}
           <Link
