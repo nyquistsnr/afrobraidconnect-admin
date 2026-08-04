@@ -25,6 +25,7 @@ export default async function LoginPage({
       lang={lang}
       supportEmail={dict.common.supportEmail}
       heroImageAlt={dict.common.heroImageAlt}
+      heroImagePosition="object-[center_8%]"
       themeLabels={dict.common.theme}
     >
       <LoginForm
