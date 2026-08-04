@@ -45,7 +45,7 @@ export function AuthShell({
       </div>
 
       {/* Right Column - Viewport-fitted hero image */}
-      <div className="relative hidden lg:block lg:w-1/2 bg-[#eae7e4] dark:bg-[#18181b]">
+      <div className="relative hidden lg:block lg:w-1/2 border-l border-border bg-background">
         <Image
           src={heroImageSrc}
           alt={heroImageAlt}
