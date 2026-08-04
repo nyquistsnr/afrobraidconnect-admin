@@ -21,6 +21,7 @@ export default async function ForgotPasswordPage({
       lang={lang}
       supportEmail={dict.common.supportEmail}
       heroImageAlt={dict.common.heroImageAlt}
+      heroImageSrc="/images/forgot-password-hero.jpg"
       themeLabels={dict.common.theme}
     >
       <ForgotPasswordForm

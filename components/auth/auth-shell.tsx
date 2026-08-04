@@ -8,12 +8,14 @@ export function AuthShell({
   lang,
   supportEmail,
   heroImageAlt,
+  heroImageSrc = "/images/hero.png",
   themeLabels,
   children,
 }: {
   lang: Locale;
   supportEmail: string;
   heroImageAlt: string;
+  heroImageSrc?: string;
   themeLabels: Record<"light" | "dark" | "system", string>;
   children: React.ReactNode;
 }) {
@@ -41,7 +43,7 @@ export function AuthShell({
 
       <div className="relative hidden lg:block lg:w-1/2">
         <Image
-          src="/images/hero.png"
+          src={heroImageSrc}
           alt={heroImageAlt}
           fill
           priority
