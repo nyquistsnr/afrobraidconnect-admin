@@ -14,6 +14,8 @@ const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 declare global {
   interface Window {
+    __googleAccountsInitialized?: boolean;
+    __googleSignInCallback?: (response: { credential: string }) => void;
     google?: {
       accounts: {
         id: {
@@ -90,10 +92,15 @@ export function GoogleSignInButton({
         return;
       }
 
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID as string,
-        callback: (response) => googleSignInMutation.mutate(response.credential),
-      });
+      window.__googleSignInCallback = (response) => googleSignInMutation.mutate(response.credential);
+
+      if (!window.__googleAccountsInitialized) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID as string,
+          callback: (response) => window.__googleSignInCallback?.(response),
+        });
+        window.__googleAccountsInitialized = true;
+      }
 
       google.accounts.id.renderButton(container, {
         size: "large",
