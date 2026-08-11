@@ -106,7 +106,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         try {
           const tokens =
-            typeof token === "string" && token.length > 0
+            typeof token === "string" && token.length > 0 && token !== "undefined"
               ? await authApi.acceptInviteSocial(
                   "google",
                   { token, provider_token: providerToken },

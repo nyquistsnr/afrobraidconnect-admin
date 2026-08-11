@@ -51,7 +51,10 @@ export function GoogleSignInButton({
 
   const googleSignInMutation = useMutation({
     mutationFn: async (providerToken: string) => {
-      const result = await signIn("google", { providerToken, token, lang, redirect: false });
+      const credentials: Record<string, string> = { providerToken, lang };
+      if (token) credentials.token = token;
+      
+      const result = await signIn("google", { ...credentials, redirect: false });
       if (result?.error) {
         throw new Error(result.code ?? result.error);
       }
