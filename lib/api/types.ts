@@ -29,12 +29,18 @@ export interface UserPublic {
   email: string;
   phone_number: string | null;
   user_type: UserType;
+  // Sticky chat-translation preference (lib/api/chat-client.ts) — distinct
+  // from the request/display locale (Accept-Language / ?lang=). Null until
+  // the user explicitly sets it via PATCH /users/me.
+  chat_locale: string | null;
 }
 
 export interface UserProfileUpdateRequest {
   first_name?: string;
   last_name?: string | null;
   phone_number?: string | null;
+  // "" clears it server-side. Omit the field entirely to leave unchanged.
+  chat_locale?: string;
 }
 
 // Returned by verify-email, login, social/{provider}, refresh.
@@ -66,7 +72,7 @@ export interface SignupEmailRequest {
   email: string;
   phone_number?: string;
   password: string;
-  user_type: "CUSTOMER" | "BRAIDER" | "ADMIN";
+  user_type: "CUSTOMER" | "BRAIDER";
 }
 
 export interface VerifyEmailRequest {
@@ -88,7 +94,7 @@ export type SocialProvider = "google" | "facebook" | "tiktok";
 
 export interface SocialLoginRequest {
   provider_token: string;
-  user_type?: "CUSTOMER" | "BRAIDER" | "ADMIN";
+  user_type?: "CUSTOMER" | "BRAIDER";
 }
 
 export interface RefreshTokenRequest {
@@ -271,17 +277,17 @@ export type LocationType = "HOME_STUDIO" | "SALON";
 
 export interface ServiceLocationUpdateRequest {
   location_type?: LocationType | null;
-  salon_name?: string;
-  address_line1?: string;
-  address_line2?: string;
-  city?: string;
-  postal_code?: string;
-  country?: string;
-  latitude?: number;
-  longitude?: number;
+  salon_name?: string | null;
+  address_line1?: string | null;
+  address_line2?: string | null;
+  city?: string | null;
+  postal_code?: string | null;
+  country?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   offers_mobile?: boolean;
-  travel_radius_km?: number;
-  travel_fee?: number;
+  travel_radius_km?: number | null;
+  travel_fee?: number | null;
 }
 
 export interface ServiceLocationResponse {
@@ -496,4 +502,347 @@ export interface BraiderStyleResponse {
   is_active: boolean;
   variations: BraiderStyleVariationResponse[];
   addons: BraiderStyleAddonResponse[];
+}
+
+// ---------------------------------------------------------------------------
+// Braider Bookings
+// ---------------------------------------------------------------------------
+
+export type BookingStatus =
+  | "PENDING_PAYMENT"
+  | "CONFIRMED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "NO_SHOW"
+  | "CANCELLED_BY_CUSTOMER"
+  | "CANCELLED_BY_BRAIDER"
+  | "CANCELLED_NO_PAYMENT"
+  | "EXPIRED"
+  | "DISPUTED";
+
+export type PaymentSchedule = "FULL_UPFRONT" | "DEPOSIT_THEN_BALANCE";
+
+export type PaymentPurpose = "FULL" | "DEPOSIT" | "BALANCE";
+
+export type PaymentStatus = "PENDING" | "SUCCEEDED" | "FAILED" | "CANCELED";
+
+export type BookingItemType =
+  | "SERVICE"
+  | "VARIATION"
+  | "ADDON"
+  | "TRAVEL"
+  | "PLATFORM_FEE"
+  | "VAT_SERVICE"
+  | "VAT_PLATFORM_FEE";
+
+export type Currency = "EUR";
+
+export interface BookingListItemResponse {
+  id: string;
+  reference: string;
+  status: BookingStatus;
+  braider_id: string;
+  braider_name: string;
+  customer_name: string;
+  style_name: string;
+  starts_at: string;
+  ends_at: string;
+  total: string;
+  currency: Currency;
+}
+
+// Note: pagination fields are flat here, not nested under `pagination` like
+// PaginatedData<T> — this endpoint's envelope shape differs from the catalog
+// endpoints.
+export interface BookingListResponse {
+  items: BookingListItemResponse[];
+  page: number;
+  page_size: number;
+  total_items: number;
+  total_pages: number;
+  has_next: boolean;
+  has_previous: boolean;
+}
+
+export interface BookingListParams {
+  status?: BookingStatus;
+  date_from?: string;
+  date_to?: string;
+  search?: string;
+  page?: number;
+  page_size?: number;
+}
+
+export interface BookingLineItemResponse {
+  item_type: BookingItemType;
+  name: string | null;
+  quantity: number;
+  unit_amount: string;
+  line_amount: string;
+  is_required: boolean;
+}
+
+export interface BookingPaymentResponse {
+  purpose: PaymentPurpose;
+  status: PaymentStatus;
+  amount: string;
+  currency: Currency;
+  client_secret?: string | null;
+}
+
+export interface BookingDetailResponse {
+  id: string;
+  reference: string;
+  status: BookingStatus;
+  braider_id: string;
+  braider_name: string;
+  customer_name: string;
+  style_id: string;
+  style_name: string;
+  duration_minutes: number;
+  is_mobile: boolean;
+  client_address: string | null;
+  client_latitude: string | null;
+  client_longitude: string | null;
+  country: string;
+  currency: Currency;
+  starts_at: string;
+  ends_at: string;
+  items: BookingLineItemResponse[];
+  service_subtotal: string;
+  travel_fee: string;
+  subtotal: string;
+  platform_fee: string;
+  vat_on_service: string;
+  vat_on_platform_fee: string;
+  vat_total: string;
+  total: string;
+  deposit_amount: string;
+  balance_amount: string;
+  payment_schedule: PaymentSchedule;
+  cancellation_cutoff_at: string;
+  payments: BookingPaymentResponse[];
+  created_at: string;
+}
+
+// ---------------------------------------------------------------------------
+// Braider Stats & Payments
+// ---------------------------------------------------------------------------
+
+export interface BookingStatsResponse {
+  total_bookings: number;
+  completed: number;
+  declined: number;
+  upcoming: number;
+}
+
+export interface TimeseriesPoint {
+  bucket: string;
+  counts: Partial<Record<BookingStatus, number>>;
+}
+
+export interface BookingTimeseriesResponse {
+  interval: "day" | "week" | "month";
+  statuses: BookingStatus[];
+  points: TimeseriesPoint[];
+}
+
+export interface PaymentStatsResponse {
+  total_received: string;
+  total_refunded: string;
+  net_revenue: string;
+  pending: string;
+  currency: Currency;
+}
+
+export interface PaymentListItemResponse {
+  id: string;
+  booking_id: string;
+  booking_reference: string;
+  purpose: PaymentPurpose;
+  status: PaymentStatus;
+  amount: string;
+  amount_refunded: string;
+  is_refunded: boolean;
+  currency: Currency;
+  created_at: string;
+}
+
+export interface PaymentListResponse {
+  items: PaymentListItemResponse[];
+  page: number;
+  page_size: number;
+  total_items: number;
+  total_pages: number;
+  has_next: boolean;
+  has_previous: boolean;
+}
+
+// ---------------------------------------------------------------------------
+// Chat & Notifications
+// ---------------------------------------------------------------------------
+
+export interface ChatThread {
+  id: string;
+  booking_id: string;
+  other_participant_id: string;
+  other_participant_name: string;
+  last_message_at: string | null;
+  last_message_preview: string | null;
+  last_message_flagged: boolean;
+  unread_count: number;
+  created_at: string;
+}
+
+export type ChatMessageStatus = "SENT" | "FLAGGED";
+
+export interface ChatMessage {
+  id: string;
+  thread_id: string;
+  sender_id: string;
+  status: ChatMessageStatus;
+  // Always null when status is FLAGGED — the platform never stores the
+  // plaintext of a message that looks like it shares contact/payment info.
+  body: string | null;
+  body_locale: string | null;
+  translated_body: string | null;
+  translated_locale: string | null;
+  violation_notice: string | null;
+  created_at: string;
+}
+
+export interface SendChatMessageRequest {
+  body: string;
+}
+
+export type ChatReportReason =
+  | "HARASSMENT"
+  | "INAPPROPRIATE_CONTENT"
+  | "SPAM"
+  | "SCAM_OR_FRAUD"
+  | "OFF_PLATFORM_SOLICITATION"
+  | "OTHER";
+
+export interface ChatReportRequest {
+  reason: ChatReportReason;
+  details?: string | null;
+  message_id?: string | null;
+}
+
+export interface ChatReportResponse {
+  id: string;
+  thread_id: string;
+  reported_user_id: string;
+  reason: ChatReportReason;
+  status: "OPEN" | "UNDER_REVIEW" | "RESOLVED" | "DISMISSED";
+  created_at: string;
+}
+
+export type NotificationType = "CHAT_NEW_MESSAGE" | "CHAT_MESSAGE_FLAGGED";
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  related_type: string | null;
+  related_id: string | null;
+  is_read: boolean;
+  read_at: string | null;
+  created_at: string;
+}
+
+export interface NotificationListParams {
+  is_read?: boolean;
+  date_from?: string;
+  date_to?: string;
+  page?: number;
+  page_size?: number;
+}
+
+// ---------------------------------------------------------------------------
+// Realtime (WebSocket) event payloads
+// ---------------------------------------------------------------------------
+
+export interface RealtimeChatMessageEvent {
+  type: "chat_message";
+  thread_id: string;
+  message: ChatMessage;
+}
+
+export interface RealtimeChatMessageTranslatedEvent {
+  type: "chat_message_translated";
+  thread_id: string;
+  message_id: string;
+  translated_body: string;
+  translated_locale: string;
+}
+
+export interface RealtimeNotificationEvent {
+  type: "notification";
+  notification: Notification;
+}
+
+export type RealtimeEvent =
+  | RealtimeChatMessageEvent
+  | RealtimeChatMessageTranslatedEvent
+  | RealtimeNotificationEvent;
+
+// ---------------------------------------------------------------------------
+// Braider Dashboard
+// ---------------------------------------------------------------------------
+
+export interface DashboardOverviewResponse {
+  total_bookings: number;
+  completed_bookings: number;
+  upcoming_bookings: number;
+  cancelled_bookings: number;
+  no_show_bookings: number;
+  completion_rate: string;
+  cancellation_rate: string;
+  total_revenue: string;
+  average_booking_value: string;
+  unique_customers: number;
+  repeat_customers: number;
+  repeat_customer_rate: string;
+  average_rating: string;
+  rating_count: number;
+  currency: Currency;
+}
+
+export interface DashboardRevenueTimeseriesPoint {
+  bucket: string;
+  revenue: string;
+  bookings_count: number;
+}
+
+export interface DashboardRevenueTimeseriesResponse {
+  interval: "day" | "week" | "month";
+  currency: Currency;
+  points: DashboardRevenueTimeseriesPoint[];
+}
+
+export interface DashboardBusiestDaysPoint {
+  weekday: number;
+  bookings_count: number;
+  revenue: string;
+}
+
+export interface DashboardBookingsByWeekdayResponse {
+  currency: Currency;
+  points: DashboardBusiestDaysPoint[];
+}
+
+export interface DashboardStyleSlice {
+  style_id: string | null;
+  style_name: string;
+  bookings_count: number;
+  revenue: string;
+  revenue_share: string;
+}
+
+export interface DashboardStyleBreakdownResponse {
+  currency: Currency;
+  total_revenue: string;
+  slices: DashboardStyleSlice[];
 }

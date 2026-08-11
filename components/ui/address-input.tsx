@@ -18,22 +18,13 @@ export interface AddressInputProps extends Omit<InputProps, "onChange" | "value"
 
 export function AddressInput({ countryCode, onAddressSelected, defaultValue = "", ...props }: AddressInputProps) {
   const [inputValue, setInputValue] = useState(defaultValue);
-  const [predictions, setPredictions] = useState<google.maps.places.AutocompletePrediction[]>([]);
+  const [predictions, setPredictions] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const places = useMapsLibrary("places");
-  const [autocompleteService, setAutocompleteService] = useState<google.maps.places.AutocompleteService | null>(null);
-  const [placesService, setPlacesService] = useState<google.maps.places.PlacesService | null>(null);
-
-  useEffect(() => {
-    if (!places) return;
-    setAutocompleteService(new places.AutocompleteService());
-    const el = document.createElement("div");
-    setPlacesService(new places.PlacesService(el));
-  }, [places]);
 
   useEffect(() => {
     if (!open) return;
@@ -47,91 +38,94 @@ export function AddressInput({ countryCode, onAddressSelected, defaultValue = ""
   }, [open]);
 
   useEffect(() => {
-    if (!autocompleteService || !inputValue.trim()) {
+    if (!places || !inputValue.trim()) {
       setPredictions([]);
       return;
     }
 
     if (!open) return;
 
-    const request: google.maps.places.AutocompletionRequest = {
-      input: inputValue,
-    };
-    
-    if (countryCode) {
-      request.componentRestrictions = { country: countryCode.toLowerCase() };
-    }
+    const fetchSuggestions = async () => {
+      const request: any = {
+        input: inputValue,
+      };
+      
+      if (countryCode) {
+        request.includedRegionCodes = [countryCode.toLowerCase()];
+      }
 
-    autocompleteService.getPlacePredictions(request, (results, status) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-        setPredictions(results);
-      } else {
+      try {
+        const { suggestions } = await places.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+        setPredictions(suggestions || []);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
         setPredictions([]);
       }
-    });
-  }, [inputValue, autocompleteService, countryCode, open]);
+    };
+
+    fetchSuggestions();
+  }, [inputValue, places, countryCode, open]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
     setOpen(true);
   }
 
-  function handleSelect(prediction: google.maps.places.AutocompletePrediction) {
-    if (!placesService) return;
+  async function handleSelect(suggestion: any) {
+    if (!places) return;
 
-    const selectedText = prediction.description;
+    const selectedText = suggestion.placePrediction?.text?.text || suggestion.placePrediction?.mainText?.text || "";
     setInputValue(selectedText);
     setOpen(false);
 
-    placesService.getDetails(
-      {
-        placeId: prediction.place_id,
-        fields: ["geometry", "name", "formatted_address", "address_components"],
-      },
-      (place, status) => {
-        if (status === google.maps.places.PlacesServiceStatus.OK && place) {
-          if (!place.geometry || !place.geometry.location) return;
+    try {
+      const place = suggestion.placePrediction.toPlace();
+      await place.fetchFields({
+        fields: ["location", "displayName", "formattedAddress", "addressComponents"],
+      });
 
-          const lat = place.geometry.location.lat();
-          const lng = place.geometry.location.lng();
+      if (!place.location) return;
 
-          let streetName = "";
-          let streetNumber = "";
-          let city = "";
-          let postalCode = "";
+      const lat = place.location.lat();
+      const lng = place.location.lng();
 
-          for (const component of place.address_components || []) {
-            const types = component.types;
-            if (types.includes("street_number")) {
-              streetNumber = component.long_name;
-            } else if (types.includes("route")) {
-              streetName = component.long_name;
-            } else if (
-              types.includes("locality") ||
-              types.includes("postal_town") ||
-              types.includes("administrative_area_level_2")
-            ) {
-              if (!city) city = component.long_name;
-            } else if (types.includes("postal_code") || types.includes("postal_code_prefix")) {
-              postalCode = component.long_name;
-            }
-          }
+      let streetName = "";
+      let streetNumber = "";
+      let city = "";
+      let postalCode = "";
 
-          const line1 = `${streetName} ${streetNumber}`.trim();
-          const finalLine1 = line1 || place.name || "";
-          
-          setInputValue(finalLine1);
-
-          onAddressSelected({
-            line1: finalLine1,
-            city,
-            postalCode,
-            lat,
-            lng,
-          });
+      for (const component of place.addressComponents || []) {
+        const types = component.types;
+        if (types.includes("street_number")) {
+          streetNumber = component.longText;
+        } else if (types.includes("route")) {
+          streetName = component.longText;
+        } else if (
+          types.includes("locality") ||
+          types.includes("postal_town") ||
+          types.includes("administrative_area_level_2")
+        ) {
+          if (!city) city = component.longText;
+        } else if (types.includes("postal_code") || types.includes("postal_code_prefix")) {
+          postalCode = component.longText;
         }
       }
-    );
+
+      const line1 = `${streetName} ${streetNumber}`.trim();
+      const finalLine1 = line1 || place.displayName || "";
+      
+      setInputValue(finalLine1);
+
+      onAddressSelected({
+        line1: finalLine1,
+        city,
+        postalCode,
+        lat,
+        lng,
+      });
+    } catch (error) {
+      console.error("Error fetching place details:", error);
+    }
   }
 
   return (
@@ -145,18 +139,18 @@ export function AddressInput({ countryCode, onAddressSelected, defaultValue = ""
       />
       {open && predictions.length > 0 && (
         <ul className="absolute left-0 right-0 top-full z-50 mt-1 max-h-60 overflow-y-auto rounded-xl border border-border bg-surface py-2 shadow-lg [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          {predictions.map((p) => (
-            <li key={p.place_id}>
+          {predictions.map((p, idx) => (
+            <li key={p.placePrediction?.placeId || idx}>
               <button
                 type="button"
                 className="w-full px-4 py-2.5 text-left transition-colors hover:bg-muted"
                 onClick={() => handleSelect(p)}
               >
                 <div className="text-sm font-medium text-foreground">
-                  {p.structured_formatting.main_text}
+                  {p.placePrediction?.mainText?.text}
                 </div>
                 <div className="text-xs text-muted-foreground mt-0.5">
-                  {p.structured_formatting.secondary_text}
+                  {p.placePrediction?.secondaryText?.text}
                 </div>
               </button>
             </li>

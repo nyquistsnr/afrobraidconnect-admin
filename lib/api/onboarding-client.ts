@@ -2,7 +2,6 @@
 // all require the session's accessToken, passed in explicitly by the caller
 // (this module has no access to next-auth's session on its own).
 import type {
-  ApiEnvelope,
   BraiderStyleCreateRequest,
   BraiderStyleResponse,
   BraiderStyleUpdateRequest,
@@ -35,75 +34,37 @@ import type {
   WeeklyWindowUpdateRequest,
   AvailabilityExceptionResponse,
   AvailabilityExceptionCreateRequest,
-  AvailableSlotResponse,
   AccountLinkResponse,
   DashboardLinkResponse,
   PaymentSetupStatusResponse,
 } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
-import { ApiError } from "@/lib/api/auth-client";
+import { apiFetch, ApiError } from "@/lib/api/http";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
 const ONBOARDING_PATH = "/braiders/onboarding";
 
 interface RequestOptions {
   method?: "GET" | "PUT" | "POST" | "DELETE" | "PATCH";
   body?: unknown;
   accessToken: string;
-  // Only relevant for the business-info PUT — bio is saved to the caller's
-  // locale server-side, defaulting to "en" if omitted.
-  lang?: Locale;
+  lang: Locale;
 }
 
-async function request<TRes>(
+function request<TRes>(
   path: string,
-  { method = "GET", body, accessToken, lang }: RequestOptions
+  { method, body, accessToken, lang }: RequestOptions
 ): Promise<TRes> {
-  if (!API_BASE) {
-    throw new ApiError(
-      "API_BASE_NOT_CONFIGURED",
-      "NEXT_PUBLIC_API_BASE_URL is not set.",
-      500
-    );
-  }
-
-  const headers: Record<string, string> = {
-    Authorization: `Bearer ${accessToken}`,
-  };
-  if (body !== undefined) headers["Content-Type"] = "application/json";
-  if (lang) headers["Accept-Language"] = lang;
-
-  let res: Response;
-  try {
-    res = await fetch(`${API_BASE}${ONBOARDING_PATH}${path}`, {
-      method,
-      headers,
-      body: body !== undefined ? JSON.stringify(body) : undefined,
-    });
-  } catch {
-    throw new ApiError("NETWORK_ERROR", "Could not reach the server.", 0);
-  }
-
-  if (res.status === 204) {
-    return null as unknown as TRes;
-  }
-
-  const json: ApiEnvelope<TRes> = await res.json();
-
-  if (json.status === "error" || !json.data) {
-    const error = json.error ?? {
-      code: "UNKNOWN_ERROR",
-      message: "Something went wrong.",
-    };
-    throw new ApiError(error.code, error.message, res.status, error.details);
-  }
-
-  return json.data;
+  return apiFetch<TRes>(`${ONBOARDING_PATH}${path}`, {
+    method,
+    body,
+    accessToken,
+    lang,
+  });
 }
 
 export const onboardingApi = {
-  getBusinessInfo: (accessToken: string) =>
-    request<BusinessInfoResponse>("/business-info", { accessToken }),
+  getBusinessInfo: (accessToken: string, lang: Locale) =>
+    request<BusinessInfoResponse>("/business-info", { accessToken, lang }),
 
   updateBusinessInfo: (
     accessToken: string,
@@ -117,21 +78,28 @@ export const onboardingApi = {
       lang,
     }),
 
-  getLogoUploadUrl: (accessToken: string, body: LogoUploadUrlRequest) =>
+  getLogoUploadUrl: (
+    accessToken: string,
+    body: LogoUploadUrlRequest,
+    lang: Locale
+  ) =>
     request<LogoUploadUrlResponse>("/business-info/logo/upload-url", {
       method: "POST",
       body,
       accessToken,
+      lang,
     }),
 
-  confirmLogo: (accessToken: string, body: LogoConfirmRequest) =>
+  confirmLogo: (accessToken: string, body: LogoConfirmRequest, lang: Locale) =>
     request<BusinessInfoResponse>("/business-info/logo/confirm", {
       method: "POST",
       body,
       accessToken,
+      lang,
     }),
 
-  // Raw presigned-URL PUT — S3, not our API, so no envelope and no auth header.
+  // Raw presigned-URL PUT — S3, not our API, so no envelope, no auth header,
+  // and no Accept-Language (there's no localized content in an S3 PUT).
   uploadLogoFile: async (uploadUrl: string, file: File) => {
     let res: Response;
     try {
@@ -153,78 +121,106 @@ export const onboardingApi = {
     }
   },
 
-  sendPhoneCode: (accessToken: string, body: SendCodeRequest) =>
+  sendPhoneCode: (accessToken: string, body: SendCodeRequest, lang: Locale) =>
     request<SendCodeResponse>("/phone-verification/send-code", {
       method: "POST",
       body,
       accessToken,
+      lang,
     }),
 
-  verifyPhoneCode: (accessToken: string, body: VerifyCodeRequest) =>
+  verifyPhoneCode: (accessToken: string, body: VerifyCodeRequest, lang: Locale) =>
     request<VerifyCodeResponse>("/phone-verification/verify-code", {
       method: "POST",
       body,
       accessToken,
+      lang,
     }),
 
-  getPhoneVerificationStatus: (accessToken: string) =>
+  getPhoneVerificationStatus: (accessToken: string, lang: Locale) =>
     request<PhoneVerificationStatusResponse>("/phone-verification/status", {
       accessToken,
+      lang,
     }),
 
-  getStatus: (accessToken: string) =>
-    request<OnboardingStatusResponse>("/status", { accessToken }),
+  getStatus: (accessToken: string, lang: Locale) =>
+    request<OnboardingStatusResponse>("/status", { accessToken, lang }),
 
-  startVeriffSession: (accessToken: string) =>
+  startVeriffSession: (accessToken: string, lang: Locale) =>
     request<StartVerificationResponse>("/veriff/session", {
       method: "POST",
       accessToken,
+      lang,
     }),
 
-  getVeriffStatus: (accessToken: string) =>
-    request<VeriffStatusResponse>("/veriff/status", { accessToken }),
+  getVeriffStatus: (accessToken: string, lang: Locale) =>
+    request<VeriffStatusResponse>("/veriff/status", { accessToken, lang }),
 
-  refreshVeriffStatus: (accessToken: string) =>
+  refreshVeriffStatus: (accessToken: string, lang: Locale) =>
     request<VeriffStatusResponse>("/veriff/refresh", {
       method: "POST",
       accessToken,
+      lang,
     }),
 
-  getServices: (accessToken: string, page = 1, pageSize = 20) =>
+  getServices: (accessToken: string, lang: Locale, page = 1, pageSize = 20) =>
     request<PaginatedData<BraiderStyleResponse>>(
       `/services?page=${page}&page_size=${pageSize}`,
-      { accessToken }
+      { accessToken, lang }
     ),
 
-  addService: (accessToken: string, body: BraiderStyleCreateRequest) =>
+  addService: (
+    accessToken: string,
+    body: BraiderStyleCreateRequest,
+    lang: Locale
+  ) =>
     request<BraiderStyleResponse>("/services", {
       method: "POST",
       body,
       accessToken,
+      lang,
     }),
 
   updateService: (
     accessToken: string,
     braiderStyleId: string,
-    body: BraiderStyleUpdateRequest
+    body: BraiderStyleUpdateRequest,
+    lang: Locale
   ) =>
     request<BraiderStyleResponse>(`/services/${braiderStyleId}`, {
       method: "PUT",
       body,
       accessToken,
+      lang,
     }),
 
-  getPortfolio: (accessToken: string) =>
-    request<PortfolioResponse>("/portfolio", { accessToken }),
+  deleteService: (accessToken: string, braiderStyleId: string, lang: Locale) =>
+    request<void>(`/services/${braiderStyleId}`, {
+      method: "DELETE",
+      accessToken,
+      lang,
+    }),
 
-  getPortfolioUploadUrl: (accessToken: string, body: PortfolioImageUploadUrlRequest) =>
+  getPortfolio: (accessToken: string, lang: Locale) =>
+    request<PortfolioResponse>("/portfolio", { accessToken, lang }),
+
+  getPortfolioUploadUrl: (
+    accessToken: string,
+    body: PortfolioImageUploadUrlRequest,
+    lang: Locale
+  ) =>
     request<PortfolioImageUploadUrlResponse>("/portfolio/upload-url", {
       method: "POST",
       body,
       accessToken,
+      lang,
     }),
 
-  confirmPortfolioImage: (accessToken: string, body: PortfolioImageConfirmRequest, lang?: Locale) =>
+  confirmPortfolioImage: (
+    accessToken: string,
+    body: PortfolioImageConfirmRequest,
+    lang: Locale
+  ) =>
     request<PortfolioImageResponse>("/portfolio/confirm", {
       method: "POST",
       body,
@@ -232,7 +228,12 @@ export const onboardingApi = {
       lang,
     }),
 
-  updatePortfolioImage: (accessToken: string, imageId: string, body: PortfolioImageUpdateRequest, lang?: Locale) =>
+  updatePortfolioImage: (
+    accessToken: string,
+    imageId: string,
+    body: PortfolioImageUpdateRequest,
+    lang: Locale
+  ) =>
     request<PortfolioImageResponse>(`/portfolio/${imageId}`, {
       method: "PUT",
       body,
@@ -240,12 +241,14 @@ export const onboardingApi = {
       lang,
     }),
 
-  deletePortfolioImage: (accessToken: string, imageId: string) =>
+  deletePortfolioImage: (accessToken: string, imageId: string, lang: Locale) =>
     request<void>(`/portfolio/${imageId}`, {
       method: "DELETE",
       accessToken,
+      lang,
     }),
 
+  // Raw presigned-URL PUT — S3, not our API; see uploadLogoFile above.
   uploadPortfolioFile: async (uploadUrl: string, file: File) => {
     let res: Response;
     try {
@@ -267,68 +270,87 @@ export const onboardingApi = {
     }
   },
 
-  getServiceLocation: (accessToken: string) =>
-    request<ServiceLocationResponse>("/service-location", { accessToken }),
+  getServiceLocation: (accessToken: string, lang: Locale) =>
+    request<ServiceLocationResponse>("/service-location", {
+      accessToken,
+      lang,
+    }),
 
-  updateServiceLocation: (accessToken: string, body: ServiceLocationUpdateRequest) =>
+  updateServiceLocation: (
+    accessToken: string,
+    body: ServiceLocationUpdateRequest,
+    lang: Locale
+  ) =>
     request<ServiceLocationResponse>("/service-location", {
       method: "PUT",
       body,
       accessToken,
+      lang,
     }),
+
   // -------------------------------------------------------------------------
   // Availability
   // -------------------------------------------------------------------------
 
-  getAvailabilitySettings: (accessToken: string) =>
+  getAvailabilitySettings: (accessToken: string, lang: Locale) =>
     request<AvailabilitySettingsResponse>("/availability/settings", {
       accessToken,
+      lang,
     }),
 
   updateAvailabilitySettings: (
     accessToken: string,
-    body: AvailabilitySettingsUpdateRequest
+    body: AvailabilitySettingsUpdateRequest,
+    lang: Locale
   ) =>
     request<AvailabilitySettingsResponse>("/availability/settings", {
       method: "PUT",
       body,
       accessToken,
+      lang,
     }),
 
-  getWeeklyWindows: (accessToken: string) =>
+  getWeeklyWindows: (accessToken: string, lang: Locale) =>
     request<WeeklyWindowResponse[]>("/availability/weekly-windows", {
       accessToken,
+      lang,
     }),
 
   createWeeklyWindow: (
     accessToken: string,
-    body: WeeklyWindowCreateRequest
+    body: WeeklyWindowCreateRequest,
+    lang: Locale
   ) =>
     request<WeeklyWindowResponse>("/availability/weekly-windows", {
       method: "POST",
       body,
       accessToken,
+      lang,
     }),
 
   updateWeeklyWindow: (
     accessToken: string,
     windowId: string,
-    body: WeeklyWindowUpdateRequest
+    body: WeeklyWindowUpdateRequest,
+    lang: Locale
   ) =>
     request<WeeklyWindowResponse>(`/availability/weekly-windows/${windowId}`, {
       method: "PATCH", // API docs say PATCH
       body,
       accessToken,
+      lang,
     }),
 
-  deleteWeeklyWindow: (accessToken: string, windowId: string) =>
+  deleteWeeklyWindow: (accessToken: string, windowId: string, lang: Locale) =>
     request<void>(`/availability/weekly-windows/${windowId}`, {
       method: "DELETE",
       accessToken,
+      lang,
     }),
 
   getExceptions: (
     accessToken: string,
+    lang: Locale,
     dateFrom?: string,
     dateTo?: string
   ) => {
@@ -338,50 +360,57 @@ export const onboardingApi = {
     const qs = query.toString() ? `?${query.toString()}` : "";
     return request<AvailabilityExceptionResponse[]>(
       `/availability/exceptions${qs}`,
-      { accessToken }
+      { accessToken, lang }
     );
   },
 
   createException: (
     accessToken: string,
-    body: AvailabilityExceptionCreateRequest
+    body: AvailabilityExceptionCreateRequest,
+    lang: Locale
   ) =>
     request<AvailabilityExceptionResponse>("/availability/exceptions", {
       method: "POST",
       body,
       accessToken,
+      lang,
     }),
 
-  deleteException: (accessToken: string, exceptionId: string) =>
+  deleteException: (accessToken: string, exceptionId: string, lang: Locale) =>
     request<void>(`/availability/exceptions/${exceptionId}`, {
       method: "DELETE",
       accessToken,
+      lang,
     }),
 
   // -------------------------------------------------------------------------
   // Payment Setup
   // -------------------------------------------------------------------------
 
-  getPaymentSetupStatus: (accessToken: string) =>
+  getPaymentSetupStatus: (accessToken: string, lang: Locale) =>
     request<PaymentSetupStatusResponse>("/payment-setup/status", {
       accessToken,
+      lang,
     }),
 
-  createAccountLink: (accessToken: string) =>
+  createAccountLink: (accessToken: string, lang: Locale) =>
     request<AccountLinkResponse>("/payment-setup/account-link", {
       method: "POST",
       accessToken,
+      lang,
     }),
 
-  createDashboardLink: (accessToken: string) =>
+  createDashboardLink: (accessToken: string, lang: Locale) =>
     request<DashboardLinkResponse>("/payment-setup/dashboard-link", {
       method: "POST",
       accessToken,
+      lang,
     }),
 
-  refreshPaymentSetupStatus: (accessToken: string) =>
+  refreshPaymentSetupStatus: (accessToken: string, lang: Locale) =>
     request<PaymentSetupStatusResponse>("/payment-setup/refresh", {
       method: "POST",
       accessToken,
+      lang,
     }),
 };

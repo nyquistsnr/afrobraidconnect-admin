@@ -30,7 +30,8 @@ export function VerifyEmailForm({
   const router = useRouter();
 
   const verifyMutation = useMutation({
-    mutationFn: authApi.verifyEmail,
+    mutationFn: (body: Parameters<typeof authApi.verifyEmail>[0]) =>
+      authApi.verifyEmail(body, lang),
     onSuccess: () => {
       toast.success(common.toasts.verifyEmailSuccess);
       router.push(`/${lang}/login`);
@@ -42,7 +43,8 @@ export function VerifyEmailForm({
   });
 
   const resendMutation = useMutation({
-    mutationFn: authApi.resendVerification,
+    mutationFn: (body: Parameters<typeof authApi.resendVerification>[0]) =>
+      authApi.resendVerification(body, lang),
     onSuccess: () => toast.success(common.toasts.resendSuccess),
     onError: (error) => {
       const errorCode = error instanceof ApiError ? error.code : undefined;
@@ -57,10 +59,8 @@ export function VerifyEmailForm({
 
   return (
     <div className="w-full">
-      <h1 className="text-2xl lg:text-3xl font-semibold text-foreground mb-2">
-        {dict.title}
-      </h1>
-      <p className="text-base text-muted-foreground mb-8">{dict.subtitle}</p>
+      <h1 className="text-3xl font-bold text-foreground">{dict.title}</h1>
+      <p className="mt-2 text-sm text-muted-foreground">{dict.subtitle}</p>
 
       <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
         <Input

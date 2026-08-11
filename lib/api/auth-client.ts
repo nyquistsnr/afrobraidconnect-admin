@@ -1,7 +1,6 @@
 // Isomorphic: called from both the server (NextAuth's authorize callback)
 // and the client (signup/verify/forgot-password/reset-password mutations).
 import type {
-  ApiEnvelope,
   AuthTokenResponse,
   ForgotPasswordRequest,
   LoginRequest,
@@ -14,96 +13,58 @@ import type {
   SocialProvider,
   VerifyEmailRequest,
 } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
+import { apiFetch, ApiError } from "@/lib/api/http";
 
-// NEXT_PUBLIC_API_BASE_URL is expected to already include the /api/v1
-// prefix (e.g. http://localhost:8000/api/v1) — this only appends /auth.
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+export { ApiError };
+
 const AUTH_PATH = "/auth";
 
-export class ApiError extends Error {
-  constructor(
-    public code: string,
-    message: string,
-    public status: number,
-    public details?: unknown[]
-  ) {
-    super(message);
-    this.name = "ApiError";
-  }
-}
-
-async function post<TReq, TRes>(path: string, body: TReq, lang?: string): Promise<TRes> {
-  if (!API_BASE) {
-    throw new ApiError(
-      "API_BASE_NOT_CONFIGURED",
-      "NEXT_PUBLIC_API_BASE_URL is not set.",
-      500
-    );
-  }
-
-  let res: Response;
-  try {
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
-    if (lang) headers["Accept-Language"] = lang;
-    
-    res = await fetch(`${API_BASE}${AUTH_PATH}${path}`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(body),
-    });
-  } catch {
-    throw new ApiError("NETWORK_ERROR", "Could not reach the server.", 0);
-  }
-
-  const json: ApiEnvelope<TRes> = await res.json();
-
-  if (json.status === "error" || !json.data) {
-    const error = json.error ?? {
-      code: "UNKNOWN_ERROR",
-      message: "Something went wrong.",
-    };
-    throw new ApiError(error.code, error.message, res.status, error.details);
-  }
-
-  return json.data;
+function post<TReq, TRes>(path: string, body: TReq, lang: Locale): Promise<TRes> {
+  return apiFetch<TRes>(`${AUTH_PATH}${path}`, { method: "POST", body, lang });
 }
 
 export const authApi = {
-  signup: (body: SignupEmailRequest) =>
+  signup: (body: SignupEmailRequest, lang: Locale) =>
     post<SignupEmailRequest, { message: string; email: string }>(
       "/signup/email",
-      body
+      body,
+      lang
     ),
 
-  verifyEmail: (body: VerifyEmailRequest) =>
-    post<VerifyEmailRequest, AuthTokenResponse>("/verify-email", body),
+  verifyEmail: (body: VerifyEmailRequest, lang: Locale) =>
+    post<VerifyEmailRequest, AuthTokenResponse>("/verify-email", body, lang),
 
-  resendVerification: (body: ResendVerificationRequest) =>
+  resendVerification: (body: ResendVerificationRequest, lang: Locale) =>
     post<ResendVerificationRequest, { message: string }>(
       "/resend-verification",
-      body
+      body,
+      lang
     ),
 
-  login: (body: LoginRequest, lang?: string) =>
+  login: (body: LoginRequest, lang: Locale) =>
     post<LoginRequest, AuthTokenResponse>("/login", body, lang),
 
-  socialLogin: (provider: SocialProvider, body: SocialLoginRequest, lang?: string) =>
+  socialLogin: (provider: SocialProvider, body: SocialLoginRequest, lang: Locale) =>
     post<SocialLoginRequest, AuthTokenResponse>(`/social/${provider}`, body, lang),
 
-  refresh: (refresh_token: string) =>
-    post<RefreshTokenRequest, AuthTokenResponse>("/refresh", {
-      refresh_token,
-    }),
-
-  logout: (refresh_token: string) =>
-    post<LogoutRequest, { message: string }>("/logout", { refresh_token }),
-
-  forgotPassword: (body: ForgotPasswordRequest) =>
-    post<ForgotPasswordRequest, { message: string }>(
-      "/forgot-password",
-      body
+  refresh: (refresh_token: string, lang: Locale) =>
+    post<RefreshTokenRequest, AuthTokenResponse>(
+      "/refresh",
+      { refresh_token },
+      lang
     ),
 
-  resetPassword: (body: ResetPasswordRequest) =>
-    post<ResetPasswordRequest, { message: string }>("/reset-password", body),
+  logout: (refresh_token: string, lang: Locale) =>
+    post<LogoutRequest, { message: string }>("/logout", { refresh_token }, lang),
+
+  forgotPassword: (body: ForgotPasswordRequest, lang: Locale) =>
+    post<ForgotPasswordRequest, { message: string }>(
+      "/forgot-password",
+      body,
+      lang
+    ),
+
+  resetPassword: (body: ResetPasswordRequest, lang: Locale) =>
+    post<ResetPasswordRequest, { message: string }>("/reset-password", body, lang),
 };

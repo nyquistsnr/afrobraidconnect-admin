@@ -62,7 +62,7 @@ export function ThemeToggle({
       {open && (
         <ul
           role="listbox"
-          className={`absolute right-0 w-40 overflow-hidden border border-border bg-surface py-1 shadow-lg ${
+          className={`absolute right-0 z-50 w-40 overflow-hidden border border-border bg-surface py-1 shadow-lg ${
             dropDirection === "up" ? "bottom-full mb-2" : "top-full mt-2"
           }`}
         >

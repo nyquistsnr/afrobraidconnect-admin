@@ -1,4 +1,156 @@
 {
+  "header": {
+    "joinBraider": "Devenir tresseuse",
+    "findBraider": "Trouver une tresseuse",
+    "dashboard": "Tableau de bord",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire"
+  },
+  "home": {
+    "heroHeadline": "Trouvez les meilleures tresseuses afro près de chez vous",
+    "heroSubheadline": "Réservez des professionnels talentueux pour votre prochaine coiffure.",
+    "ctaFind": "Trouver une tresseuse",
+    "ctaJoin": "Rejoindre en tant que professionnel",
+    "badgeTitle": "Les Mieux Notés",
+    "badgeSubtitle": "Professionnels",
+    "benefits": {
+      "title": "Pourquoi Tresser avec Nous ?",
+      "subtitle": "Rejoignez Afrobraid Connect et propulsez votre activité de coiffure.",
+      "cards": [
+        {
+          "title": "Gagnez Bien Votre Vie",
+          "description": "Fixez vos propres tarifs et conservez une plus grande part de ce que vous gagnez grâce à notre structure tarifaire transparente."
+        },
+        {
+          "title": "Horaires Flexibles",
+          "description": "Travaillez quand vous voulez, où vous voulez. Vous êtes votre propre patron."
+        },
+        {
+          "title": "Développez Votre Clientèle",
+          "description": "Faites-vous découvrir par des centaines de clients à la recherche de tresses afro de qualité dans votre région."
+        }
+      ]
+    },
+    "howItWorks": {
+      "title": "Comment Ça Marche",
+      "subtitle": "Commencez en 8 étapes simples.",
+      "steps": {
+        "step1": { "title": "Informations Commerciales", "description": "Parlez-nous de votre marque." },
+        "step2": { "title": "Vérification Téléphonique", "description": "Sécurisez votre compte." },
+        "step3": { "title": "Vérification d'Identité", "description": "Propulsé par Veriff pour des contrôles d'identité fiables." },
+        "step4": { "title": "Type de Service", "description": "Sélectionnez les styles que vous proposez." },
+        "step5": { "title": "Portfolio", "description": "Présentez votre meilleur travail." },
+        "step6": { "title": "Emplacement", "description": "Indiquez où vous travaillez." },
+        "step7": { "title": "Disponibilité", "description": "Choisissez vos heures de travail." },
+        "step8": { "title": "Configuration du Paiement", "description": "Connectez-vous avec Stripe pour recevoir des paiements sécurisés." }
+      }
+    },
+    "statistics": {
+      "stats": [
+        { "value": "500+", "label": "Tresseuses Actives" },
+        { "value": "50+", "label": "Villes Couvertes" },
+        { "value": "10k+", "label": "Clients Satisfaits" }
+      ]
+    },
+    "testimonials": {
+      "title": "Apprécié par les Tresseuses",
+      "subtitle": "Découvrez ce que les professionnelles disent d'Afrobraid Connect.",
+      "cards": [
+        {
+          "name": "Aisha T.",
+          "location": "Berlin",
+          "quote": "Afrobraid Connect a complètement transformé mon activité. J'ai plus de clients que jamais, et j'adore avoir le contrôle de mon propre emploi du temps."
+        },
+        {
+          "name": "Sarah K.",
+          "location": "Paris",
+          "quote": "La plateforme rend la gestion des réservations et des paiements très simple. Je n'ai plus à courir après les clients pour les acomptes !"
+        },
+        {
+          "name": "Joy M.",
+          "location": "Munich",
+          "quote": "J'ai rejoint il y a trois mois, et mes revenus ont doublé. Les clients que j'obtiens ici respectent mon travail et mon temps."
+        }
+      ]
+    },
+    "faq": {
+      "title": "Foire Aux Questions",
+      "subtitle": "Tout ce que vous devez savoir avant de rejoindre la plateforme.",
+      "items": [
+        {
+          "question": "Combien coûte l'inscription ?",
+          "answer": "S'inscrire et lister vos services est totalement gratuit. Nous ne prenons qu'une petite commission transparente lorsque vous effectuez une réservation."
+        },
+        {
+          "question": "Comment suis-je payée ?",
+          "answer": "Les paiements sont traités en toute sécurité via Stripe. Une fois le service terminé, les fonds sont automatiquement transférés sur votre compte bancaire."
+        },
+        {
+          "question": "Puis-je définir mes propres horaires ?",
+          "answer": "Oui ! Vous avez le contrôle total de votre calendrier. Vous décidez quand vous êtes disponible et pouvez le modifier à tout moment."
+        },
+        {
+          "question": "Que se passe-t-il si un client annule ?",
+          "answer": "Vous définissez votre propre politique d'annulation. Si un client annule tardivement, vous recevrez une partie du paiement selon vos règles."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Prête à développer votre activité de coiffure ?",
+      "subtitle": "Rejoignez des centaines de professionnelles qui gagnent bien leur vie selon leurs propres conditions.",
+      "button": "Rejoindre Afrobraid Connect"
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} Afrobraid Connect. Tous droits réservés.",
+    "company": "Entreprise",
+    "links": {
+      "aboutUs": "À Propos",
+      "privacy": "Politique de confidentialité",
+      "terms": "Conditions d'utilisation"
+    }
+  },
+  "about": {
+    "title": "À Propos d'Afrobraid Connect",
+    "missionTitle": "Notre Mission",
+    "missionText": "Notre mission est d'autonomiser les tresseuses afro talentueuses en leur fournissant les outils dont elles ont besoin pour gérer une entreprise indépendante et prospère, tout en offrant aux clients une expérience de réservation fluide et fiable.",
+    "storyTitle": "Notre Histoire",
+    "storyText": "Afrobraid Connect est né d'un constat simple : trouver une tresseuse afro qualifiée et fiable était trop difficile, et pour les tresseuses, gérer les réservations, les acomptes et les horaires était chaotique. Nous avons construit cette plateforme pour combler ce vide. Nous célébrons l'héritage culturel tout en apportant une commodité moderne à l'industrie de la coiffure afro."
+  },
+  "privacy": {
+    "title": "Politique de Confidentialité",
+    "lastUpdated": "Dernière mise à jour : Août 2026",
+    "intro": "Chez Afrobraid Connect, nous prenons votre vie privée au sérieux. Cette politique explique comment nous recueillons, utilisons et protégeons vos informations personnelles.",
+    "dataCollection": {
+      "title": "1. Collecte des Données",
+      "text": "Nous recueillons les informations que vous nous fournissez directement lorsque vous créez un compte, mettez à jour votre profil ou utilisez nos services. Cela inclut votre nom, adresse e-mail, numéro de téléphone et données de localisation."
+    },
+    "dataUsage": {
+      "title": "2. Utilisation de vos Données",
+      "text": "Vos données sont utilisées pour fournir, maintenir et améliorer nos services, traiter les transactions, envoyer des messages d'assistance et communiquer avec vous concernant nos produits et services."
+    },
+    "dataSharing": {
+      "title": "3. Partage des Données",
+      "text": "Nous ne vendons pas vos données personnelles. Nous pouvons partager des données avec des fournisseurs tiers de confiance (tels que Stripe pour les paiements ou Veriff pour la vérification d'identité) uniquement pour fournir nos services."
+    }
+  },
+  "terms": {
+    "title": "Conditions d'Utilisation",
+    "lastUpdated": "Dernière mise à jour : Août 2026",
+    "intro": "Bienvenue sur Afrobraid Connect. En accédant à notre plateforme, vous acceptez ces conditions.",
+    "account": {
+      "title": "1. Responsabilités du Compte",
+      "text": "Vous êtes responsable du maintien de la confidentialité de vos identifiants de compte et de toutes les activités qui se produisent sous votre compte."
+    },
+    "services": {
+      "title": "2. Services des Tresseuses",
+      "text": "Les tresseuses opèrent en tant qu'entrepreneures indépendantes. Afrobraid Connect est une plateforme technologique qui met en relation les clients avec les tresseuses et ne fournit pas directement de services de coiffure."
+    },
+    "payments": {
+      "title": "3. Paiements et Frais",
+      "text": "Tous les paiements doivent être traités via la plateforme. Afrobraid Connect facture des frais de service transparents sur les réservations terminées, tels qu'indiqués dans votre tableau de bord."
+    }
+  },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Femme souriante portant des cheveux tressés",
@@ -41,6 +193,15 @@
       "styleAlreadyAdded": "Vous avez déjà ajouté ce style à votre offre.",
       "invalidStyleVariation": "L'une des variantes sélectionnées n'est pas valide pour ce style.",
       "invalidAddon": "L'un des suppléments sélectionnés n'est pas valide.",
+      "bookingNotFound": "Cette réservation est introuvable.",
+      "invalidBookingDateRange": "La date de fin doit être postérieure ou égale à la date de début.",
+      "invalidChatLocale": "Cette langue n'est pas prise en charge.",
+      "chatNotAvailable": "Le chat s'ouvre une fois le paiement de cette réservation effectué.",
+      "chatThreadNotFound": "Cette conversation est introuvable.",
+      "chatAccessDenied": "Vous n'avez pas accès à cette conversation.",
+      "chatMessageNotFound": "Ce message est introuvable.",
+      "notificationNotFound": "Cette notification est introuvable.",
+      "invalidDateRange": "La date de fin doit être postérieure ou égale à la date de début.",
       "generic": "Une erreur s'est produite. Veuillez réessayer."
     },
     "toasts": {
@@ -134,7 +295,10 @@
     "header": {
       "notifications": "Notifications",
       "messages": "Messages",
-      "logout": "Déconnexion"
+      "logout": "Déconnexion",
+      "notificationsEmpty": "Aucune notification pour le moment.",
+      "notificationsLoadError": "Impossible de charger vos notifications.",
+      "markAllRead": "Tout marquer comme lu"
     },
     "logoutModal": {
       "title": "Déconnexion ?",
@@ -143,7 +307,27 @@
       "confirm": "Se déconnecter"
     },
     "home": {
-      "greeting": "Bonjour"
+      "greeting": "Bonjour",
+      "stats": {
+        "totalBookings": "Réservations totales",
+        "totalRevenue": "Revenu total",
+        "completionRate": "Taux de complétion",
+        "uniqueCustomers": "Clients uniques"
+      },
+      "revenueChart": {
+        "title": "Revenus"
+      },
+      "busiestDaysChart": {
+        "title": "Jours les plus chargés"
+      },
+      "topStylesChart": {
+        "title": "Meilleurs styles",
+        "other": "Autres"
+      },
+      "recentBookings": {
+        "title": "Réservations récentes",
+        "viewAll": "Voir toutes les réservations"
+      }
     },
     "profile": {
       "title": "Paramètres du profil",
@@ -154,20 +338,208 @@
       "lastNamePlaceholder": "ex: Nwosu",
       "phoneLabel": "Numéro de téléphone",
       "saveButton": "Enregistrer",
-      "successToast": "Profil mis à jour avec succès."
+      "successToast": "Profil mis à jour avec succès.",
+      "chatLocaleLabel": "Langue du chat",
+      "chatLocaleHint": "Utilisée pour traduire automatiquement les messages entre vous et vos clients.",
+      "chatLocaleUnset": "Non définie"
+    },
+    "bookings": {
+      "title": "Réservations",
+      "subtitle": "Consultez et gérez vos rendez-vous à venir et passés.",
+      "filters": {
+        "searchLabel": "Rechercher",
+        "searchPlaceholder": "Rechercher par client ou style…",
+        "statusLabel": "Statut",
+        "statusAll": "Tous les statuts",
+        "dateFromLabel": "Du",
+        "dateToLabel": "Au",
+        "dateRangeLabel": "Période",
+        "dateRangePlaceholder": "Filtrer par date",
+        "dateRangePresets": "Raccourcis",
+        "dateRangeToday": "Aujourd'hui",
+        "dateRangeLast7Days": "7 derniers jours",
+        "dateRangeThisMonth": "Ce mois-ci",
+        "dateRangeLastMonth": "Le mois dernier",
+        "dateRangeClear": "Effacer",
+        "dateRangeApply": "Appliquer",
+        "dateRangePreviousMonth": "Mois précédent",
+        "dateRangeNextMonth": "Mois suivant",
+        "reset": "Réinitialiser les filtres"
+      },
+      "status": {
+        "PENDING_PAYMENT": "Paiement en attente",
+        "CONFIRMED": "Confirmée",
+        "IN_PROGRESS": "En cours",
+        "COMPLETED": "Terminée",
+        "NO_SHOW": "Absence du client",
+        "CANCELLED_BY_CUSTOMER": "Annulée par le client",
+        "CANCELLED_BY_BRAIDER": "Annulée par vous",
+        "CANCELLED_NO_PAYMENT": "Annulée (non payée)",
+        "EXPIRED": "Expirée",
+        "DISPUTED": "Contestée"
+      },
+      "table": {
+        "styleColumn": "Style",
+        "customerColumn": "Client",
+        "dateColumn": "Date et heure",
+        "statusColumn": "Statut",
+        "totalColumn": "Total"
+      },
+      "empty": {
+        "title": "Aucune réservation pour le moment",
+        "description": "Vos réservations apparaîtront ici dès que des clients réserveront vos services."
+      },
+      "noResults": "Aucune réservation ne correspond à vos filtres.",
+      "loadError": "Impossible de charger vos réservations. Veuillez réessayer.",
+      "pagination": {
+        "summary": "Page {page} sur {totalPages} · {totalItems} réservations",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "detail": {
+        "title": "Détails de la réservation",
+        "reference": "Référence",
+        "customer": "Client",
+        "style": "Style",
+        "duration": "Durée",
+        "durationMinutes": "{minutes} min",
+        "location": "Lieu",
+        "mobileService": "Service à domicile — vous vous déplacez chez le client",
+        "studioService": "À votre emplacement",
+        "schedule": "Horaire",
+        "itemsTitle": "Détail du prix",
+        "itemTypes": {
+          "SERVICE": "Service",
+          "VARIATION": "Variante",
+          "ADDON": "Supplément",
+          "TRAVEL": "Frais de déplacement",
+          "PLATFORM_FEE": "Frais de plateforme",
+          "VAT_SERVICE": "TVA (service)",
+          "VAT_PLATFORM_FEE": "TVA (frais de plateforme)"
+        },
+        "serviceSubtotal": "Sous-total du service",
+        "travelFee": "Frais de déplacement",
+        "subtotal": "Sous-total",
+        "platformFee": "Frais de plateforme",
+        "vatOnService": "TVA sur le service",
+        "vatOnPlatformFee": "TVA sur les frais de plateforme",
+        "vatTotal": "TVA totale",
+        "total": "Total",
+        "depositAmount": "Acompte",
+        "balanceAmount": "Solde",
+        "paymentSchedule": "Échéancier de paiement",
+        "paymentScheduleValues": {
+          "FULL_UPFRONT": "Paiement intégral à l'avance",
+          "DEPOSIT_THEN_BALANCE": "Acompte, puis solde"
+        },
+        "cancellationCutoff": "Annulation gratuite jusqu'au",
+        "paymentsTitle": "Paiements",
+        "paymentPurpose": {
+          "FULL": "Paiement intégral",
+          "DEPOSIT": "Acompte",
+          "BALANCE": "Solde"
+        },
+        "paymentStatus": {
+          "PENDING": "En attente",
+          "SUCCEEDED": "Payé",
+          "FAILED": "Échoué",
+          "CANCELED": "Annulé"
+        },
+        "createdAt": "Réservé le",
+        "close": "Fermer",
+        "chatButton": "Discuter avec le client"
+      },
+      "stats": {
+        "totalBookings": "Total des réservations",
+        "completed": "Terminé",
+        "upcoming": "À venir",
+        "declined": "Refusé"
+      }
     }
   },
-  "bookings": {
-    "title": "Page de réservation"
-  },
   "payment": {
-    "title": "Paiement"
+    "title": "Paiement",
+    "subtitle": "Suivez vos revenus et l'historique de vos paiements",
+    "stats": {
+      "netRevenue": "Revenu net",
+      "totalReceived": "Total reçu",
+      "totalRefunded": "Total remboursé",
+      "pending": "Paiements en attente"
+    },
+    "trendChart": {
+      "title": "Tendances des réservations",
+      "subtitle": "90 derniers jours",
+      "empty": "Aucune donnée de réservation disponible pour cette période."
+    },
+    "table": {
+      "title": "Paiements récents",
+      "emptyTitle": "Aucun paiement",
+      "emptySubtitle": "Vous n'avez pas encore reçu de paiements.",
+      "columns": {
+        "date": "Date",
+        "bookingRef": "Réf. réservation",
+        "purpose": "Motif",
+        "amount": "Montant",
+        "status": "Statut"
+      },
+      "refunded": "Remboursé",
+      "pagination": "Affichage de {start} à {end} sur {total} résultats"
+    }
   },
   "settings": {
     "title": "Paramètres"
   },
   "chat": {
-    "title": "Chat"
+    "title": "Chat",
+    "inbox": {
+      "subtitle": "Conversations avec vos clients.",
+      "empty": "Aucune conversation pour le moment.",
+      "emptyDescription": "Les conversations s'ouvrent automatiquement une fois la réservation d'un client payée.",
+      "loadError": "Impossible de charger vos conversations. Veuillez réessayer.",
+      "flaggedPreview": "Message retenu",
+      "paginationSummary": "Page {page} sur {totalPages}",
+      "previous": "Précédent",
+      "next": "Suivant"
+    },
+    "thread": {
+      "backToInbox": "Retour aux conversations",
+      "loadError": "Impossible de charger cette conversation. Veuillez réessayer.",
+      "loadEarlier": "Charger les messages précédents",
+      "composerPlaceholder": "Écrire un message…",
+      "send": "Envoyer",
+      "sendError": "Votre message n'a pas pu être envoyé. Veuillez réessayer.",
+      "charLimit": "{count}/2000",
+      "translatedFrom": "Traduit depuis le {locale} · ",
+      "seeOriginal": "voir l'original",
+      "seeTranslation": "voir la traduction",
+      "reportAction": "Signaler",
+      "you": "Vous"
+    },
+    "report": {
+      "title": "Signaler cette conversation",
+      "reasonLabel": "Motif",
+      "reasons": {
+        "HARASSMENT": "Harcèlement",
+        "INAPPROPRIATE_CONTENT": "Contenu inapproprié",
+        "SPAM": "Spam",
+        "SCAM_OR_FRAUD": "Arnaque ou fraude",
+        "OFF_PLATFORM_SOLICITATION": "Demande de paiement ou de communication hors application",
+        "OTHER": "Autre"
+      },
+      "detailsLabel": "Détails supplémentaires (facultatif)",
+      "detailsPlaceholder": "Tout ce qui pourrait aider notre équipe à examiner ceci…",
+      "cancel": "Annuler",
+      "submit": "Envoyer le signalement",
+      "success": "Merci — notre équipe va examiner cette conversation.",
+      "error": "Votre signalement n'a pas pu être envoyé. Veuillez réessayer."
+    },
+    "localeBanner": {
+      "title": "Définissez votre langue de chat",
+      "description": "Nous traduirons automatiquement les messages lorsque vous et votre client écrivez dans des langues différentes.",
+      "placeholder": "Choisir une langue",
+      "save": "Enregistrer",
+      "success": "Langue du chat mise à jour."
+    }
   },
   "availability": {
     "title": "Disponibilité"
@@ -291,11 +663,22 @@
       "priceLabel": "Prix (€)",
       "cancel": "Annuler",
       "addButton": "Ajouter à la carte",
+      "discoverCatalog": "Découvrir le catalogue",
+      "allCategories": "Toutes les catégories",
+      "editService": "Modifier le service",
+      "deleteService": "Supprimer le service",
+      "deleteConfirmMessage": "Êtes-vous sûr de vouloir retirer {styleName} de votre carte ?",
+      "deleteButton": "Supprimer",
       "menuTitle": "Votre carte",
       "emptyMenu": "Vous n'avez encore ajouté aucun style.",
       "continue": "Continuer",
+      "dashboardTitle": "Votre carte de prix",
+      "dashboardSubtitle": "Gérez les styles que vous proposez et leurs prix.",
+      "saveChanges": "Enregistrer",
       "toasts": {
-        "added": "Ajouté à votre carte."
+        "added": "Ajouté à votre carte.",
+        "saved": "Service mis à jour.",
+        "removed": "Service supprimé."
       }
     },
     "portfolio": {
@@ -336,6 +719,9 @@
       "travelRadiusLabel": "Rayon de déplacement (km)",
       "travelFeeLabel": "Frais de déplacement (€, facultatif)",
       "continue": "Enregistrer et continuer",
+      "dashboardTitle": "Votre emplacement",
+      "dashboardSubtitle": "Mettez à jour votre lieu de travail et vos paramètres de déplacement.",
+      "saveChanges": "Enregistrer",
       "toasts": {
         "saved": "Emplacement enregistré.",
         "incomplete": "Veuillez remplir tous les détails d'emplacement requis."
@@ -346,11 +732,15 @@
       "subtitle": "Définissez votre emploi du temps hebdomadaire et vos exceptions.",
       "settingsTitle": "Règles de réservation",
       "timezoneLabel": "Fuseau horaire",
-      "minNoticeHoursLabel": "Délai minimum (heures)",
-      "maxAdvanceDaysLabel": "Jours d'avance max",
-      "bufferMinutesLabel": "Marge entre rendez-vous (mins)",
-      "weeklyWindowsTitle": "Emploi du temps hebdomadaire",
+      "minNoticeHoursLabel": "Préavis minimum (heures)",
+      "maxAdvanceDaysLabel": "Jours à l'avance max",
+      "bufferMinutesLabel": "Marge entre les rendez-vous (mins)",
+      "weeklyWindowsTitle": "Horaires hebdomadaires",
       "addWindow": "Ajouter des heures",
+      "editWindow": "Modifier les horaires de travail",
+      "dayLabel": "Jour",
+      "update": "Mettre à jour",
+      "cancel": "Annuler",
       "days": {
         "MONDAY": "Lundi",
         "TUESDAY": "Mardi",
@@ -396,5 +786,27 @@
       "title": "Bientôt disponible",
       "subtitle": "Cette étape n'est pas encore prête — revenez bientôt."
     }
+  },
+  "contact": {
+    "title": "Nous contacter",
+    "subtitle": "Nous aimerions avoir de vos nouvelles. Envoyez-nous un message et nous vous répondrons dans les plus brefs délais.",
+    "firstNameLabel": "Prénom",
+    "firstNamePlaceholder": "ex., Ada",
+    "lastNameLabel": "Nom de famille",
+    "lastNamePlaceholder": "ex., Nwosu",
+    "emailLabel": "Adresse e-mail",
+    "emailPlaceholder": "ada@example.com",
+    "phoneLabel": "Numéro de téléphone",
+    "phonePlaceholder": "+15551234567",
+    "subjectLabel": "Sujet",
+    "subjectPlaceholder": "ex., Question sur les tarifs",
+    "purposeLabel": "Raison de nous contacter",
+    "purposeGeneral": "Demande générale",
+    "purposePartner": "Partenariat",
+    "purposePricing": "Tarification",
+    "purposeFaqs": "FAQ",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Comment pouvons-nous vous aider ?",
+    "submit": "Envoyer le message"
   }
 }

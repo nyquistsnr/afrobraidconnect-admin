@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Mail } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
@@ -8,28 +9,34 @@ export function AuthShell({
   lang,
   supportEmail,
   heroImageAlt,
-  heroImageSrc = "/images/hero.png",
-  heroImagePosition = "object-[center_12%]",
   themeLabels,
   children,
 }: {
   lang: Locale;
   supportEmail: string;
   heroImageAlt: string;
-  heroImageSrc?: string;
-  heroImagePosition?: string;
   themeLabels: Record<"light" | "dark" | "system", string>;
   children: React.ReactNode;
 }) {
   return (
     <div className="flex min-h-screen flex-1 bg-background">
-      {/* Left Form Column */}
       <div className="flex w-full flex-col justify-between px-6 py-10 sm:px-10 lg:w-1/2 lg:px-16 xl:px-24">
-        <div />
+        <div className="mx-auto w-full max-w-sm mb-6">
+          <Link href={`/${lang}`} className="inline-block">
+            <Image
+              src="/logo/logo.webp"
+              alt="Afrobraid Connect"
+              width={180}
+              height={46}
+              className="theme-invert transition-opacity hover:opacity-80"
+              priority
+            />
+          </Link>
+        </div>
 
-        <div className="mx-auto w-full max-w-md my-auto py-6">{children}</div>
+        <div className="mx-auto w-full max-w-sm">{children}</div>
 
-        <div className="mx-auto flex w-full max-w-md flex-col-reverse items-center gap-4 pt-8 text-sm text-muted-foreground sm:flex-row sm:justify-between">
+        <div className="mx-auto flex w-full max-w-sm flex-col-reverse items-center gap-4 pt-10 text-sm text-muted-foreground sm:flex-row sm:justify-between">
           <a
             href={`mailto:${supportEmail}`}
             className="flex items-center gap-1.5 hover:text-foreground"
@@ -44,15 +51,14 @@ export function AuthShell({
         </div>
       </div>
 
-      {/* Right Column - Viewport-fitted hero image */}
-      <div className="relative hidden lg:block lg:w-1/2 border-l border-border bg-background">
+      <div className="relative hidden lg:block lg:w-1/2">
         <Image
-          src={heroImageSrc}
+          src="/images/hero.png"
           alt={heroImageAlt}
           fill
           priority
           sizes="50vw"
-          className={`object-cover ${heroImagePosition}`}
+          className="object-cover"
         />
       </div>
     </div>

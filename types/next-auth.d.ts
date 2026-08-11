@@ -1,6 +1,7 @@
 import type { DefaultSession } from "next-auth";
 import type { DefaultJWT } from "next-auth/jwt";
 import type { BraiderAuthProfile, UserType } from "@/lib/api/types";
+import type { Locale } from "@/lib/i18n";
 
 declare module "next-auth" {
   interface User {
@@ -12,6 +13,9 @@ declare module "next-auth" {
     refreshToken: string;
     accessTokenExpires: number;
     braider: BraiderAuthProfile | null;
+    // The locale active at sign-in — carried into the JWT so a later
+    // silent token refresh can still send the right Accept-Language.
+    lang: Locale;
   }
 
   interface Session {
@@ -39,6 +43,7 @@ declare module "next-auth/jwt" {
     refreshToken: string;
     accessTokenExpires: number;
     braider: BraiderAuthProfile | null;
+    lang: Locale;
     error?: "RefreshAccessTokenError";
   }
 }

@@ -12,6 +12,8 @@ import { getAuthErrorMessage } from "@/lib/api/error-messages";
 import { onboardingStepPath } from "@/lib/onboarding";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 
 export function LoginForm({
@@ -28,18 +30,25 @@ export function LoginForm({
   const router = useRouter();
 
   const loginMutation = useMutation({
-    mutationFn: async (credentials: { email: string; password: string }) => {
+    mutationFn: async (credentials: { email: string; password: string; rememberMe: boolean }) => {
       const result = await signIn("credentials", {
         ...credentials,
+        rememberMe: String(credentials.rememberMe),
+        lang,
         redirect: false,
       });
 
+      // signIn() never rejects for auth failures — it resolves with an
+      // error/code pair instead, so we translate that into a thrown error
+      // to let TanStack Query's onError path handle it uniformly.
       if (result?.error) {
         throw new Error(result.code ?? result.error);
       }
     },
     onSuccess: async () => {
       toast.success(common.toasts.loginSuccess);
+      // A validated callbackUrl (wherever the visitor was before an auth
+      // guard sent them here) always wins over the default destination.
       if (callbackUrl) {
         router.push(callbackUrl);
         return;
@@ -63,62 +72,60 @@ export function LoginForm({
     loginMutation.mutate({
       email: String(formData.get("email") ?? ""),
       password: String(formData.get("password") ?? ""),
+      rememberMe: formData.get("remember_me") === "on",
     });
   }
 
   return (
     <div className="w-full">
-      <h1 className="text-2xl lg:text-3xl font-semibold text-foreground mb-2">
-        {dict.title}
-      </h1>
-      <p className="text-base text-muted-foreground mb-8">
-        {dict.subtitle}
-      </p>
+      <h1 className="text-3xl font-bold text-foreground">{dict.title}</h1>
+      <p className="mt-2 text-sm text-muted-foreground">{dict.subtitle}</p>
 
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div>
-          <Input
-            label={dict.emailLabel}
-            type="email"
-            name="email"
-            icon={Mail}
-            autoComplete="email"
-            placeholder={dict.emailPlaceholder || "hello@example.com"}
-            required
-          />
+      <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+        <Input
+          label={dict.emailLabel}
+          type="email"
+          name="email"
+          icon={Mail}
+          autoComplete="email"
+          placeholder={dict.emailPlaceholder}
+          required
+        />
+
+        <PasswordInput
+          label={dict.passwordLabel}
+          name="password"
+          autoComplete="current-password"
+          placeholder={dict.passwordPlaceholder}
+          required
+        />
+
+        <div className="flex items-center justify-between pt-1">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <Checkbox name="remember_me" />
+            <span className="text-sm font-medium text-foreground select-none">
+              {dict.rememberMe || "Remember me"}
+            </span>
+          </label>
+          <Link
+            href={`/${lang}/forgot-password`}
+            className="text-sm font-medium text-brand hover:text-brand-hover"
+          >
+            {dict.forgotPassword}
+          </Link>
         </div>
 
-        <div>
-          <PasswordInput
-            label={dict.passwordLabel}
-            name="password"
-            autoComplete="current-password"
-            placeholder={dict.passwordPlaceholder || "••••••••"}
-            required
-          />
-          <div className="flex justify-end mt-2 text-sm">
-            <Link
-              href={`/${lang}/forgot-password`}
-              className="font-medium text-brand hover:underline"
-            >
-              {dict.forgotPassword}
-            </Link>
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={loginMutation.isPending}
-          className="w-full px-4 py-3 font-semibold text-white bg-brand hover:bg-brand-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-hover disabled:opacity-70 transition-colors"
-        >
+        <Button type="submit" disabled={loginMutation.isPending}>
           {loginMutation.isPending ? common.loading : dict.signIn}
-        </button>
+        </Button>
       </form>
 
-      <div className="flex items-center my-6">
-        <hr className="flex-grow border-border" />
-        <span className="px-4 text-sm text-muted-foreground">{dict.or}</span>
-        <hr className="flex-grow border-border" />
+      <div className="my-6 flex items-center gap-4">
+        <div className="h-px flex-1 bg-border" />
+        <span className="text-xs font-medium text-muted-foreground">
+          {dict.or}
+        </span>
+        <div className="h-px flex-1 bg-border" />
       </div>
 
       <GoogleSignInButton
@@ -129,12 +136,21 @@ export function LoginForm({
         callbackUrl={callbackUrl}
       />
 
-      <div className="mt-8 text-center text-sm text-muted-foreground">
+      <div className="mt-8 space-y-2 text-center text-sm text-muted-foreground">
+        <p>
+          {dict.noAccount}{" "}
+          <Link
+            href={`/${lang}/signup`}
+            className="font-medium text-brand hover:text-brand-hover"
+          >
+            {dict.signUpProfessional}
+          </Link>
+        </p>
         <p>
           {dict.notVerified}{" "}
           <Link
             href={`/${lang}/verify-email`}
-            className="font-medium text-brand hover:underline"
+            className="font-medium text-brand hover:text-brand-hover"
           >
             {dict.revalidate}
           </Link>

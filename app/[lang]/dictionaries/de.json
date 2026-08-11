@@ -1,4 +1,156 @@
 {
+  "header": {
+    "joinBraider": "Als Flechterin anmelden",
+    "findBraider": "Flechterin finden",
+    "dashboard": "Armaturenbrett",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren"
+  },
+  "home": {
+    "heroHeadline": "Finden Sie die besten Afro-Flechterinnen in Ihrer Nähe",
+    "heroSubheadline": "Buchen Sie talentierte Profis für Ihre nächste Flechtfrisur.",
+    "ctaFind": "Flechterin finden",
+    "ctaJoin": "Als Profi anmelden",
+    "badgeTitle": "Bestbewertet",
+    "badgeSubtitle": "Profis",
+    "benefits": {
+      "title": "Warum bei uns flechten?",
+      "subtitle": "Treten Sie Afrobraid Connect bei und bringen Sie Ihr Flechtgeschäft auf die nächste Stufe.",
+      "cards": [
+        {
+          "title": "Gutes Geld verdienen",
+          "description": "Legen Sie Ihre eigenen Preise fest und behalten Sie mit unserer transparenten Gebührenstruktur mehr von dem, was Sie verdienen."
+        },
+        {
+          "title": "Flexible Arbeitszeiten",
+          "description": "Arbeiten Sie, wann Sie wollen und wo Sie wollen. Sie sind Ihr eigener Chef."
+        },
+        {
+          "title": "Kundenstamm aufbauen",
+          "description": "Lassen Sie sich von Hunderten von Kunden entdecken, die nach hochwertigem Afro-Flechten in Ihrer Nähe suchen."
+        }
+      ]
+    },
+    "howItWorks": {
+      "title": "Wie es funktioniert",
+      "subtitle": "Beginnen Sie in 8 einfachen Schritten.",
+      "steps": {
+        "step1": { "title": "Geschäftsinfos", "description": "Erzählen Sie uns von Ihrer Marke." },
+        "step2": { "title": "Telefonverifizierung", "description": "Sichern Sie Ihr Konto." },
+        "step3": { "title": "ID-Verifizierung", "description": "Unterstützt durch Veriff für vertrauenswürdige Identitätsprüfungen." },
+        "step4": { "title": "Dienstart", "description": "Wählen Sie die Stile, die Sie anbieten." },
+        "step5": { "title": "Portfolio", "description": "Präsentieren Sie Ihre beste Arbeit." },
+        "step6": { "title": "Standort", "description": "Legen Sie fest, wo Sie arbeiten." },
+        "step7": { "title": "Verfügbarkeit", "description": "Wählen Sie Ihre Arbeitszeiten." },
+        "step8": { "title": "Zahlungseinrichtung", "description": "Verbinden Sie sich mit Stripe, um sichere Auszahlungen zu erhalten." }
+      }
+    },
+    "statistics": {
+      "stats": [
+        { "value": "500+", "label": "Aktive Flechterinnen" },
+        { "value": "50+", "label": "Städte" },
+        { "value": "10k+", "label": "Zufriedene Kunden" }
+      ]
+    },
+    "testimonials": {
+      "title": "Von Flechterinnen geliebt",
+      "subtitle": "Sehen Sie, was Profis über Afrobraid Connect sagen.",
+      "cards": [
+        {
+          "name": "Aisha T.",
+          "location": "Berlin",
+          "quote": "Afrobraid Connect hat mein Geschäft völlig verändert. Ich habe mehr Kunden als je zuvor und liebe es, die Kontrolle über meinen eigenen Zeitplan zu haben."
+        },
+        {
+          "name": "Sarah K.",
+          "location": "Paris",
+          "quote": "Die Plattform macht die Verwaltung von Buchungen und Zahlungen mühelos. Ich muss Kunden nicht mehr wegen Anzahlungen hinterherlaufen!"
+        },
+        {
+          "name": "Joy M.",
+          "location": "München",
+          "quote": "Ich bin vor drei Monaten beigetreten und mein Umsatz hat sich verdoppelt. Die Kunden, die ich hierher bekomme, respektieren meine Arbeit und meine Zeit."
+        }
+      ]
+    },
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "subtitle": "Alles, was Sie über den Beitritt zur Plattform wissen müssen.",
+      "items": [
+        {
+          "question": "Wie viel kostet die Anmeldung?",
+          "answer": "Die Anmeldung und die Auflistung Ihrer Dienste sind völlig kostenlos. Wir berechnen nur eine kleine, transparente Provision, wenn Sie eine Buchung abschließen."
+        },
+        {
+          "question": "Wie werde ich bezahlt?",
+          "answer": "Zahlungen werden sicher über Stripe abgewickelt. Sobald ein Dienst abgeschlossen ist, wird das Geld automatisch auf Ihr verknüpftes Bankkonto überwiesen."
+        },
+        {
+          "question": "Kann ich meine eigenen Arbeitszeiten festlegen?",
+          "answer": "Ja! Sie haben die volle Kontrolle über Ihren Kalender. Sie entscheiden, wann Sie für Buchungen verfügbar sind, und können dies jederzeit aktualisieren."
+        },
+        {
+          "question": "Was passiert, wenn ein Kunde absagt?",
+          "answer": "Sie können Ihre eigene Stornierungsrichtlinie festlegen. Wenn ein Kunde zu spät absagt, erhalten Sie gemäß Ihren Regeln dennoch einen Teil der Zahlung."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Bereit, Ihr Flechtgeschäft auszubauen?",
+      "subtitle": "Schließen Sie sich Hunderten von Top-Profis an, die zu ihren eigenen Bedingungen gutes Geld verdienen.",
+      "button": "Heute Afrobraid Connect beitreten"
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} Afrobraid Connect. Alle Rechte vorbehalten.",
+    "company": "Unternehmen",
+    "links": {
+      "aboutUs": "Über Uns",
+      "privacy": "Datenschutzrichtlinie",
+      "terms": "Nutzungsbedingungen"
+    }
+  },
+  "about": {
+    "title": "Über Afrobraid Connect",
+    "missionTitle": "Unsere Mission",
+    "missionText": "Unsere Mission ist es, talentierte Afro-Flechterinnen zu stärken, indem wir ihnen die Werkzeuge an die Hand geben, die sie benötigen, um ein erfolgreiches, unabhängiges Unternehmen zu führen, und gleichzeitig den Kunden ein nahtloses, vertrauenswürdiges Buchungserlebnis bieten.",
+    "storyTitle": "Unsere Geschichte",
+    "storyText": "Afrobraid Connect entstand aus einer einfachen Beobachtung: Es war zu schwierig, eine kompetente, zuverlässige Afro-Haarflechterin zu finden, und für die Flechterinnen war die Verwaltung von Buchungen, Anzahlungen und Terminen chaotisch. Wir haben diese Plattform gebaut, um diese Lücke zu schließen. Wir feiern das kulturelle Erbe und bringen gleichzeitig modernen Komfort in die Haarflechtbranche."
+  },
+  "privacy": {
+    "title": "Datenschutzrichtlinie",
+    "lastUpdated": "Zuletzt aktualisiert: August 2026",
+    "intro": "Bei Afrobraid Connect nehmen wir Ihren Datenschutz ernst. Diese Richtlinie erklärt, wie wir Ihre personenbezogenen Daten erfassen, verwenden und schützen.",
+    "dataCollection": {
+      "title": "1. Datenerfassung",
+      "text": "Wir erfassen Informationen, die Sie uns direkt zur Verfügung stellen, wenn Sie ein Konto erstellen, Ihr Profil aktualisieren oder unsere Dienste nutzen. Dazu gehören Ihr Name, Ihre E-Mail-Adresse, Ihre Telefonnummer und Ihre Standortdaten."
+    },
+    "dataUsage": {
+      "title": "2. Wie wir Ihre Daten verwenden",
+      "text": "Ihre Daten werden verwendet, um unsere Dienste bereitzustellen, aufrechtzuerhalten und zu verbessern, Transaktionen abzuwickeln, Supportnachrichten zu senden und mit Ihnen über Produkte und Dienste zu kommunizieren."
+    },
+    "dataSharing": {
+      "title": "3. Datenweitergabe",
+      "text": "Wir verkaufen Ihre personenbezogenen Daten nicht. Wir können Daten an vertrauenswürdige Drittanbieter (wie Stripe für Zahlungen oder Veriff für die Identitätsprüfung) weitergeben, jedoch nur zur Bereitstellung unserer Dienste."
+    }
+  },
+  "terms": {
+    "title": "Nutzungsbedingungen",
+    "lastUpdated": "Zuletzt aktualisiert: August 2026",
+    "intro": "Willkommen bei Afrobraid Connect. Durch den Zugriff auf unsere Plattform stimmen Sie diesen Bedingungen zu.",
+    "account": {
+      "title": "1. Kontoverantwortlichkeiten",
+      "text": "Sie sind dafür verantwortlich, die Vertraulichkeit Ihrer Kontodaten zu wahren und für alle Aktivitäten, die unter Ihrem Konto stattfinden."
+    },
+    "services": {
+      "title": "2. Flechtdienste",
+      "text": "Flechterinnen arbeiten als unabhängige Auftragnehmer. Afrobraid Connect ist eine Technologieplattform, die Kunden mit Flechterinnen verbindet und Flechtdienste nicht direkt anbietet."
+    },
+    "payments": {
+      "title": "3. Zahlungen und Gebühren",
+      "text": "Alle Zahlungen müssen über die Plattform abgewickelt werden. Afrobraid Connect erhebt eine transparente Servicegebühr auf abgeschlossene Buchungen, wie in Ihrem Dashboard beschrieben."
+    }
+  },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Lächelnde Frau mit geflochtenem Haar",
@@ -9,7 +161,7 @@
     },
     "loading": "Wird geladen…",
     "backToLogin": "Zurück zur Anmeldung",
-    "backToDashboard": "Zurück zum Dashboard",
+    "backToDashboard": "Zurück zum Armaturenbrett",
     "back": "Zurück",
     "countrySearchPlaceholder": "Land suchen",
     "noCountriesFound": "Keine Länder gefunden",
@@ -41,6 +193,15 @@
       "styleAlreadyAdded": "Sie haben diesen Stil bereits zu Ihrem Angebot hinzugefügt.",
       "invalidStyleVariation": "Eine der ausgewählten Varianten ist für diesen Stil nicht gültig.",
       "invalidAddon": "Eines der ausgewählten Extras ist nicht gültig.",
+      "bookingNotFound": "Diese Buchung konnte nicht gefunden werden.",
+      "invalidBookingDateRange": "Das Enddatum muss am oder nach dem Startdatum liegen.",
+      "invalidChatLocale": "Diese Sprache wird nicht unterstützt.",
+      "chatNotAvailable": "Der Chat wird verfügbar, sobald die Zahlung für diese Buchung eingegangen ist.",
+      "chatThreadNotFound": "Diese Unterhaltung konnte nicht gefunden werden.",
+      "chatAccessDenied": "Sie haben keinen Zugriff auf diese Unterhaltung.",
+      "chatMessageNotFound": "Diese Nachricht konnte nicht gefunden werden.",
+      "notificationNotFound": "Diese Benachrichtigung konnte nicht gefunden werden.",
+      "invalidDateRange": "Das Enddatum muss am oder nach dem Startdatum liegen.",
       "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
     },
     "toasts": {
@@ -120,7 +281,7 @@
   },
   "dashboard": {
     "sidebar": {
-      "dashboard": "Dashboard",
+      "dashboard": "Armaturenbrett",
       "bookings": "Buchungen",
       "payment": "Zahlung",
       "settings": "Einstellungen",
@@ -134,7 +295,10 @@
     "header": {
       "notifications": "Benachrichtigungen",
       "messages": "Nachrichten",
-      "logout": "Abmelden"
+      "logout": "Abmelden",
+      "notificationsEmpty": "Noch keine Benachrichtigungen.",
+      "notificationsLoadError": "Ihre Benachrichtigungen konnten nicht geladen werden.",
+      "markAllRead": "Alle als gelesen markieren"
     },
     "logoutModal": {
       "title": "Abmelden?",
@@ -143,7 +307,27 @@
       "confirm": "Abmelden"
     },
     "home": {
-      "greeting": "Hallo"
+      "greeting": "Hallo",
+      "stats": {
+        "totalBookings": "Gesamtbuchungen",
+        "totalRevenue": "Gesamteinnahmen",
+        "completionRate": "Abschlussrate",
+        "uniqueCustomers": "Einzigartige Kunden"
+      },
+      "revenueChart": {
+        "title": "Einnahmen"
+      },
+      "busiestDaysChart": {
+        "title": "Verkehrsreichste Tage"
+      },
+      "topStylesChart": {
+        "title": "Top-Styles",
+        "other": "Andere"
+      },
+      "recentBookings": {
+        "title": "Aktuelle Buchungen",
+        "viewAll": "Alle Buchungen anzeigen"
+      }
     },
     "profile": {
       "title": "Profileinstellungen",
@@ -154,20 +338,208 @@
       "lastNamePlaceholder": "z.B. Nwosu",
       "phoneLabel": "Telefonnummer",
       "saveButton": "Änderungen speichern",
-      "successToast": "Profil erfolgreich aktualisiert."
+      "successToast": "Profil erfolgreich aktualisiert.",
+      "chatLocaleLabel": "Chat-Sprache",
+      "chatLocaleHint": "Wird verwendet, um Chat-Nachrichten zwischen Ihnen und Kunden automatisch zu übersetzen.",
+      "chatLocaleUnset": "Nicht festgelegt"
+    },
+    "bookings": {
+      "title": "Buchungen",
+      "subtitle": "Sehen und verwalten Sie Ihre bevorstehenden und vergangenen Termine.",
+      "filters": {
+        "searchLabel": "Suche",
+        "searchPlaceholder": "Nach Kunde oder Stil suchen…",
+        "statusLabel": "Status",
+        "statusAll": "Alle Status",
+        "dateFromLabel": "Von",
+        "dateToLabel": "Bis",
+        "dateRangeLabel": "Zeitraum",
+        "dateRangePlaceholder": "Nach Datum filtern",
+        "dateRangePresets": "Schnellauswahl",
+        "dateRangeToday": "Heute",
+        "dateRangeLast7Days": "Letzte 7 Tage",
+        "dateRangeThisMonth": "Dieser Monat",
+        "dateRangeLastMonth": "Letzter Monat",
+        "dateRangeClear": "Löschen",
+        "dateRangeApply": "Übernehmen",
+        "dateRangePreviousMonth": "Vorheriger Monat",
+        "dateRangeNextMonth": "Nächster Monat",
+        "reset": "Filter zurücksetzen"
+      },
+      "status": {
+        "PENDING_PAYMENT": "Zahlung ausstehend",
+        "CONFIRMED": "Bestätigt",
+        "IN_PROGRESS": "In Bearbeitung",
+        "COMPLETED": "Abgeschlossen",
+        "NO_SHOW": "Nicht erschienen",
+        "CANCELLED_BY_CUSTOMER": "Vom Kunden storniert",
+        "CANCELLED_BY_BRAIDER": "Von Ihnen storniert",
+        "CANCELLED_NO_PAYMENT": "Storniert (unbezahlt)",
+        "EXPIRED": "Abgelaufen",
+        "DISPUTED": "Angefochten"
+      },
+      "table": {
+        "styleColumn": "Stil",
+        "customerColumn": "Kunde",
+        "dateColumn": "Datum & Uhrzeit",
+        "statusColumn": "Status",
+        "totalColumn": "Gesamt"
+      },
+      "empty": {
+        "title": "Noch keine Buchungen",
+        "description": "Buchungen erscheinen hier, sobald Kunden Ihre Leistungen buchen."
+      },
+      "noResults": "Keine Buchungen entsprechen Ihren Filtern.",
+      "loadError": "Ihre Buchungen konnten nicht geladen werden. Bitte versuchen Sie es erneut.",
+      "pagination": {
+        "summary": "Seite {page} von {totalPages} · {totalItems} Buchungen",
+        "previous": "Zurück",
+        "next": "Weiter"
+      },
+      "detail": {
+        "title": "Buchungsdetails",
+        "reference": "Referenz",
+        "customer": "Kunde",
+        "style": "Stil",
+        "duration": "Dauer",
+        "durationMinutes": "{minutes} Min.",
+        "location": "Ort",
+        "mobileService": "Mobiler Service — Sie fahren zum Kunden",
+        "studioService": "An Ihrem Standort",
+        "schedule": "Zeitplan",
+        "itemsTitle": "Preisaufschlüsselung",
+        "itemTypes": {
+          "SERVICE": "Leistung",
+          "VARIATION": "Variante",
+          "ADDON": "Extra",
+          "TRAVEL": "Reisegebühr",
+          "PLATFORM_FEE": "Plattformgebühr",
+          "VAT_SERVICE": "MwSt. (Leistung)",
+          "VAT_PLATFORM_FEE": "MwSt. (Plattformgebühr)"
+        },
+        "serviceSubtotal": "Zwischensumme Leistung",
+        "travelFee": "Reisegebühr",
+        "subtotal": "Zwischensumme",
+        "platformFee": "Plattformgebühr",
+        "vatOnService": "MwSt. auf Leistung",
+        "vatOnPlatformFee": "MwSt. auf Plattformgebühr",
+        "vatTotal": "MwSt. gesamt",
+        "total": "Gesamt",
+        "depositAmount": "Anzahlung",
+        "balanceAmount": "Restbetrag",
+        "paymentSchedule": "Zahlungsplan",
+        "paymentScheduleValues": {
+          "FULL_UPFRONT": "Vollständige Vorauszahlung",
+          "DEPOSIT_THEN_BALANCE": "Anzahlung, dann Restbetrag"
+        },
+        "cancellationCutoff": "Kostenlose Stornierung bis",
+        "paymentsTitle": "Zahlungen",
+        "paymentPurpose": {
+          "FULL": "Vollzahlung",
+          "DEPOSIT": "Anzahlung",
+          "BALANCE": "Restbetrag"
+        },
+        "paymentStatus": {
+          "PENDING": "Ausstehend",
+          "SUCCEEDED": "Bezahlt",
+          "FAILED": "Fehlgeschlagen",
+          "CANCELED": "Storniert"
+        },
+        "createdAt": "Gebucht am",
+        "close": "Schließen",
+        "chatButton": "Mit Kunde chatten"
+      },
+      "stats": {
+        "totalBookings": "Buchungen insgesamt",
+        "completed": "Abgeschlossen",
+        "upcoming": "Anstehend",
+        "declined": "Abgelehnt"
+      }
     }
   },
-  "bookings": {
-    "title": "Buchungsseite"
-  },
   "payment": {
-    "title": "Zahlung"
+    "title": "Zahlung",
+    "subtitle": "Verfolgen Sie Ihre Einnahmen und Ihren Zahlungsverlauf",
+    "stats": {
+      "netRevenue": "Nettoumsatz",
+      "totalReceived": "Gesamteinnahmen",
+      "totalRefunded": "Gesamtrückerstattungen",
+      "pending": "Ausstehende Zahlungen"
+    },
+    "trendChart": {
+      "title": "Buchungstrends",
+      "subtitle": "Letzte 90 Tage",
+      "empty": "Keine Buchungsdaten für diesen Zeitraum verfügbar."
+    },
+    "table": {
+      "title": "Letzte Zahlungen",
+      "emptyTitle": "Keine Zahlungen",
+      "emptySubtitle": "Sie haben noch keine Zahlungen erhalten.",
+      "columns": {
+        "date": "Datum",
+        "bookingRef": "Buchungs-Ref",
+        "purpose": "Zweck",
+        "amount": "Betrag",
+        "status": "Status"
+      },
+      "refunded": "Erstattet",
+      "pagination": "Zeige {start} bis {end} von {total} Ergebnissen"
+    }
   },
   "settings": {
     "title": "Einstellungen"
   },
   "chat": {
-    "title": "Chat"
+    "title": "Chat",
+    "inbox": {
+      "subtitle": "Unterhaltungen mit Ihren Kunden.",
+      "empty": "Noch keine Unterhaltungen.",
+      "emptyDescription": "Unterhaltungen werden automatisch eröffnet, sobald die Buchung eines Kunden bezahlt ist.",
+      "loadError": "Ihre Unterhaltungen konnten nicht geladen werden. Bitte versuchen Sie es erneut.",
+      "flaggedPreview": "Nachricht zurückgehalten",
+      "paginationSummary": "Seite {page} von {totalPages}",
+      "previous": "Zurück",
+      "next": "Weiter"
+    },
+    "thread": {
+      "backToInbox": "Zurück zu den Unterhaltungen",
+      "loadError": "Diese Unterhaltung konnte nicht geladen werden. Bitte versuchen Sie es erneut.",
+      "loadEarlier": "Frühere Nachrichten laden",
+      "composerPlaceholder": "Nachricht schreiben…",
+      "send": "Senden",
+      "sendError": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+      "charLimit": "{count}/2000",
+      "translatedFrom": "Übersetzt aus dem {locale} · ",
+      "seeOriginal": "Original anzeigen",
+      "seeTranslation": "Übersetzung anzeigen",
+      "reportAction": "Melden",
+      "you": "Sie"
+    },
+    "report": {
+      "title": "Diese Unterhaltung melden",
+      "reasonLabel": "Grund",
+      "reasons": {
+        "HARASSMENT": "Belästigung",
+        "INAPPROPRIATE_CONTENT": "Unangemessene Inhalte",
+        "SPAM": "Spam",
+        "SCAM_OR_FRAUD": "Betrug",
+        "OFF_PLATFORM_SOLICITATION": "Aufforderung zu Zahlung oder Kommunikation außerhalb der App",
+        "OTHER": "Sonstiges"
+      },
+      "detailsLabel": "Weitere Details (optional)",
+      "detailsPlaceholder": "Alles, was unserem Team bei der Prüfung hilft…",
+      "cancel": "Abbrechen",
+      "submit": "Meldung senden",
+      "success": "Danke — unser Team wird diese Unterhaltung prüfen.",
+      "error": "Ihre Meldung konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
+    },
+    "localeBanner": {
+      "title": "Legen Sie Ihre Chat-Sprache fest",
+      "description": "Wir übersetzen Nachrichten automatisch, wenn Sie und Ihr Kunde in unterschiedlichen Sprachen schreiben.",
+      "placeholder": "Sprache wählen",
+      "save": "Speichern",
+      "success": "Chat-Sprache aktualisiert."
+    }
   },
   "availability": {
     "title": "Verfügbarkeit"
@@ -291,11 +663,22 @@
       "priceLabel": "Preis (€)",
       "cancel": "Abbrechen",
       "addButton": "Zum Angebot hinzufügen",
+      "discoverCatalog": "Katalog durchsuchen",
+      "allCategories": "Alle Kategorien",
+      "editService": "Leistung bearbeiten",
+      "deleteService": "Leistung löschen",
+      "deleteConfirmMessage": "Möchten Sie {styleName} wirklich aus Ihrem Angebot entfernen?",
+      "deleteButton": "Löschen",
       "menuTitle": "Ihr Angebot",
       "emptyMenu": "Sie haben noch keine Stile hinzugefügt.",
       "continue": "Weiter",
+      "dashboardTitle": "Ihre Preisliste",
+      "dashboardSubtitle": "Verwalten Sie die von Ihnen angebotenen Stile und deren Preise.",
+      "saveChanges": "Änderungen speichern",
       "toasts": {
-        "added": "Zum Angebot hinzugefügt."
+        "added": "Zum Angebot hinzugefügt.",
+        "saved": "Leistung aktualisiert.",
+        "removed": "Leistung entfernt."
       }
     },
     "portfolio": {
@@ -336,6 +719,9 @@
       "travelRadiusLabel": "Reiseradius (km)",
       "travelFeeLabel": "Reisegebühr (€, optional)",
       "continue": "Speichern & Weiter",
+      "dashboardTitle": "Ihr Standort",
+      "dashboardSubtitle": "Aktualisieren Sie, wo Sie arbeiten, und Ihre Reiseeinstellungen.",
+      "saveChanges": "Änderungen speichern",
       "toasts": {
         "saved": "Standort gespeichert.",
         "incomplete": "Bitte füllen Sie alle erforderlichen Standortdetails aus."
@@ -346,11 +732,15 @@
       "subtitle": "Legen Sie Ihren wöchentlichen Zeitplan und Ausnahmen fest.",
       "settingsTitle": "Buchungsregeln",
       "timezoneLabel": "Zeitzone",
-      "minNoticeHoursLabel": "Mindestvorlauf (Stunden)",
-      "maxAdvanceDaysLabel": "Max. Vorlauf (Tage)",
+      "minNoticeHoursLabel": "Vorlaufzeit (Stunden)",
+      "maxAdvanceDaysLabel": "Max. Vorausbuchung (Tage)",
       "bufferMinutesLabel": "Puffer zwischen Terminen (Min)",
       "weeklyWindowsTitle": "Wochenplan",
       "addWindow": "Zeiten hinzufügen",
+      "editWindow": "Arbeitszeiten bearbeiten",
+      "dayLabel": "Tag",
+      "update": "Aktualisieren",
+      "cancel": "Abbrechen",
       "days": {
         "MONDAY": "Montag",
         "TUESDAY": "Dienstag",
@@ -396,5 +786,27 @@
       "title": "Demnächst verfügbar",
       "subtitle": "Dieser Schritt ist noch nicht bereit — schauen Sie bald wieder vorbei."
     }
+  },
+  "contact": {
+    "title": "Kontaktiere uns",
+    "subtitle": "Wir würden uns freuen, von Ihnen zu hören. Senden Sie uns eine Nachricht und wir werden uns so schnell wie möglich bei Ihnen melden.",
+    "firstNameLabel": "Vorname",
+    "firstNamePlaceholder": "z.B., Ada",
+    "lastNameLabel": "Nachname",
+    "lastNamePlaceholder": "z.B., Nwosu",
+    "emailLabel": "E-Mail-Adresse",
+    "emailPlaceholder": "ada@example.com",
+    "phoneLabel": "Telefonnummer",
+    "phonePlaceholder": "+15551234567",
+    "subjectLabel": "Betreff",
+    "subjectPlaceholder": "z.B., Frage zu Preisen",
+    "purposeLabel": "Grund der Kontaktaufnahme",
+    "purposeGeneral": "Allgemeine Anfrage",
+    "purposePartner": "Partnerschaft",
+    "purposePricing": "Preise",
+    "purposeFaqs": "FAQs",
+    "messageLabel": "Nachricht",
+    "messagePlaceholder": "Wie können wir Ihnen helfen?",
+    "submit": "Nachricht senden"
   }
 }

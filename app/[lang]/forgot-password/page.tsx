@@ -1,11 +1,8 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getDictionary, hasLocale, locales } from "../dictionaries";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { ForgotPasswordForm } from "@/components/forgot-password/forgot-password-form";
-
-export function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
-}
+import { auth } from "@/auth";
 
 export default async function ForgotPasswordPage({
   params,
@@ -14,6 +11,11 @@ export default async function ForgotPasswordPage({
 
   if (!hasLocale(lang)) notFound();
 
+  const session = await auth();
+  if (session && session.error !== "RefreshAccessTokenError") {
+    redirect(`/${lang}/dashboard`);
+  }
+
   const dict = await getDictionary(lang);
 
   return (
@@ -21,8 +23,6 @@ export default async function ForgotPasswordPage({
       lang={lang}
       supportEmail={dict.common.supportEmail}
       heroImageAlt={dict.common.heroImageAlt}
-      heroImageSrc="/images/forgot-password-hero.jpg"
-      heroImagePosition="object-[center_2%]"
       themeLabels={dict.common.theme}
     >
       <ForgotPasswordForm

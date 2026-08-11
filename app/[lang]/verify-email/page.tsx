@@ -1,11 +1,8 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getDictionary, hasLocale, locales } from "../dictionaries";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { VerifyEmailForm } from "@/components/verify-email/verify-email-form";
-
-export function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
-}
+import { auth } from "@/auth";
 
 export default async function VerifyEmailPage({
   params,
@@ -15,6 +12,11 @@ export default async function VerifyEmailPage({
   const { email } = await searchParams;
 
   if (!hasLocale(lang)) notFound();
+
+  const session = await auth();
+  if (session && session.error !== "RefreshAccessTokenError") {
+    redirect(`/${lang}/dashboard`);
+  }
 
   const dict = await getDictionary(lang);
   const defaultEmail = typeof email === "string" ? email : "";

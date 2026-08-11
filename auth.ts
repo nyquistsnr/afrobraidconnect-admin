@@ -3,7 +3,13 @@ import Credentials from "next-auth/providers/credentials";
 import type { JWT } from "next-auth/jwt";
 import { ApiError, authApi } from "@/lib/api/auth-client";
 import type { AuthTokenResponse } from "@/lib/api/types";
-import { defaultLocale, hasLocale } from "@/lib/i18n";
+import { defaultLocale, hasLocale, type Locale } from "@/lib/i18n";
+
+// Credentials fields arrive as untyped strings from the client — validate
+// against the known locale list rather than trusting/casting blindly.
+function resolveLocale(value: unknown): Locale {
+  return typeof value === "string" && hasLocale(value) ? value : defaultLocale;
+}
 
 // Auth.js redirects thrown-CredentialsSignin subclasses back to the client
 // with `code` set to this instance property — this is how our backend's
@@ -18,7 +24,7 @@ class LoginError extends CredentialsSignin {
 
 // Shared by both the email/password and Google providers — same backend
 // envelope shape (AuthTokenResponse) either way, once a session exists.
-function toAuthUser(tokens: AuthTokenResponse): User {
+function toAuthUser(tokens: AuthTokenResponse, lang: Locale): User {
   return {
     id: tokens.id,
     email: tokens.email,
@@ -31,14 +37,17 @@ function toAuthUser(tokens: AuthTokenResponse): User {
     refreshToken: tokens.refresh_token,
     accessTokenExpires: Date.now() + tokens.expires_in * 1000,
     braider: tokens.braider,
+    lang,
   };
 }
 
 // The backend rotates refresh tokens on every use, so the old one is dead
 // the moment this call returns — the new pair below is the only valid one.
+// Uses the locale captured at sign-in (token.lang) since there's no request
+// context here to read a fresh one from.
 async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
-    const refreshed = await authApi.refresh(token.refreshToken);
+    const refreshed = await authApi.refresh(token.refreshToken, token.lang);
     return {
       ...token,
       accessToken: refreshed.access_token,
@@ -52,7 +61,6 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  secret: process.env.AUTH_SECRET,
   session: { strategy: "jwt" },
   trustHost: true,
   providers: [
@@ -67,15 +75,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       authorize: async (credentials) => {
         const email = credentials?.email;
         const password = credentials?.password;
+        const lang = resolveLocale(credentials?.lang);
 
         if (typeof email !== "string" || typeof password !== "string") {
           throw new LoginError("VALIDATION_ERROR");
         }
-
-        const lang =
-          typeof credentials?.lang === "string" && hasLocale(credentials.lang)
-            ? credentials.lang
-            : defaultLocale;
 
         try {
           const tokens = await authApi.login(
@@ -86,7 +90,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             },
             lang
           );
-          return toAuthUser(tokens);
+          return toAuthUser(tokens, lang);
         } catch (error) {
           throw new LoginError(
             error instanceof ApiError ? error.code : "UNKNOWN_ERROR"
@@ -108,15 +112,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       authorize: async (credentials) => {
         const providerToken = credentials?.providerToken;
+        const lang = resolveLocale(credentials?.lang);
 
         if (typeof providerToken !== "string") {
           throw new LoginError("VALIDATION_ERROR");
         }
-
-        const lang =
-          typeof credentials?.lang === "string" && hasLocale(credentials.lang)
-            ? credentials.lang
-            : defaultLocale;
 
         try {
           const tokens = await authApi.socialLogin(
@@ -125,11 +125,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               provider_token: providerToken,
               // Ignored by the backend if the Google account already maps to
               // an existing user — only applies to brand-new sign-ups.
-              user_type: "ADMIN",
+              user_type: "BRAIDER",
             },
             lang
           );
-          return toAuthUser(tokens);
+          return toAuthUser(tokens, lang);
         } catch (error) {
           throw new LoginError(
             error instanceof ApiError ? error.code : "UNKNOWN_ERROR"
@@ -139,13 +139,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
-      if (trigger === "update" && session) {
-        token.firstName = session.firstName ?? token.firstName;
-        token.lastName = session.lastName ?? token.lastName;
-        token.phoneNumber = session.phoneNumber ?? token.phoneNumber;
-      }
-      
+    async jwt({ token, user }) {
       if (user) {
         return {
           ...token,
@@ -160,11 +154,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           refreshToken: user.refreshToken,
           accessTokenExpires: user.accessTokenExpires,
           braider: user.braider,
+          lang: user.lang,
         };
       }
 
-      // Refresh 2 minutes early so an in-flight request never races expiry.
-      if (Date.now() < token.accessTokenExpires - 120_000) {
+      // Refresh a minute early so an in-flight request never races expiry.
+      if (Date.now() < token.accessTokenExpires - 60_000) {
         return token;
       }
 
@@ -177,7 +172,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.phoneNumber = token.phoneNumber;
       session.user.userType = token.userType;
       session.accessToken = token.accessToken;
-      session.accessTokenExpires = token.accessTokenExpires;
       session.braider = token.braider;
       session.error = token.error;
       return session;

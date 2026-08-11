@@ -26,7 +26,8 @@ export function ForgotPasswordForm({
   const [email, setEmail] = useState("");
 
   const forgotPasswordMutation = useMutation({
-    mutationFn: authApi.forgotPassword,
+    mutationFn: (body: Parameters<typeof authApi.forgotPassword>[0]) =>
+      authApi.forgotPassword(body, lang),
     onSuccess: () => {
       toast.success(common.toasts.forgotPasswordSuccess);
       router.push(`/${lang}/reset-password?email=${encodeURIComponent(email)}`);
@@ -44,10 +45,8 @@ export function ForgotPasswordForm({
 
   return (
     <div className="w-full">
-      <h1 className="text-2xl lg:text-3xl font-semibold text-foreground mb-2">
-        {dict.title}
-      </h1>
-      <p className="text-base text-muted-foreground mb-8">{dict.subtitle}</p>
+      <h1 className="text-3xl font-bold text-foreground">{dict.title}</h1>
+      <p className="mt-2 text-sm text-muted-foreground">{dict.subtitle}</p>
 
       <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
         <Input

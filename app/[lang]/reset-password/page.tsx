@@ -1,11 +1,8 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getDictionary, hasLocale, locales } from "../dictionaries";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { ResetPasswordForm } from "@/components/reset-password/reset-password-form";
-
-export function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
-}
+import { auth } from "@/auth";
 
 export default async function ResetPasswordPage({
   params,
@@ -16,6 +13,11 @@ export default async function ResetPasswordPage({
 
   if (!hasLocale(lang)) notFound();
 
+  const session = await auth();
+  if (session && session.error !== "RefreshAccessTokenError") {
+    redirect(`/${lang}/dashboard`);
+  }
+
   const dict = await getDictionary(lang);
   const defaultEmail = typeof email === "string" ? email : "";
 
@@ -24,8 +26,6 @@ export default async function ResetPasswordPage({
       lang={lang}
       supportEmail={dict.common.supportEmail}
       heroImageAlt={dict.common.heroImageAlt}
-      heroImageSrc="/images/forgot-password-hero.jpg"
-      heroImagePosition="object-[center_2%]"
       themeLabels={dict.common.theme}
     >
       <ResetPasswordForm

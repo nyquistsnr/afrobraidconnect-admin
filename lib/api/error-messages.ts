@@ -32,6 +32,15 @@ const CODE_TO_KEY: Record<string, keyof ErrorsDict> = {
   BRAIDER_STYLE_ALREADY_EXISTS: "styleAlreadyAdded",
   INVALID_STYLE_VARIATION: "invalidStyleVariation",
   INVALID_ADDON: "invalidAddon",
+  BOOKING_NOT_FOUND: "bookingNotFound",
+  INVALID_BOOKING_DATE_RANGE: "invalidBookingDateRange",
+  INVALID_CHAT_LOCALE: "invalidChatLocale",
+  CHAT_NOT_AVAILABLE: "chatNotAvailable",
+  CHAT_THREAD_NOT_FOUND: "chatThreadNotFound",
+  CHAT_ACCESS_DENIED: "chatAccessDenied",
+  CHAT_MESSAGE_NOT_FOUND: "chatMessageNotFound",
+  NOTIFICATION_NOT_FOUND: "notificationNotFound",
+  INVALID_DATE_RANGE: "invalidDateRange",
 };
 
 // `code` here is whatever error.code the backend returned (see ApiError),

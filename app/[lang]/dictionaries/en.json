@@ -1,4 +1,156 @@
 {
+  "header": {
+    "joinBraider": "Join as a braider",
+    "findBraider": "Find a braider",
+    "dashboard": "Dashboard",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "home": {
+    "heroHeadline": "Find the best Afro braiders near you",
+    "heroSubheadline": "Book talented professionals for your next braided style.",
+    "ctaFind": "Find a braider",
+    "ctaJoin": "Join as a professional",
+    "badgeTitle": "Top Rated",
+    "badgeSubtitle": "Professionals",
+    "benefits": {
+      "title": "Why Braide with Us?",
+      "subtitle": "Join Afrobraid Connect and take your braiding business to the next level.",
+      "cards": [
+        {
+          "title": "Make Good Money",
+          "description": "Set your own rates and keep more of what you earn with our transparent fee structure."
+        },
+        {
+          "title": "Flexible Schedule",
+          "description": "Work when you want, where you want. You are your own boss."
+        },
+        {
+          "title": "Grow Your Client Base",
+          "description": "Get discovered by hundreds of clients looking for top-tier Afro braiding in your area."
+        }
+      ]
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Get started in 8 simple steps.",
+      "steps": {
+        "step1": { "title": "Business Info", "description": "Tell us about your brand." },
+        "step2": { "title": "Phone Verification", "description": "Secure your account." },
+        "step3": { "title": "ID Verification", "description": "Powered by Veriff for trusted identity checks." },
+        "step4": { "title": "Service Type", "description": "Select the styles you offer." },
+        "step5": { "title": "Portfolio", "description": "Showcase your best work." },
+        "step6": { "title": "Location", "description": "Set where you work from." },
+        "step7": { "title": "Availability", "description": "Choose your working hours." },
+        "step8": { "title": "Payment Setup", "description": "Connect with Stripe to receive secure payouts." }
+      }
+    },
+    "statistics": {
+      "stats": [
+        { "value": "500+", "label": "Active Braiders" },
+        { "value": "50+", "label": "Cities Covered" },
+        { "value": "10k+", "label": "Happy Clients" }
+      ]
+    },
+    "testimonials": {
+      "title": "Loved by Braiders",
+      "subtitle": "See what professionals are saying about Afrobraid Connect.",
+      "cards": [
+        {
+          "name": "Aisha T.",
+          "location": "Berlin",
+          "quote": "Afrobraid Connect completely transformed my business. I have more clients than ever, and I love having control over my own schedule."
+        },
+        {
+          "name": "Sarah K.",
+          "location": "Paris",
+          "quote": "The platform makes managing bookings and payments effortless. I don't have to chase clients for deposits anymore!"
+        },
+        {
+          "name": "Joy M.",
+          "location": "Munich",
+          "quote": "I joined three months ago, and my revenue has doubled. The clients I get from here respect my work and time."
+        }
+      ]
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about joining the platform.",
+      "items": [
+        {
+          "question": "How much does it cost to join?",
+          "answer": "Signing up and listing your services is completely free. We only take a small transparent commission when you complete a booking."
+        },
+        {
+          "question": "How do I get paid?",
+          "answer": "Payments are processed securely via Stripe. Once a service is completed, funds are automatically transferred to your connected bank account."
+        },
+        {
+          "question": "Can I set my own hours?",
+          "answer": "Yes! You have complete control over your calendar. You decide when you are available for bookings and can update it anytime."
+        },
+        {
+          "question": "What if a client cancels?",
+          "answer": "You can define your own cancellation policy. If a client cancels late, you'll still receive a portion of the payment according to your rules."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to grow your braiding business?",
+      "subtitle": "Join hundreds of top professionals making great money on their own terms.",
+      "button": "Join Afrobraid Connect Today"
+    }
+  },
+  "footer": {
+    "copyright": "© {{year}} Afrobraid Connect. All rights reserved.",
+    "company": "Company",
+    "links": {
+      "aboutUs": "About Us",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "about": {
+    "title": "About Afrobraid Connect",
+    "missionTitle": "Our Mission",
+    "missionText": "We are on a mission to empower talented Afro braiders by providing them with the tools they need to run a successful, independent business, while giving clients a seamless, trusted booking experience.",
+    "storyTitle": "Our Story",
+    "storyText": "Afrobraid Connect was born out of a simple observation: finding a skilled, reliable Afro hair braider was too difficult, and for braiders, managing bookings, deposits, and schedules was chaotic. We built this platform to bridge that gap. We celebrate cultural heritage while bringing modern convenience to the hair braiding industry."
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated: August 2026",
+    "intro": "At Afrobraid Connect, we take your privacy seriously. This policy explains how we collect, use, and protect your personal information.",
+    "dataCollection": {
+      "title": "1. Data Collection",
+      "text": "We collect information you provide directly to us when you create an account, update your profile, or use our services. This includes your name, email address, phone number, and location data."
+    },
+    "dataUsage": {
+      "title": "2. How We Use Your Data",
+      "text": "Your data is used to provide, maintain, and improve our services, process transactions, send support messages, and communicate with you about products and services."
+    },
+    "dataSharing": {
+      "title": "3. Data Sharing",
+      "text": "We do not sell your personal data. We may share data with trusted third-party vendors (such as Stripe for payments or Veriff for identity verification) solely to provide our services."
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last Updated: August 2026",
+    "intro": "Welcome to Afrobraid Connect. By accessing our platform, you agree to these terms.",
+    "account": {
+      "title": "1. Account Responsibilities",
+      "text": "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account."
+    },
+    "services": {
+      "title": "2. Braider Services",
+      "text": "Braiders operate as independent contractors. Afrobraid Connect is a technology platform that connects clients with braiders and does not directly provide braiding services."
+    },
+    "payments": {
+      "title": "3. Payments and Fees",
+      "text": "All payments must be processed through the platform. Afrobraid Connect charges a transparent service fee on completed bookings as outlined in your dashboard."
+    }
+  },
   "common": {
     "supportEmail": "support@afrobraidconnect.de",
     "heroImageAlt": "Smiling woman wearing braided hair",
@@ -41,6 +193,15 @@
       "styleAlreadyAdded": "You've already added that style to your menu.",
       "invalidStyleVariation": "One of the selected variations isn't valid for this style.",
       "invalidAddon": "One of the selected add-ons isn't valid.",
+      "bookingNotFound": "That booking couldn't be found.",
+      "invalidBookingDateRange": "The end date must be on or after the start date.",
+      "invalidChatLocale": "That language isn't supported.",
+      "chatNotAvailable": "Chat opens once this booking's payment has gone through.",
+      "chatThreadNotFound": "That conversation couldn't be found.",
+      "chatAccessDenied": "You don't have access to this conversation.",
+      "chatMessageNotFound": "That message couldn't be found.",
+      "notificationNotFound": "That notification couldn't be found.",
+      "invalidDateRange": "The end date must be on or after the start date.",
       "generic": "Something went wrong. Please try again."
     },
     "toasts": {
@@ -134,7 +295,10 @@
     "header": {
       "notifications": "Notifications",
       "messages": "Messages",
-      "logout": "Logout"
+      "logout": "Logout",
+      "notificationsEmpty": "No notifications yet.",
+      "notificationsLoadError": "We couldn't load your notifications.",
+      "markAllRead": "Mark all as read"
     },
     "logoutModal": {
       "title": "Log out?",
@@ -143,7 +307,27 @@
       "confirm": "Log Out"
     },
     "home": {
-      "greeting": "Hello There"
+      "greeting": "Hello There",
+      "stats": {
+        "totalBookings": "Total Bookings",
+        "totalRevenue": "Total Revenue",
+        "completionRate": "Completion Rate",
+        "uniqueCustomers": "Unique Customers"
+      },
+      "revenueChart": {
+        "title": "Revenue"
+      },
+      "busiestDaysChart": {
+        "title": "Busiest Days"
+      },
+      "topStylesChart": {
+        "title": "Top Styles",
+        "other": "Other"
+      },
+      "recentBookings": {
+        "title": "Recent Bookings",
+        "viewAll": "View all bookings"
+      }
     },
     "profile": {
       "title": "Profile Settings",
@@ -154,20 +338,208 @@
       "lastNamePlaceholder": "e.g. Nwosu",
       "phoneLabel": "Phone Number",
       "saveButton": "Save Changes",
-      "successToast": "Profile updated successfully."
+      "successToast": "Profile updated successfully.",
+      "chatLocaleLabel": "Chat language",
+      "chatLocaleHint": "Used to auto-translate chat messages between you and clients.",
+      "chatLocaleUnset": "Not set"
+    },
+    "bookings": {
+      "title": "Bookings",
+      "subtitle": "View and manage your upcoming and past appointments.",
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Search by client or style…",
+        "statusLabel": "Status",
+        "statusAll": "All statuses",
+        "dateFromLabel": "From",
+        "dateToLabel": "To",
+        "dateRangeLabel": "Date range",
+        "dateRangePlaceholder": "Filter by date",
+        "dateRangePresets": "Presets",
+        "dateRangeToday": "Today",
+        "dateRangeLast7Days": "Last 7 days",
+        "dateRangeThisMonth": "This month",
+        "dateRangeLastMonth": "Last month",
+        "dateRangeClear": "Clear",
+        "dateRangeApply": "Apply range",
+        "dateRangePreviousMonth": "Previous month",
+        "dateRangeNextMonth": "Next month",
+        "reset": "Reset filters"
+      },
+      "status": {
+        "PENDING_PAYMENT": "Pending payment",
+        "CONFIRMED": "Confirmed",
+        "IN_PROGRESS": "In progress",
+        "COMPLETED": "Completed",
+        "NO_SHOW": "No-show",
+        "CANCELLED_BY_CUSTOMER": "Cancelled by client",
+        "CANCELLED_BY_BRAIDER": "Cancelled by you",
+        "CANCELLED_NO_PAYMENT": "Cancelled (unpaid)",
+        "EXPIRED": "Expired",
+        "DISPUTED": "Disputed"
+      },
+      "table": {
+        "styleColumn": "Style",
+        "customerColumn": "Client",
+        "dateColumn": "Date & time",
+        "statusColumn": "Status",
+        "totalColumn": "Total"
+      },
+      "empty": {
+        "title": "No bookings yet",
+        "description": "Bookings will show up here once clients start booking your services."
+      },
+      "noResults": "No bookings match your filters.",
+      "loadError": "We couldn't load your bookings. Please try again.",
+      "pagination": {
+        "summary": "Page {page} of {totalPages} · {totalItems} bookings",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "detail": {
+        "title": "Booking details",
+        "reference": "Reference",
+        "customer": "Client",
+        "style": "Style",
+        "duration": "Duration",
+        "durationMinutes": "{minutes} min",
+        "location": "Location",
+        "mobileService": "Mobile service — travels to the client",
+        "studioService": "At your location",
+        "schedule": "Schedule",
+        "itemsTitle": "Price breakdown",
+        "itemTypes": {
+          "SERVICE": "Service",
+          "VARIATION": "Variation",
+          "ADDON": "Add-on",
+          "TRAVEL": "Travel fee",
+          "PLATFORM_FEE": "Platform fee",
+          "VAT_SERVICE": "VAT (service)",
+          "VAT_PLATFORM_FEE": "VAT (platform fee)"
+        },
+        "serviceSubtotal": "Service subtotal",
+        "travelFee": "Travel fee",
+        "subtotal": "Subtotal",
+        "platformFee": "Platform fee",
+        "vatOnService": "VAT on service",
+        "vatOnPlatformFee": "VAT on platform fee",
+        "vatTotal": "Total VAT",
+        "total": "Total",
+        "depositAmount": "Deposit",
+        "balanceAmount": "Balance",
+        "paymentSchedule": "Payment schedule",
+        "paymentScheduleValues": {
+          "FULL_UPFRONT": "Full payment upfront",
+          "DEPOSIT_THEN_BALANCE": "Deposit, then balance"
+        },
+        "cancellationCutoff": "Free cancellation until",
+        "paymentsTitle": "Payments",
+        "paymentPurpose": {
+          "FULL": "Full payment",
+          "DEPOSIT": "Deposit",
+          "BALANCE": "Balance"
+        },
+        "paymentStatus": {
+          "PENDING": "Pending",
+          "SUCCEEDED": "Paid",
+          "FAILED": "Failed",
+          "CANCELED": "Canceled"
+        },
+        "createdAt": "Booked on",
+        "close": "Close",
+        "chatButton": "Chat with client"
+      },
+      "stats": {
+        "totalBookings": "Total Bookings",
+        "completed": "Completed",
+        "upcoming": "Upcoming",
+        "declined": "Declined"
+      }
     }
   },
-  "bookings": {
-    "title": "Booking Page"
-  },
   "payment": {
-    "title": "Payment"
+    "title": "Payment",
+    "subtitle": "Track your earnings and payment history",
+    "stats": {
+      "netRevenue": "Net Revenue",
+      "totalReceived": "Total Received",
+      "totalRefunded": "Total Refunded",
+      "pending": "Pending Payments"
+    },
+    "trendChart": {
+      "title": "Booking Trends",
+      "subtitle": "Past 90 days",
+      "empty": "No booking data available for this period."
+    },
+    "table": {
+      "title": "Recent Payments",
+      "emptyTitle": "No payments",
+      "emptySubtitle": "You haven't received any payments yet.",
+      "columns": {
+        "date": "Date",
+        "bookingRef": "Booking Ref",
+        "purpose": "Purpose",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "refunded": "Refunded",
+      "pagination": "Showing {start} to {end} of {total} results"
+    }
   },
   "settings": {
     "title": "Settings"
   },
   "chat": {
-    "title": "Chat"
+    "title": "Chat",
+    "inbox": {
+      "subtitle": "Conversations with your clients.",
+      "empty": "No conversations yet.",
+      "emptyDescription": "Conversations open automatically once a client's booking is paid.",
+      "loadError": "We couldn't load your conversations. Please try again.",
+      "flaggedPreview": "Message withheld",
+      "paginationSummary": "Page {page} of {totalPages}",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "thread": {
+      "backToInbox": "Back to conversations",
+      "loadError": "We couldn't load this conversation. Please try again.",
+      "loadEarlier": "Load earlier messages",
+      "composerPlaceholder": "Write a message…",
+      "send": "Send",
+      "sendError": "Your message couldn't be sent. Please try again.",
+      "charLimit": "{count}/2000",
+      "translatedFrom": "Translated from {locale} · ",
+      "seeOriginal": "see original",
+      "seeTranslation": "see translation",
+      "reportAction": "Report",
+      "you": "You"
+    },
+    "report": {
+      "title": "Report this conversation",
+      "reasonLabel": "Reason",
+      "reasons": {
+        "HARASSMENT": "Harassment",
+        "INAPPROPRIATE_CONTENT": "Inappropriate content",
+        "SPAM": "Spam",
+        "SCAM_OR_FRAUD": "Scam or fraud",
+        "OFF_PLATFORM_SOLICITATION": "Asked to pay or communicate outside the app",
+        "OTHER": "Other"
+      },
+      "detailsLabel": "Additional details (optional)",
+      "detailsPlaceholder": "Anything that will help our team review this…",
+      "cancel": "Cancel",
+      "submit": "Submit report",
+      "success": "Thanks — our team will review this conversation.",
+      "error": "We couldn't submit your report. Please try again."
+    },
+    "localeBanner": {
+      "title": "Set your chat language",
+      "description": "We'll automatically translate messages when you and your client write in different languages.",
+      "placeholder": "Choose a language",
+      "save": "Save",
+      "success": "Chat language updated."
+    }
   },
   "availability": {
     "title": "Availability"
@@ -291,11 +663,22 @@
       "priceLabel": "Price (€)",
       "cancel": "Cancel",
       "addButton": "Add to menu",
+      "discoverCatalog": "Discover Catalog",
+      "allCategories": "All Categories",
+      "editService": "Edit Service",
+      "deleteService": "Delete Service",
+      "deleteConfirmMessage": "Are you sure you want to remove {styleName} from your menu?",
+      "deleteButton": "Delete",
       "menuTitle": "Your menu",
       "emptyMenu": "You haven't added any styles yet.",
       "continue": "Continue",
+      "dashboardTitle": "Your Price Menu",
+      "dashboardSubtitle": "Manage the styles you offer and their prices.",
+      "saveChanges": "Save Changes",
       "toasts": {
-        "added": "Added to your menu."
+        "added": "Added to your menu.",
+        "saved": "Service updated.",
+        "removed": "Service removed."
       }
     },
     "portfolio": {
@@ -336,6 +719,9 @@
       "travelRadiusLabel": "Travel radius (km)",
       "travelFeeLabel": "Travel fee (€, optional)",
       "continue": "Save & Continue",
+      "dashboardTitle": "Your Location",
+      "dashboardSubtitle": "Update where you work and your travel settings.",
+      "saveChanges": "Save Changes",
       "toasts": {
         "saved": "Location saved.",
         "incomplete": "Please fill out all required location details."
@@ -351,6 +737,10 @@
       "bufferMinutesLabel": "Buffer between appointments (mins)",
       "weeklyWindowsTitle": "Weekly Schedule",
       "addWindow": "Add hours",
+      "editWindow": "Edit Working Hours",
+      "dayLabel": "Day",
+      "update": "Update",
+      "cancel": "Cancel",
       "days": {
         "MONDAY": "Monday",
         "TUESDAY": "Tuesday",
@@ -396,5 +786,27 @@
       "title": "Coming soon",
       "subtitle": "This step isn't ready yet — check back shortly."
     }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We'd love to hear from you. Send us a message and we'll get back to you as soon as possible.",
+    "firstNameLabel": "First Name",
+    "firstNamePlaceholder": "e.g., Ada",
+    "lastNameLabel": "Last Name",
+    "lastNamePlaceholder": "e.g., Nwosu",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "ada@example.com",
+    "phoneLabel": "Phone Number",
+    "phonePlaceholder": "+15551234567",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "e.g., Question about pricing",
+    "purposeLabel": "Reason for contacting us",
+    "purposeGeneral": "General Inquiry",
+    "purposePartner": "Partnership",
+    "purposePricing": "Pricing",
+    "purposeFaqs": "FAQs",
+    "messageLabel": "Message",
+    "messagePlaceholder": "How can we help you?",
+    "submit": "Send Message"
   }
 }

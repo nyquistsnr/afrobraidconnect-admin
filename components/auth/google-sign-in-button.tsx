@@ -14,8 +14,6 @@ const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 declare global {
   interface Window {
-    __googleAccountsInitialized?: boolean;
-    __googleSignInCallback?: (response: { credential: string }) => void;
     google?: {
       accounts: {
         id: {
@@ -52,7 +50,7 @@ export function GoogleSignInButton({
 
   const googleSignInMutation = useMutation({
     mutationFn: async (providerToken: string) => {
-      const result = await signIn("google", { providerToken, redirect: false });
+      const result = await signIn("google", { providerToken, lang, redirect: false });
       if (result?.error) {
         throw new Error(result.code ?? result.error);
       }
@@ -77,8 +75,16 @@ export function GoogleSignInButton({
   });
 
   useEffect(() => {
-    if (!GOOGLE_CLIENT_ID) return;
+    if (!GOOGLE_CLIENT_ID) {
+      console.error(
+        "NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set — Google sign-in is disabled."
+      );
+      return;
+    }
 
+    // The GSI script (loaded via next/script in the root layout) may not
+    // have finished executing yet when this effect first runs — poll
+    // rather than assume it's ready.
     let cancelled = false;
 
     function renderWhenReady() {
@@ -92,16 +98,21 @@ export function GoogleSignInButton({
         return;
       }
 
-      window.__googleSignInCallback = (response) => googleSignInMutation.mutate(response.credential);
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID as string,
+        // The ID token is short-lived and single-use for verification —
+        // it's handed straight to authorize(), never cached or replayed.
+        callback: (response) => googleSignInMutation.mutate(response.credential),
+      });
 
-      if (!window.__googleAccountsInitialized) {
-        google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID as string,
-          callback: (response) => window.__googleSignInCallback?.(response),
-        });
-        window.__googleAccountsInitialized = true;
-      }
-
+      // Google's own rendered button is the only supported way to get an
+      // ID token (rather than an access token) from a click — but its
+      // built-in themes always keep a white backing chip behind the logo
+      // even in dark mode, and its `text` option only offers a handful of
+      // fixed Google-picked strings that don't follow this app's language
+      // switcher. So it's rendered fully transparent, stretched exactly
+      // over our own styled + translated button below, and just catches
+      // the click; all the visible pixels are ours.
       google.accounts.id.renderButton(container, {
         size: "large",
         width: wrapper.offsetWidth || 320,
@@ -116,49 +127,48 @@ export function GoogleSignInButton({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (!GOOGLE_CLIENT_ID) return null;
+
   return (
-    <div ref={wrapperRef} className="relative w-full">
+    <div ref={wrapperRef} className="relative h-10 w-full">
       <button
         type="button"
-        onClick={() => {
-          if (!GOOGLE_CLIENT_ID) {
-            toast.info("Google Sign-In is not configured yet.");
-          }
-        }}
-        className="flex h-11 w-full items-center justify-center gap-2 border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        tabIndex={-1}
+        aria-hidden="true"
+        className="pointer-events-none flex h-10 w-full items-center justify-center gap-3 border border-border bg-input text-sm font-semibold text-foreground"
       >
         <GoogleIcon className="size-5 shrink-0" />
         {label}
       </button>
 
-      {GOOGLE_CLIENT_ID && (
-        <div
-          ref={containerRef}
-          className="absolute inset-0 overflow-hidden opacity-0 cursor-pointer"
-        />
-      )}
+      {/* Google's real, functional button — invisible but still the
+          element that actually receives the click and keyboard focus. */}
+      <div
+        ref={containerRef}
+        className="absolute inset-0 overflow-hidden opacity-0"
+      />
     </div>
   );
 }
 
 function GoogleIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg {...props} viewBox="0 0 48 48" className="size-5">
+    <svg {...props} viewBox="0 0 24 24">
       <path
-        fill="#FFC107"
-        d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+        fill="#4285F4"
+        d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.47a5.53 5.53 0 0 1-2.4 3.63v3h3.89c2.27-2.09 3.58-5.17 3.58-8.82Z"
       />
       <path
-        fill="#FF3D00"
-        d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+        fill="#34A853"
+        d="M12 24c3.24 0 5.96-1.07 7.95-2.91l-3.89-3c-1.08.73-2.46 1.15-4.06 1.15-3.13 0-5.78-2.11-6.73-4.95H1.26v3.11A12 12 0 0 0 12 24Z"
       />
       <path
-        fill="#4CAF50"
-        d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+        fill="#FBBC05"
+        d="M5.27 14.29a7.19 7.19 0 0 1 0-4.58V6.6H1.26a12 12 0 0 0 0 10.8l4.01-3.11Z"
       />
       <path
-        fill="#1976D2"
-        d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+        fill="#EA4335"
+        d="M12 4.77c1.76 0 3.34.6 4.58 1.79l3.44-3.44C17.95 1.19 15.24 0 12 0A12 12 0 0 0 1.26 6.6l4.01 3.11C6.22 6.88 8.87 4.77 12 4.77Z"
       />
     </svg>
   );
