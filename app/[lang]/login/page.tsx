@@ -1,5 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { getDictionary, hasLocale, locales } from "../dictionaries";
+import type { Locale } from "@/lib/i18n";
 import { sanitizeCallbackUrl } from "@/lib/callback-url";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { LoginForm } from "@/components/login/login-form";
@@ -21,7 +22,8 @@ export default async function LoginPage({
 
   const dict = await getDictionary(lang);
   const safeCallbackUrl = sanitizeCallbackUrl(
-    typeof callbackUrl === "string" ? callbackUrl : null
+    typeof callbackUrl === "string" ? callbackUrl : null,
+    lang as Locale
   );
 
   return (
