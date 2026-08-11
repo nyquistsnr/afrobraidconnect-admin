@@ -5,16 +5,10 @@ import { ApiError, authApi } from "@/lib/api/auth-client";
 import type { AuthTokenResponse } from "@/lib/api/types";
 import { defaultLocale, hasLocale, type Locale } from "@/lib/i18n";
 
-// Credentials fields arrive as untyped strings from the client — validate
-// against the known locale list rather than trusting/casting blindly.
 function resolveLocale(value: unknown): Locale {
   return typeof value === "string" && hasLocale(value) ? value : defaultLocale;
 }
 
-// Auth.js redirects thrown-CredentialsSignin subclasses back to the client
-// with `code` set to this instance property — this is how our backend's
-// error.code (INVALID_CREDENTIALS, EMAIL_NOT_VERIFIED, RATE_LIMITED, ...)
-// survives the round trip instead of collapsing into a generic failure.
 class LoginError extends CredentialsSignin {
   constructor(code: string) {
     super();
@@ -22,8 +16,6 @@ class LoginError extends CredentialsSignin {
   }
 }
 
-// Shared by both the email/password and Google providers — same backend
-// envelope shape (AuthTokenResponse) either way, once a session exists.
 function toAuthUser(tokens: AuthTokenResponse, lang: Locale): User {
   return {
     id: tokens.id,
@@ -41,10 +33,6 @@ function toAuthUser(tokens: AuthTokenResponse, lang: Locale): User {
   };
 }
 
-// The backend rotates refresh tokens on every use, so the old one is dead
-// the moment this call returns — the new pair below is the only valid one.
-// Uses the locale captured at sign-in (token.lang) since there's no request
-// context here to read a fresh one from.
 async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
     const refreshed = await authApi.refresh(token.refreshToken, token.lang);
@@ -88,21 +76,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               password,
               remember_me: credentials?.rememberMe === "true",
             },
-            lang
+            lang,
           );
           return toAuthUser(tokens, lang);
         } catch (error) {
           throw new LoginError(
-            error instanceof ApiError ? error.code : "UNKNOWN_ERROR"
+            error instanceof ApiError ? error.code : "UNKNOWN_ERROR",
           );
         }
       },
     }),
-    // Not next-auth/providers/google — that provider expects to run the
-    // OAuth redirect dance itself. Google Identity Services (the button
-    // rendered client-side) instead hands us a ready-made Google ID token,
-    // which our backend verifies directly, so this is modeled as a second
-    // Credentials provider that just forwards that token.
+
     Credentials({
       id: "google",
       name: "Google",
@@ -121,21 +105,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         try {
-          const tokens = typeof token === "string" && token.length > 0
-            ? await authApi.acceptInviteSocial(
-                "google",
-                { token, provider_token: providerToken },
-                lang
-              )
-            : await authApi.socialLogin(
-                "google",
-                { provider_token: providerToken },
-                lang
-              );
+          const tokens =
+            typeof token === "string" && token.length > 0
+              ? await authApi.acceptInviteSocial(
+                  "google",
+                  { token, provider_token: providerToken },
+                  lang,
+                )
+              : await authApi.socialLogin(
+                  "google",
+                  { provider_token: providerToken },
+                  lang,
+                );
           return toAuthUser(tokens, lang);
         } catch (error) {
           throw new LoginError(
-            error instanceof ApiError ? error.code : "UNKNOWN_ERROR"
+            error instanceof ApiError ? error.code : "UNKNOWN_ERROR",
           );
         }
       },
@@ -169,12 +154,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               last_name: typeof lastName === "string" ? lastName : undefined,
               password: typeof password === "string" ? password : undefined,
             },
-            lang
+            lang,
           );
           return toAuthUser(tokens, lang);
         } catch (error) {
           throw new LoginError(
-            error instanceof ApiError ? error.code : "UNKNOWN_ERROR"
+            error instanceof ApiError ? error.code : "UNKNOWN_ERROR",
           );
         }
       },
@@ -185,8 +170,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         return {
           ...token,
-          // authorize() always returns a defined id (from UserPublic.id);
-          // the base NextAuth `User` type just declares it optional.
           id: user.id as string,
           firstName: user.firstName,
           lastName: user.lastName,
@@ -200,7 +183,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
       }
 
-      // Refresh a minute early so an in-flight request never races expiry.
       if (Date.now() < token.accessTokenExpires - 60_000) {
         return token;
       }
