@@ -16,7 +16,7 @@ export default async function DashboardPage({
   return (
     <div className="flex h-[50vh] flex-col items-center justify-center">
       <h1 className="text-3xl font-bold text-muted-foreground">
-        {dict.dashboard?.dashboard || "Dashboard"}
+        Dashboard
       </h1>
     </div>
   );
