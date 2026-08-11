@@ -35,21 +35,54 @@
       "title": "Comment Ça Marche",
       "subtitle": "Commencez en 8 étapes simples.",
       "steps": {
-        "step1": { "title": "Informations Commerciales", "description": "Parlez-nous de votre marque." },
-        "step2": { "title": "Vérification Téléphonique", "description": "Sécurisez votre compte." },
-        "step3": { "title": "Vérification d'Identité", "description": "Propulsé par Veriff pour des contrôles d'identité fiables." },
-        "step4": { "title": "Type de Service", "description": "Sélectionnez les styles que vous proposez." },
-        "step5": { "title": "Portfolio", "description": "Présentez votre meilleur travail." },
-        "step6": { "title": "Emplacement", "description": "Indiquez où vous travaillez." },
-        "step7": { "title": "Disponibilité", "description": "Choisissez vos heures de travail." },
-        "step8": { "title": "Configuration du Paiement", "description": "Connectez-vous avec Stripe pour recevoir des paiements sécurisés." }
+        "step1": {
+          "title": "Informations Commerciales",
+          "description": "Parlez-nous de votre marque."
+        },
+        "step2": {
+          "title": "Vérification Téléphonique",
+          "description": "Sécurisez votre compte."
+        },
+        "step3": {
+          "title": "Vérification d'Identité",
+          "description": "Propulsé par Veriff pour des contrôles d'identité fiables."
+        },
+        "step4": {
+          "title": "Type de Service",
+          "description": "Sélectionnez les styles que vous proposez."
+        },
+        "step5": {
+          "title": "Portfolio",
+          "description": "Présentez votre meilleur travail."
+        },
+        "step6": {
+          "title": "Emplacement",
+          "description": "Indiquez où vous travaillez."
+        },
+        "step7": {
+          "title": "Disponibilité",
+          "description": "Choisissez vos heures de travail."
+        },
+        "step8": {
+          "title": "Configuration du Paiement",
+          "description": "Connectez-vous avec Stripe pour recevoir des paiements sécurisés."
+        }
       }
     },
     "statistics": {
       "stats": [
-        { "value": "500+", "label": "Tresseuses Actives" },
-        { "value": "50+", "label": "Villes Couvertes" },
-        { "value": "10k+", "label": "Clients Satisfaits" }
+        {
+          "value": "500+",
+          "label": "Tresseuses Actives"
+        },
+        {
+          "value": "50+",
+          "label": "Villes Couvertes"
+        },
+        {
+          "value": "10k+",
+          "label": "Clients Satisfaits"
+        }
       ]
     },
     "testimonials": {
@@ -212,7 +245,8 @@
       "forgotPasswordSuccess": "Si ce compte existe, un code de réinitialisation est en route.",
       "resetPasswordSuccess": "Mot de passe réinitialisé ! Veuillez vous connecter avec votre nouveau mot de passe.",
       "logoutSuccess": "Vous avez été déconnecté."
-    }
+    },
+    "usersDescription": "Gérez les clients, les coiffeurs et les autres administrateurs."
   },
   "login": {
     "title": "Content de vous revoir",
@@ -290,7 +324,8 @@
       "location": "Emplacement",
       "serviceStyle": "Style de service",
       "onboardingStatus": "Statut d'intégration",
-      "logout": "Déconnexion"
+      "logout": "Déconnexion",
+      "users": "Utilisateurs"
     },
     "header": {
       "notifications": "Notifications",
@@ -454,6 +489,40 @@
         "completed": "Terminé",
         "upcoming": "À venir",
         "declined": "Refusé"
+      }
+    },
+    "users": {
+      "tabs": {
+        "all": "Tous",
+        "admin": "Admin",
+        "customer": "Client",
+        "braider": "Coiffeur"
+      },
+      "pagination": {
+        "summary": "Affichage de {start} à {end} sur {total} utilisateurs",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "inviteAdmin": {
+        "button": "Inviter un Admin",
+        "modalTitle": "Inviter un nouvel Admin",
+        "emailLabel": "Adresse e-mail",
+        "cancel": "Annuler",
+        "sending": "Envoi...",
+        "send": "Envoyer l'invitation",
+        "success": "Invitation envoyée avec succès."
+      },
+      "table": {
+        "name": "Nom",
+        "email": "E-mail",
+        "role": "Rôle",
+        "status": "Statut",
+        "actions": "Actions",
+        "empty": "Aucun utilisateur trouvé.",
+        "active": "Actif",
+        "suspended": "Suspendu",
+        "suspendAction": "Suspendre l'utilisateur",
+        "unsuspendAction": "Réactiver l'utilisateur"
       }
     }
   },

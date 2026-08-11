@@ -8,15 +8,16 @@ export const metadata = {
 export default async function DashboardPage({
   params,
 }: {
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 }) {
-  const lang = params.lang as Locale;
-  const dict = await getDictionary(lang);
+  const { lang } = await params;
+  const locale = lang as Locale;
+  const dict = await getDictionary(locale);
 
   return (
     <div className="flex h-[50vh] flex-col items-center justify-center">
       <h1 className="text-3xl font-bold text-muted-foreground">
-        Dashboard
+        {dict.dashboard?.sidebar?.dashboard || "Dashboard"}
       </h1>
     </div>
   );

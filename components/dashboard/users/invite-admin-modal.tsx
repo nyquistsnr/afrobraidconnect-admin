@@ -15,10 +15,12 @@ export function InviteAdminModal({
   accessToken,
   lang,
   errorsDict,
+  dict,
 }: {
   accessToken: string;
   lang: Locale;
   errorsDict: any;
+  dict: any;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -27,7 +29,7 @@ export function InviteAdminModal({
       return authApi.inviteAdmin(accessToken, { email }, lang);
     },
     onSuccess: (data) => {
-      toast.success(data.message || "Invite sent successfully.");
+      toast.success(data.message || dict.success);
       setOpen(false);
     },
     onError: (error: any) => {
@@ -45,17 +47,17 @@ export function InviteAdminModal({
     <>
       <Button className="gap-2" onClick={() => setOpen(true)}>
         <Plus className="size-4" />
-        Invite Admin
+        {dict.button}
       </Button>
 
       <Modal open={open} onClose={() => setOpen(false)} labelledBy="invite-admin-title">
         <div className="flex flex-col gap-4">
           <h2 id="invite-admin-title" className="text-xl font-bold text-foreground">
-            Invite a New Admin
+            {dict.modalTitle}
           </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
-              label="Email Address"
+              label={dict.emailLabel}
               type="email"
               name="email"
               icon={Mail}
@@ -69,10 +71,10 @@ export function InviteAdminModal({
                 onClick={() => setOpen(false)}
                 disabled={inviteMutation.isPending}
               >
-                Cancel
+                {dict.cancel}
               </Button>
               <Button type="submit" disabled={inviteMutation.isPending}>
-                {inviteMutation.isPending ? "Sending..." : "Send Invite"}
+                {inviteMutation.isPending ? dict.sending : dict.send}
               </Button>
             </div>
           </form>

@@ -1,5 +1,5 @@
 import type { AdminUserResponse, SuspendUserRequest, PaginatedData } from "@/lib/api/types";
-import { apiFetch, ApiError } from "@/lib/api/http";
+import { apiFetch, apiFetchWithEnvelope, ApiError } from "@/lib/api/http";
 import type { Locale } from "@/lib/i18n";
 
 export { ApiError };
@@ -35,7 +35,7 @@ export const adminUsersApi = {
     accessToken: string,
     lang: Locale
   ) =>
-    apiFetch<AdminUserResponse>(`${ADMIN_USERS_PATH}/${userId}/suspend`, {
+    apiFetchWithEnvelope<AdminUserResponse>(`${ADMIN_USERS_PATH}/${userId}/suspend`, {
       method: "POST",
       body,
       accessToken,
@@ -43,7 +43,7 @@ export const adminUsersApi = {
     }),
 
   unsuspendUser: (userId: string, accessToken: string, lang: Locale) =>
-    apiFetch<AdminUserResponse>(`${ADMIN_USERS_PATH}/${userId}/unsuspend`, {
+    apiFetchWithEnvelope<AdminUserResponse>(`${ADMIN_USERS_PATH}/${userId}/unsuspend`, {
       method: "POST",
       body: {},
       accessToken,

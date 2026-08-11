@@ -35,21 +35,54 @@
       "title": "Wie es funktioniert",
       "subtitle": "Beginnen Sie in 8 einfachen Schritten.",
       "steps": {
-        "step1": { "title": "Geschäftsinfos", "description": "Erzählen Sie uns von Ihrer Marke." },
-        "step2": { "title": "Telefonverifizierung", "description": "Sichern Sie Ihr Konto." },
-        "step3": { "title": "ID-Verifizierung", "description": "Unterstützt durch Veriff für vertrauenswürdige Identitätsprüfungen." },
-        "step4": { "title": "Dienstart", "description": "Wählen Sie die Stile, die Sie anbieten." },
-        "step5": { "title": "Portfolio", "description": "Präsentieren Sie Ihre beste Arbeit." },
-        "step6": { "title": "Standort", "description": "Legen Sie fest, wo Sie arbeiten." },
-        "step7": { "title": "Verfügbarkeit", "description": "Wählen Sie Ihre Arbeitszeiten." },
-        "step8": { "title": "Zahlungseinrichtung", "description": "Verbinden Sie sich mit Stripe, um sichere Auszahlungen zu erhalten." }
+        "step1": {
+          "title": "Geschäftsinfos",
+          "description": "Erzählen Sie uns von Ihrer Marke."
+        },
+        "step2": {
+          "title": "Telefonverifizierung",
+          "description": "Sichern Sie Ihr Konto."
+        },
+        "step3": {
+          "title": "ID-Verifizierung",
+          "description": "Unterstützt durch Veriff für vertrauenswürdige Identitätsprüfungen."
+        },
+        "step4": {
+          "title": "Dienstart",
+          "description": "Wählen Sie die Stile, die Sie anbieten."
+        },
+        "step5": {
+          "title": "Portfolio",
+          "description": "Präsentieren Sie Ihre beste Arbeit."
+        },
+        "step6": {
+          "title": "Standort",
+          "description": "Legen Sie fest, wo Sie arbeiten."
+        },
+        "step7": {
+          "title": "Verfügbarkeit",
+          "description": "Wählen Sie Ihre Arbeitszeiten."
+        },
+        "step8": {
+          "title": "Zahlungseinrichtung",
+          "description": "Verbinden Sie sich mit Stripe, um sichere Auszahlungen zu erhalten."
+        }
       }
     },
     "statistics": {
       "stats": [
-        { "value": "500+", "label": "Aktive Flechterinnen" },
-        { "value": "50+", "label": "Städte" },
-        { "value": "10k+", "label": "Zufriedene Kunden" }
+        {
+          "value": "500+",
+          "label": "Aktive Flechterinnen"
+        },
+        {
+          "value": "50+",
+          "label": "Städte"
+        },
+        {
+          "value": "10k+",
+          "label": "Zufriedene Kunden"
+        }
       ]
     },
     "testimonials": {
@@ -212,7 +245,8 @@
       "forgotPasswordSuccess": "Falls dieses Konto existiert, ist ein Code zum Zurücksetzen unterwegs.",
       "resetPasswordSuccess": "Passwort zurückgesetzt! Bitte melden Sie sich mit Ihrem neuen Passwort an.",
       "logoutSuccess": "Sie wurden abgemeldet."
-    }
+    },
+    "usersDescription": "Verwalten Sie Kunden, Flechter und andere Administratoren."
   },
   "login": {
     "title": "Willkommen zurück",
@@ -290,7 +324,8 @@
       "location": "Standort",
       "serviceStyle": "Dienstleistungsstil",
       "onboardingStatus": "Onboarding-Status",
-      "logout": "Abmelden"
+      "logout": "Abmelden",
+      "users": "Benutzer"
     },
     "header": {
       "notifications": "Benachrichtigungen",
@@ -454,6 +489,40 @@
         "completed": "Abgeschlossen",
         "upcoming": "Anstehend",
         "declined": "Abgelehnt"
+      }
+    },
+    "users": {
+      "tabs": {
+        "all": "Alle",
+        "admin": "Admin",
+        "customer": "Kunde",
+        "braider": "Flechter"
+      },
+      "pagination": {
+        "summary": "Zeige {start} bis {end} von {total} Benutzern",
+        "previous": "Zurück",
+        "next": "Weiter"
+      },
+      "inviteAdmin": {
+        "button": "Admin einladen",
+        "modalTitle": "Neuen Admin einladen",
+        "emailLabel": "E-Mail-Adresse",
+        "cancel": "Abbrechen",
+        "sending": "Senden...",
+        "send": "Einladung senden",
+        "success": "Einladung erfolgreich gesendet."
+      },
+      "table": {
+        "name": "Name",
+        "email": "E-Mail",
+        "role": "Rolle",
+        "status": "Status",
+        "actions": "Aktionen",
+        "empty": "Keine Benutzer gefunden.",
+        "active": "Aktiv",
+        "suspended": "Gesperrt",
+        "suspendAction": "Benutzer sperren",
+        "unsuspendAction": "Benutzer entsperren"
       }
     }
   },

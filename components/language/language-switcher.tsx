@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { GB, FR, DE } from "country-flag-icons/react/3x2";
 import { locales, localeNames, localeCountry, type Locale } from "@/lib/i18n";
@@ -18,6 +18,7 @@ export function LanguageSwitcher({
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
 
   useEffect(() => {
@@ -37,7 +38,13 @@ export function LanguageSwitcher({
     setOpen(false);
     const segments = pathname.split("/");
     segments[1] = nextLang;
-    router.replace(segments.join("/") || "/");
+    
+    // Construct new path with search parameters
+    const query = searchParams.toString();
+    const newPath = segments.join("/") + (query ? `?${query}` : "");
+    
+    router.replace(newPath);
+    router.refresh();
   }
 
   const CurrentFlag = flags[lang];

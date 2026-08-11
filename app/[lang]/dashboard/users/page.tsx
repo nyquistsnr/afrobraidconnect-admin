@@ -5,6 +5,8 @@ import { auth } from "@/auth";
 import type { AdminUserResponse } from "@/lib/api/types";
 import { adminUsersApi } from "@/lib/api/admin-users-client";
 import { UsersTable } from "@/components/dashboard/users/users-table";
+import { UsersPagination } from "@/components/dashboard/users/users-pagination";
+import Link from "next/link";
 import { InviteAdminModal } from "@/components/dashboard/users/invite-admin-modal";
 
 export const metadata = {
@@ -15,57 +17,117 @@ export default async function UsersDashboardPage({
   params,
   searchParams,
 }: {
-  params: { lang: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ lang: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const { lang } = await params;
+  const locale = lang as Locale;
+  const resolvedSearchParams = await searchParams;
+
   const session = await auth();
   if (!session?.accessToken || session.user.userType !== "ADMIN") {
-    redirect(`/${params.lang}/login`);
+    redirect(`/${locale}/login`);
   }
 
-  const lang = params.lang as Locale;
-  const dict = await getDictionary(lang);
+  const dict = await getDictionary(locale);
 
-  const page = typeof searchParams.page === "string" ? parseInt(searchParams.page, 10) : 1;
-  const userType = typeof searchParams.user_type === "string" ? searchParams.user_type : undefined;
+  const page = typeof resolvedSearchParams.page === "string" ? parseInt(resolvedSearchParams.page, 10) : 1;
+  const userType = typeof resolvedSearchParams.user_type === "string" ? resolvedSearchParams.user_type : undefined;
 
   let users: AdminUserResponse[] = [];
+  let pagination = {
+    page: 1,
+    page_size: 10,
+    total_items: 0,
+    total_pages: 0,
+    has_next: false,
+    has_previous: false,
+  };
+
   try {
-    const response = await adminUsersApi.getUsers(session.accessToken, lang, {
+    const response = await adminUsersApi.getUsers(session.accessToken, locale, {
       page,
-      page_size: 50,
+      page_size: 10,
       user_type: userType,
     });
     users = response.items;
+    pagination = response.pagination;
   } catch (error) {
     console.error("Failed to fetch users:", error);
   }
+
+  const usersDict = (dict.dashboard as any).users;
+
+  const tabs = [
+    { label: usersDict?.tabs?.all || "All", value: "" },
+    { label: usersDict?.tabs?.admin || "Admin", value: "ADMIN" },
+    { label: usersDict?.tabs?.customer || "Customer", value: "CUSTOMER" },
+    { label: usersDict?.tabs?.braider || "Braider", value: "BRAIDER" },
+  ];
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            User Management
+            {dict.dashboard.sidebar.users || "User Management"}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Manage customers, braiders, and other admins.
+            {dict.common.usersDescription || "Manage customers, braiders, and other admins."}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <InviteAdminModal
             accessToken={session.accessToken}
-            lang={lang}
+            lang={locale}
             errorsDict={dict.common.errors}
+            dict={usersDict?.inviteAdmin || {}}
           />
         </div>
+
+      </div>
+
+      <div className="border-b border-border">
+        <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+          {tabs.map((tab) => {
+            const isActive = (userType || "") === tab.value;
+            return (
+              <Link
+                key={tab.label}
+                href={tab.value ? `/${locale}/dashboard/users?user_type=${tab.value}` : `/${locale}/dashboard/users`}
+                className={`whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium ${
+                  isActive
+                    ? "border-brand text-brand"
+                    : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
+                }`}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {tab.label}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
 
       <UsersTable
         users={users}
         accessToken={session.accessToken}
-        lang={lang}
+        lang={locale}
         errorsDict={dict.common.errors}
+        dict={usersDict?.table || {}}
+      />
+
+      <UsersPagination
+        page={pagination.page}
+        totalPages={pagination.total_pages}
+        hasNext={pagination.has_next}
+        hasPrevious={pagination.has_previous}
+        summary={(usersDict?.pagination?.summary || "Showing {start} to {end} of {total} users")
+          .replace("{start}", String((pagination.page - 1) * pagination.page_size + (users.length > 0 ? 1 : 0)))
+          .replace("{end}", String(Math.min(pagination.page * pagination.page_size, pagination.total_items)))
+          .replace("{total}", String(pagination.total_items))}
+        previousLabel={usersDict?.pagination?.previous || "Previous"}
+        nextLabel={usersDict?.pagination?.next || "Next"}
       />
     </div>
   );

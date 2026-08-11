@@ -79,3 +79,51 @@ export async function apiFetch<TRes>(
 
   return json.data;
 }
+
+export async function apiFetchWithEnvelope<TRes>(
+  path: string,
+  options: ApiRequestOptions
+): Promise<ApiEnvelope<TRes>> {
+  if (!API_BASE) {
+    throw new ApiError(
+      "API_BASE_NOT_CONFIGURED",
+      "NEXT_PUBLIC_API_BASE_URL is not set.",
+      500
+    );
+  }
+
+  const { method = "GET", body, accessToken, lang, headers: extraHeaders } = options;
+  const headers: Record<string, string> = {
+    "Accept-Language": lang,
+    ...extraHeaders,
+  };
+  if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
+  if (body !== undefined) headers["Content-Type"] = "application/json";
+
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      method,
+      headers,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new ApiError("NETWORK_ERROR", "Could not reach the server.", 0);
+  }
+
+  if (res.status === 204) {
+    return { status: "success", status_label: "", data: null, error: null } as unknown as ApiEnvelope<TRes>;
+  }
+
+  const json: ApiEnvelope<TRes> = await res.json();
+
+  if (json.status === "error" || !json.data) {
+    const error = json.error ?? {
+      code: "UNKNOWN_ERROR",
+      message: "Something went wrong.",
+    };
+    throw new ApiError(error.code, error.message, res.status, error.details, res.headers);
+  }
+
+  return json;
+}
