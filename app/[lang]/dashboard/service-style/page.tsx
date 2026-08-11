@@ -2,7 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { Locale } from "@/lib/i18n";
 import { auth } from "@/auth";
-import { onboardingApi } from "@/lib/api/onboarding-client";
+import { settingsApi } from "@/lib/api/settings-client";
 import { DashboardServiceStyle } from "@/components/dashboard/service-style/dashboard-service-style";
 
 export default async function DashboardServiceStylePage(props: {
@@ -23,7 +23,7 @@ export default async function DashboardServiceStylePage(props: {
   // might want a paginated table or fetch all, but reusing the onboarding form which uses
   // initialServices (and currently assumes all services are fetched or handles it client-side)
   // is sufficient for this scope. The onboarding API returns paginated data.
-  const servicesData = await onboardingApi.getServices(session.accessToken, lang as Locale, 1, 100).catch((error) => {
+  const servicesData = await settingsApi.getServices(session.accessToken, lang as Locale, 1, 100).catch((error) => {
     console.error("Failed to fetch service styles:", error);
     throw error;
   });

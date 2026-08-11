@@ -2,7 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { Locale } from "@/lib/i18n";
 import { auth } from "@/auth";
-import { onboardingApi } from "@/lib/api/onboarding-client";
+import { settingsApi } from "@/lib/api/settings-client";
 import { DashboardLocation } from "@/components/dashboard/location/dashboard-location";
 
 export default async function DashboardLocationPage(props: {
@@ -20,7 +20,7 @@ export default async function DashboardLocationPage(props: {
   }
 
   // Fetch the location data
-  const locationData = await onboardingApi.getServiceLocation(session.accessToken, lang as Locale).catch((error) => {
+  const locationData = await settingsApi.getServiceLocation(session.accessToken, lang as Locale).catch((error) => {
     console.error("Failed to fetch location data:", error);
     throw error;
   });

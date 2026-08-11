@@ -10,7 +10,7 @@ import type { Country } from "react-phone-number-input";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
 import type { ServiceLocationResponse, LocationType } from "@/lib/api/types";
-import { onboardingApi } from "@/lib/api/onboarding-client";
+import { settingsApi } from "@/lib/api/settings-client";
 import { ApiError } from "@/lib/api/auth-client";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
 import { Button } from "@/components/ui/button";
@@ -92,7 +92,7 @@ export function DashboardLocation({
 
   const saveMutation = useMutation({
     mutationFn: async () => {
-      return onboardingApi.updateServiceLocation(
+      return settingsApi.updateServiceLocation(
         session!.accessToken,
         {
           location_type: locationType || null,

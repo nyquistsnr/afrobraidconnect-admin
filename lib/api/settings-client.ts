@@ -62,7 +62,7 @@ function request<TRes>(
   });
 }
 
-export const onboardingApi = {
+export const settingsApi = {
   getBusinessInfo: (accessToken: string, lang: Locale) =>
     request<BusinessInfoResponse>("/business-info", { accessToken, lang }),
 

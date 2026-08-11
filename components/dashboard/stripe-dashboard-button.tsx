@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ExternalLink, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { onboardingApi } from "@/lib/api/onboarding-client";
+import { settingsApi } from "@/lib/api/settings-client";
 import { useSession } from "next-auth/react";
 import { Locale } from "@/lib/i18n";
 
@@ -21,7 +21,7 @@ export function StripeDashboardButton({ lang, dict }: StripeDashboardButtonProps
     if (!session?.accessToken) return;
     try {
       setIsLoading(true);
-      const res = await onboardingApi.createDashboardLink(session.accessToken, lang);
+      const res = await settingsApi.createDashboardLink(session.accessToken, lang);
       if (res.dashboard_url) {
         window.open(res.dashboard_url, "_blank");
       } else {

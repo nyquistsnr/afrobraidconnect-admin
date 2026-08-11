@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 import { Modal } from "@/components/ui/modal";
 
-import { onboardingApi } from "@/lib/api/onboarding-client";
+import { settingsApi } from "@/lib/api/settings-client";
 import type {
   AvailabilitySettingsResponse,
   WeeklyWindowResponse,
@@ -80,7 +80,7 @@ export function DashboardAvailability({
   // Mutations
   const updateSettingsMutation = useMutation({
     mutationFn: async (data: typeof settings) => {
-      return onboardingApi.updateAvailabilitySettings(token, data, lang);
+      return settingsApi.updateAvailabilitySettings(token, data, lang);
     },
     onSuccess: (data) => {
       setSettings(data);
@@ -103,7 +103,7 @@ export function DashboardAvailability({
 
   const addWindowMutation = useMutation({
     mutationFn: async () => {
-      return onboardingApi.createWeeklyWindow(
+      return settingsApi.createWeeklyWindow(
         token,
         {
           day_of_week: newWindowDay,
@@ -122,7 +122,7 @@ export function DashboardAvailability({
 
   const deleteWindowMutation = useMutation({
     mutationFn: async (id: string) => {
-      return onboardingApi.deleteWeeklyWindow(token, id, lang);
+      return settingsApi.deleteWeeklyWindow(token, id, lang);
     },
     onSuccess: (_, id) => {
       setWindows((prev) => prev.filter((w) => w.id !== id));
@@ -134,8 +134,8 @@ export function DashboardAvailability({
   const editWindowMutation = useMutation({
     mutationFn: async () => {
       if (!editingWindow) throw new Error("No window selected");
-      await onboardingApi.deleteWeeklyWindow(token, editingWindow.id, lang);
-      return onboardingApi.createWeeklyWindow(
+      await settingsApi.deleteWeeklyWindow(token, editingWindow.id, lang);
+      return settingsApi.createWeeklyWindow(
         token,
         {
           day_of_week: editWindowDay,
@@ -155,7 +155,7 @@ export function DashboardAvailability({
 
   const addExceptionMutation = useMutation({
     mutationFn: async () => {
-      return onboardingApi.createException(
+      return settingsApi.createException(
         token,
         {
           date: newExceptionDate,
@@ -178,7 +178,7 @@ export function DashboardAvailability({
 
   const deleteExceptionMutation = useMutation({
     mutationFn: async (id: string) => {
-      return onboardingApi.deleteException(token, id, lang);
+      return settingsApi.deleteException(token, id, lang);
     },
     onSuccess: (_, id) => {
       setExceptions((prev) => prev.filter((e) => e.id !== id));

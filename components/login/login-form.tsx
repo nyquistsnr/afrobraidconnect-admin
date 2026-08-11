@@ -9,7 +9,6 @@ import { Mail } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
-import { onboardingStepPath } from "@/lib/onboarding";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -53,13 +52,7 @@ export function LoginForm({
         router.push(callbackUrl);
         return;
       }
-      const session = await getSession();
-      const step = session?.braider?.onboarding.current_step;
-      router.push(
-        step && step !== "COMPLETED"
-          ? onboardingStepPath(lang, step)
-          : `/${lang}/dashboard`
-      );
+      router.push(`/${lang}/dashboard`);
     },
     onError: (error) => {
       toast.error(getAuthErrorMessage(error.message, common.errors));

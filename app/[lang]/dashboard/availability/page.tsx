@@ -2,7 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { Locale } from "@/lib/i18n";
 import { auth } from "@/auth";
-import { onboardingApi } from "@/lib/api/onboarding-client";
+import { settingsApi } from "@/lib/api/settings-client";
 import { DashboardAvailability } from "@/components/dashboard/availability/dashboard-availability";
 
 export default async function DashboardAvailabilityPage(props: {
@@ -21,9 +21,9 @@ export default async function DashboardAvailabilityPage(props: {
 
   // Fetch all required data for the availability form concurrently
   const [settings, windows, exceptions] = await Promise.all([
-    onboardingApi.getAvailabilitySettings(session.accessToken, lang as Locale),
-    onboardingApi.getWeeklyWindows(session.accessToken, lang as Locale),
-    onboardingApi.getExceptions(session.accessToken, lang as Locale),
+    settingsApi.getAvailabilitySettings(session.accessToken, lang as Locale),
+    settingsApi.getWeeklyWindows(session.accessToken, lang as Locale),
+    settingsApi.getExceptions(session.accessToken, lang as Locale),
   ]).catch((error) => {
     console.error("Failed to fetch availability data:", error);
     throw error;

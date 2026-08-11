@@ -14,7 +14,7 @@ import type {
   BraiderStyleVariationInput,
   StylePublicResponse,
 } from "@/lib/api/types";
-import { onboardingApi } from "@/lib/api/onboarding-client";
+import { settingsApi } from "@/lib/api/settings-client";
 import { catalogApi } from "@/lib/api/catalog-client";
 import { ApiError } from "@/lib/api/auth-client";
 import { getAuthErrorMessage } from "@/lib/api/error-messages";
@@ -139,7 +139,7 @@ export function DashboardServiceStyle({
           is_required: selection.required,
         }));
 
-      return onboardingApi.addService(
+      return settingsApi.addService(
         session!.accessToken,
         {
           style_id: selectedStyle!.id,
@@ -180,7 +180,7 @@ export function DashboardServiceStyle({
           is_required: selection.required,
         }));
 
-      return onboardingApi.updateService(
+      return settingsApi.updateService(
         session!.accessToken,
         editingBraiderStyleId,
         {
@@ -207,7 +207,7 @@ export function DashboardServiceStyle({
 
   const deleteMutation = useMutation({
     mutationFn: (braiderStyleId: string) =>
-      onboardingApi.deleteService(session!.accessToken, braiderStyleId, lang),
+      settingsApi.deleteService(session!.accessToken, braiderStyleId, lang),
     onSuccess: (_, braiderStyleId) => {
       setServices((current) => current.filter((s) => s.id !== braiderStyleId));
       toast.success(dict.toasts.removed || "Service removed");
