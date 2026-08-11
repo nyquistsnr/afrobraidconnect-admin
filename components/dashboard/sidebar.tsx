@@ -14,7 +14,7 @@ import {
   Clock,
   MapPin,
   Scissors,
-  ListChecks
+  Users
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -35,7 +35,7 @@ export function Sidebar({
     availability?: string; 
     location?: string; 
     serviceStyle?: string; 
-    onboardingStatus?: string; 
+    users?: string; 
     home?: string;
   };
   userName: string;
@@ -103,10 +103,10 @@ export function Sidebar({
       active: pathname === `/${lang}/dashboard/service-style`,
     },
     {
-      href: `/${lang}/dashboard/onboarding-status`,
-      label: dict.onboardingStatus || "Onboarding Status",
-      icon: ListChecks,
-      active: pathname === `/${lang}/dashboard/onboarding-status`,
+      href: `/${lang}/dashboard/users`,
+      label: dict.users || "Users",
+      icon: Users,
+      active: pathname === `/${lang}/dashboard/users`,
     },
   ];
 

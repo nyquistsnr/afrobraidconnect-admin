@@ -66,22 +66,20 @@ export interface ApiEnvelope<T> {
   error: ApiErrorBody | null;
 }
 
-export interface SignupEmailRequest {
+export interface AdminInviteRequest {
+  email: string;
+}
+
+export interface AdminInviteAcceptRequest {
+  token: string;
   first_name: string;
   last_name?: string;
-  email: string;
-  phone_number?: string;
-  password: string;
-  user_type: "CUSTOMER" | "BRAIDER";
+  password?: string;
 }
 
-export interface VerifyEmailRequest {
-  email: string;
-  code: string;
-}
-
-export interface ResendVerificationRequest {
-  email: string;
+export interface AdminInviteSocialAcceptRequest {
+  token: string;
+  provider_token: string;
 }
 
 export interface LoginRequest {
@@ -94,7 +92,6 @@ export type SocialProvider = "google" | "facebook" | "tiktok";
 
 export interface SocialLoginRequest {
   provider_token: string;
-  user_type?: "CUSTOMER" | "BRAIDER";
 }
 
 export interface RefreshTokenRequest {
@@ -113,6 +110,28 @@ export interface ResetPasswordRequest {
   email: string;
   code: string;
   new_password: string;
+}
+
+// ---------------------------------------------------------------------------
+// Admin User Management
+// ---------------------------------------------------------------------------
+
+export interface AdminUserResponse {
+  id: string;
+  first_name: string;
+  last_name: string | null;
+  email: string;
+  phone_number: string | null;
+  user_type: UserType;
+  is_email_verified: boolean;
+  is_active: boolean;
+  suspension_reason: string | null;
+  suspended_at: string | null;
+  created_at: string;
+}
+
+export interface SuspendUserRequest {
+  reason?: string;
 }
 
 // ---------------------------------------------------------------------------

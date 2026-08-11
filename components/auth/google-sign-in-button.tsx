@@ -36,12 +36,14 @@ export function GoogleSignInButton({
   successMessage,
   errorsDict,
   callbackUrl,
+  token,
 }: {
   lang: Locale;
   label: string;
   successMessage: string;
   errorsDict: Dictionary["common"]["errors"];
   callbackUrl?: string | null;
+  token?: string; // Optional admin invite token
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -49,7 +51,7 @@ export function GoogleSignInButton({
 
   const googleSignInMutation = useMutation({
     mutationFn: async (providerToken: string) => {
-      const result = await signIn("google", { providerToken, lang, redirect: false });
+      const result = await signIn("google", { providerToken, token, lang, redirect: false });
       if (result?.error) {
         throw new Error(result.code ?? result.error);
       }

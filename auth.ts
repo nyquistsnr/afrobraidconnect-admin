@@ -108,10 +108,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       name: "Google",
       credentials: {
         providerToken: {},
+        token: {},
         lang: {},
       },
       authorize: async (credentials) => {
         const providerToken = credentials?.providerToken;
+        const token = credentials?.token;
         const lang = resolveLocale(credentials?.lang);
 
         if (typeof providerToken !== "string") {
@@ -119,13 +121,53 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         try {
-          const tokens = await authApi.socialLogin(
-            "google",
+          const tokens = typeof token === "string" && token.length > 0
+            ? await authApi.acceptInviteSocial(
+                "google",
+                { token, provider_token: providerToken },
+                lang
+              )
+            : await authApi.socialLogin(
+                "google",
+                { provider_token: providerToken },
+                lang
+              );
+          return toAuthUser(tokens, lang);
+        } catch (error) {
+          throw new LoginError(
+            error instanceof ApiError ? error.code : "UNKNOWN_ERROR"
+          );
+        }
+      },
+    }),
+    Credentials({
+      id: "accept_invite",
+      name: "Accept Invite",
+      credentials: {
+        token: {},
+        firstName: {},
+        lastName: {},
+        password: {},
+        lang: {},
+      },
+      authorize: async (credentials) => {
+        const token = credentials?.token;
+        const firstName = credentials?.firstName;
+        const lastName = credentials?.lastName;
+        const password = credentials?.password;
+        const lang = resolveLocale(credentials?.lang);
+
+        if (typeof token !== "string" || typeof firstName !== "string") {
+          throw new LoginError("VALIDATION_ERROR");
+        }
+
+        try {
+          const tokens = await authApi.acceptInvite(
             {
-              provider_token: providerToken,
-              // Ignored by the backend if the Google account already maps to
-              // an existing user — only applies to brand-new sign-ups.
-              user_type: "BRAIDER",
+              token,
+              first_name: firstName,
+              last_name: typeof lastName === "string" ? lastName : undefined,
+              password: typeof password === "string" ? password : undefined,
             },
             lang
           );
