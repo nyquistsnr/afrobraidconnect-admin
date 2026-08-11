@@ -32,7 +32,7 @@ export class ApiError extends Error {
   }
 }
 
-async function post<TReq, TRes>(path: string, body: TReq): Promise<TRes> {
+async function post<TReq, TRes>(path: string, body: TReq, lang?: string): Promise<TRes> {
   if (!API_BASE) {
     throw new ApiError(
       "API_BASE_NOT_CONFIGURED",
@@ -43,9 +43,12 @@ async function post<TReq, TRes>(path: string, body: TReq): Promise<TRes> {
 
   let res: Response;
   try {
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (lang) headers["Accept-Language"] = lang;
+    
     res = await fetch(`${API_BASE}${AUTH_PATH}${path}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(body),
     });
   } catch {
@@ -81,11 +84,11 @@ export const authApi = {
       body
     ),
 
-  login: (body: LoginRequest) =>
-    post<LoginRequest, AuthTokenResponse>("/login", body),
+  login: (body: LoginRequest, lang?: string) =>
+    post<LoginRequest, AuthTokenResponse>("/login", body, lang),
 
-  socialLogin: (provider: SocialProvider, body: SocialLoginRequest) =>
-    post<SocialLoginRequest, AuthTokenResponse>(`/social/${provider}`, body),
+  socialLogin: (provider: SocialProvider, body: SocialLoginRequest, lang?: string) =>
+    post<SocialLoginRequest, AuthTokenResponse>(`/social/${provider}`, body, lang),
 
   refresh: (refresh_token: string) =>
     post<RefreshTokenRequest, AuthTokenResponse>("/refresh", {

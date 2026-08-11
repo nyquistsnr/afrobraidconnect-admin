@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import type { JWT } from "next-auth/jwt";
 import { ApiError, authApi } from "@/lib/api/auth-client";
 import type { AuthTokenResponse } from "@/lib/api/types";
+import { defaultLocale, hasLocale } from "@/lib/i18n";
 
 // Auth.js redirects thrown-CredentialsSignin subclasses back to the client
 // with `code` set to this instance property — this is how our backend's
@@ -61,6 +62,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         email: {},
         password: {},
         rememberMe: {},
+        lang: {},
       },
       authorize: async (credentials) => {
         const email = credentials?.email;
@@ -70,12 +72,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new LoginError("VALIDATION_ERROR");
         }
 
+        const lang =
+          typeof credentials?.lang === "string" && hasLocale(credentials.lang)
+            ? credentials.lang
+            : defaultLocale;
+
         try {
-          const tokens = await authApi.login({
-            email,
-            password,
-            remember_me: credentials?.rememberMe === "true",
-          });
+          const tokens = await authApi.login(
+            {
+              email,
+              password,
+              remember_me: credentials?.rememberMe === "true",
+            },
+            lang
+          );
           return toAuthUser(tokens);
         } catch (error) {
           throw new LoginError(
@@ -94,6 +104,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       name: "Google",
       credentials: {
         providerToken: {},
+        lang: {},
       },
       authorize: async (credentials) => {
         const providerToken = credentials?.providerToken;
@@ -102,13 +113,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           throw new LoginError("VALIDATION_ERROR");
         }
 
+        const lang =
+          typeof credentials?.lang === "string" && hasLocale(credentials.lang)
+            ? credentials.lang
+            : defaultLocale;
+
         try {
-          const tokens = await authApi.socialLogin("google", {
-            provider_token: providerToken,
-            // Ignored by the backend if the Google account already maps to
-            // an existing user — only applies to brand-new sign-ups.
-            user_type: "ADMIN",
-          });
+          const tokens = await authApi.socialLogin(
+            "google",
+            {
+              provider_token: providerToken,
+              // Ignored by the backend if the Google account already maps to
+              // an existing user — only applies to brand-new sign-ups.
+              user_type: "ADMIN",
+            },
+            lang
+          );
           return toAuthUser(tokens);
         } catch (error) {
           throw new LoginError(
@@ -119,7 +139,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      if (trigger === "update" && session) {
+        token.firstName = session.firstName ?? token.firstName;
+        token.lastName = session.lastName ?? token.lastName;
+        token.phoneNumber = session.phoneNumber ?? token.phoneNumber;
+      }
+      
       if (user) {
         return {
           ...token,
@@ -137,8 +163,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
       }
 
-      // Refresh a minute early so an in-flight request never races expiry.
-      if (Date.now() < token.accessTokenExpires - 60_000) {
+      // Refresh 2 minutes early so an in-flight request never races expiry.
+      if (Date.now() < token.accessTokenExpires - 120_000) {
         return token;
       }
 
@@ -151,6 +177,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.phoneNumber = token.phoneNumber;
       session.user.userType = token.userType;
       session.accessToken = token.accessToken;
+      session.accessTokenExpires = token.accessTokenExpires;
       session.braider = token.braider;
       session.error = token.error;
       return session;
