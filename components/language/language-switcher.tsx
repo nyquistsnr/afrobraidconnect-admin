@@ -8,7 +8,9 @@ import { locales, localeNames, localeCountry, type Locale } from "@/lib/i18n";
 
 const flags: Record<Locale, typeof GB> = { en: GB, fr: FR, de: DE };
 
-export function LanguageSwitcher({
+import { Suspense } from "react";
+
+function LanguageSwitcherInner({
   lang,
   dropDirection = "up",
 }: {
@@ -99,5 +101,23 @@ export function LanguageSwitcher({
         </ul>
       )}
     </div>
+  );
+}
+
+export function LanguageSwitcher(props: {
+  lang: Locale;
+  dropDirection?: "up" | "down";
+}) {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center gap-1.5 px-2 py-1 text-muted-foreground opacity-50">
+          <div className="h-3.5 w-5 bg-border/40" />
+          <span className="font-medium uppercase">{props.lang}</span>
+        </div>
+      }
+    >
+      <LanguageSwitcherInner {...props} />
+    </Suspense>
   );
 }
