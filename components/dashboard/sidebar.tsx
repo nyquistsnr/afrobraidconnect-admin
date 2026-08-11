@@ -6,14 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, 
-  CalendarCheck, 
   LogOut, 
   X,
-  CreditCard,
-  MessageSquare,
-  Clock,
-  MapPin,
-  Scissors,
   Users
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
@@ -30,11 +24,6 @@ export function Sidebar({
 }: {
   lang: Locale;
   dict: Dictionary["dashboard"]["sidebar"] & { 
-    payment?: string; 
-    chat?: string; 
-    availability?: string; 
-    location?: string; 
-    serviceStyle?: string; 
     users?: string; 
     home?: string;
   };
@@ -64,43 +53,6 @@ export function Sidebar({
       label: dict.dashboard,
       icon: LayoutDashboard,
       active: pathname === `/${lang}/dashboard`,
-    },
-    {
-      href: `/${lang}/dashboard/bookings`,
-      label: dict.bookings,
-      icon: CalendarCheck,
-      active: pathname === `/${lang}/dashboard/bookings`,
-    },
-    {
-      href: `/${lang}/dashboard/payment`,
-      label: dict.payment || "Payment",
-      icon: CreditCard,
-      active: pathname === `/${lang}/dashboard/payment`,
-    },
-
-    {
-      href: `/${lang}/dashboard/chat`,
-      label: dict.chat || "Chat",
-      icon: MessageSquare,
-      active: pathname === `/${lang}/dashboard/chat`,
-    },
-    {
-      href: `/${lang}/dashboard/availability`,
-      label: dict.availability || "Availability",
-      icon: Clock,
-      active: pathname === `/${lang}/dashboard/availability`,
-    },
-    {
-      href: `/${lang}/dashboard/location`,
-      label: dict.location || "Location",
-      icon: MapPin,
-      active: pathname === `/${lang}/dashboard/location`,
-    },
-    {
-      href: `/${lang}/dashboard/service-style`,
-      label: dict.serviceStyle || "Service Style",
-      icon: Scissors,
-      active: pathname === `/${lang}/dashboard/service-style`,
     },
     {
       href: `/${lang}/dashboard/users`,
