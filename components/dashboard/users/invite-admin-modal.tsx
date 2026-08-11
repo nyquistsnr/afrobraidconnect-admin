@@ -33,7 +33,7 @@ export function InviteAdminModal({
       setOpen(false);
     },
     onError: (error: any) => {
-      toast.error(getAuthErrorMessage(error.message, errorsDict));
+      toast.error(error.message || getAuthErrorMessage(error.code, errorsDict));
     },
   });
 
