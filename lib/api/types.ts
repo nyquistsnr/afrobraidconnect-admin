@@ -66,6 +66,19 @@ export interface ApiEnvelope<T> {
   error: ApiErrorBody | null;
 }
 
+export type AdminInviteStatus = "PENDING" | "ACCEPTED" | "EXPIRED" | "REVOKED";
+
+export interface AdminInviteResponse {
+  id: string;
+  email: string;
+  status: AdminInviteStatus;
+  invited_by_user_id: string;
+  created_at: string;
+  expires_at: string;
+  accepted_at: string | null;
+  revoked_at: string | null;
+}
+
 export interface AdminInviteRequest {
   email: string;
 }

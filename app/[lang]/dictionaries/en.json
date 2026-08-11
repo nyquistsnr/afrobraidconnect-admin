@@ -496,7 +496,8 @@
         "all": "All",
         "admin": "Admin",
         "customer": "Customer",
-        "braider": "Braider"
+        "braider": "Braider",
+        "invites": "Invites"
       },
       "pagination": {
         "summary": "Showing {start} to {end} of {total} users",
@@ -523,6 +524,19 @@
         "suspended": "Suspended",
         "suspendAction": "Suspend User",
         "unsuspendAction": "Unsuspend User"
+      },
+      "invitesTable": {
+        "email": "Email",
+        "status": "Status",
+        "invitedOn": "Invited On",
+        "expiresOn": "Expires On",
+        "empty": "No invites found.",
+        "statusLabels": {
+          "PENDING": "Pending",
+          "ACCEPTED": "Accepted",
+          "EXPIRED": "Expired",
+          "REVOKED": "Revoked"
+        }
       }
     }
   },
@@ -877,5 +891,18 @@
     "messageLabel": "Message",
     "messagePlaceholder": "How can we help you?",
     "submit": "Send Message"
+  },
+  "admin": {
+    "inviteAccept": {
+      "invalidInviteLink": "Invalid Invite Link",
+      "missingTokenDescription": "The invite link is missing a valid token. Please check your email and try again.",
+      "title": "Accept Admin Invite",
+      "subtitle": "Complete your account details to join as an admin.",
+      "firstNameLabel": "First Name",
+      "firstNamePlaceholder": "First Name",
+      "lastNameLabel": "Last Name (Optional)",
+      "lastNamePlaceholder": "Last Name",
+      "acceptInvite": "Accept Invite"
+    }
   }
 }

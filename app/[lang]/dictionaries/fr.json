@@ -496,7 +496,8 @@
         "all": "Tous",
         "admin": "Admin",
         "customer": "Client",
-        "braider": "Coiffeur"
+        "braider": "Coiffeur",
+        "invites": "Invitations"
       },
       "pagination": {
         "summary": "Affichage de {start} à {end} sur {total} utilisateurs",
@@ -523,6 +524,19 @@
         "suspended": "Suspendu",
         "suspendAction": "Suspendre l'utilisateur",
         "unsuspendAction": "Réactiver l'utilisateur"
+      },
+      "invitesTable": {
+        "email": "E-mail",
+        "status": "Statut",
+        "invitedOn": "Invité le",
+        "expiresOn": "Expire le",
+        "empty": "Aucune invitation trouvée.",
+        "statusLabels": {
+          "PENDING": "En attente",
+          "ACCEPTED": "Accepté",
+          "EXPIRED": "Expiré",
+          "REVOKED": "Révoqué"
+        }
       }
     }
   },
@@ -877,5 +891,18 @@
     "messageLabel": "Message",
     "messagePlaceholder": "Comment pouvons-nous vous aider ?",
     "submit": "Envoyer le message"
+  },
+  "admin": {
+    "inviteAccept": {
+      "invalidInviteLink": "Lien d'invitation invalide",
+      "missingTokenDescription": "Le lien d'invitation ne contient pas de jeton valide. Veuillez vérifier votre e-mail et réessayer.",
+      "title": "Accepter l'invitation administrateur",
+      "subtitle": "Complétez les détails de votre compte pour rejoindre en tant qu'administrateur.",
+      "firstNameLabel": "Prénom",
+      "firstNamePlaceholder": "Prénom",
+      "lastNameLabel": "Nom (Optionnel)",
+      "lastNamePlaceholder": "Nom",
+      "acceptInvite": "Accepter l'invitation"
+    }
   }
 }

@@ -496,7 +496,8 @@
         "all": "Alle",
         "admin": "Admin",
         "customer": "Kunde",
-        "braider": "Flechter"
+        "braider": "Flechter",
+        "invites": "Einladungen"
       },
       "pagination": {
         "summary": "Zeige {start} bis {end} von {total} Benutzern",
@@ -523,6 +524,19 @@
         "suspended": "Gesperrt",
         "suspendAction": "Benutzer sperren",
         "unsuspendAction": "Benutzer entsperren"
+      },
+      "invitesTable": {
+        "email": "E-Mail",
+        "status": "Status",
+        "invitedOn": "Eingeladen am",
+        "expiresOn": "Läuft ab am",
+        "empty": "Keine Einladungen gefunden.",
+        "statusLabels": {
+          "PENDING": "Ausstehend",
+          "ACCEPTED": "Akzeptiert",
+          "EXPIRED": "Abgelaufen",
+          "REVOKED": "Widerrufen"
+        }
       }
     }
   },
@@ -877,5 +891,18 @@
     "messageLabel": "Nachricht",
     "messagePlaceholder": "Wie können wir Ihnen helfen?",
     "submit": "Nachricht senden"
+  },
+  "admin": {
+    "inviteAccept": {
+      "invalidInviteLink": "Ungültiger Einladungslink",
+      "missingTokenDescription": "Dem Einladungslink fehlt ein gültiges Token. Bitte überprüfen Sie Ihre E-Mail und versuchen Sie es erneut.",
+      "title": "Admin-Einladung akzeptieren",
+      "subtitle": "Vervollständigen Sie Ihre Kontodetails, um als Administrator beizutreten.",
+      "firstNameLabel": "Vorname",
+      "lastNameLabel": "Nachname (Optional)",
+      "lastNamePlaceholder": "Nachname",
+      "acceptInvite": "Einladung akzeptieren",
+      "firstNamePlaceholder": "Vorname"
+    }
   }
 }

@@ -17,10 +17,12 @@ import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 
 export function InviteAcceptForm({
   dict,
+  loginDict,
   common,
   lang,
 }: {
-  dict: Dictionary["login"]; // We can reuse some strings from login/signup or generic ones. Let's assume generic admin dict strings are passed or we use what's available.
+  dict: any;
+  loginDict: Dictionary["login"];
   common: Dictionary["common"];
   lang: Locale;
 }) {
@@ -68,9 +70,9 @@ export function InviteAcceptForm({
   if (!token) {
     return (
       <div className="w-full text-center">
-        <h1 className="text-2xl font-bold text-foreground">Invalid Invite Link</h1>
+        <h1 className="text-2xl font-bold text-foreground">{dict.invalidInviteLink}</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          The invite link is missing a valid token. Please check your email and try again.
+          {dict.missingTokenDescription}
         </p>
       </div>
     );
@@ -78,51 +80,51 @@ export function InviteAcceptForm({
 
   return (
     <div className="w-full">
-      <h1 className="text-3xl font-bold text-foreground">Accept Admin Invite</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Complete your account details to join as an admin.</p>
+      <h1 className="text-3xl font-bold text-foreground">{dict.title}</h1>
+      <p className="mt-2 text-sm text-muted-foreground">{dict.subtitle}</p>
 
       <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
         <Input
-          label="First Name"
+          label={dict.firstNameLabel}
           type="text"
           name="first_name"
           icon={User}
           autoComplete="given-name"
-          placeholder="First Name"
+          placeholder={dict.firstNamePlaceholder}
           required
         />
         <Input
-          label="Last Name (Optional)"
+          label={dict.lastNameLabel}
           type="text"
           name="last_name"
           icon={User}
           autoComplete="family-name"
-          placeholder="Last Name"
+          placeholder={dict.lastNamePlaceholder}
         />
         <PasswordInput
-          label={dict.passwordLabel || "Password"}
+          label={loginDict.passwordLabel || "Password"}
           name="password"
           autoComplete="new-password"
-          placeholder={dict.passwordPlaceholder || "Create a secure password"}
+          placeholder={loginDict.passwordPlaceholder || "Create a secure password"}
           required
         />
 
         <Button type="submit" disabled={acceptMutation.isPending}>
-          {acceptMutation.isPending ? common.loading : "Accept Invite"}
+          {acceptMutation.isPending ? common.loading : dict.acceptInvite}
         </Button>
       </form>
 
       <div className="my-6 flex items-center gap-4">
         <div className="h-px flex-1 bg-border" />
         <span className="text-xs font-medium text-muted-foreground">
-          {dict.or || "or"}
+          {loginDict.or || "or"}
         </span>
         <div className="h-px flex-1 bg-border" />
       </div>
 
       <GoogleSignInButton
         lang={lang}
-        label={dict.signInWithGoogle || "Sign in with Google"}
+        label={loginDict.signInWithGoogle || "Sign in with Google"}
         successMessage={common.toasts.loginSuccess}
         errorsDict={common.errors}
         token={token}
