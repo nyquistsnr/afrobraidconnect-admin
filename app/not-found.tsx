@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowLeft, SearchX } from "lucide-react";
+import { ArrowRight, Lock, ShieldAlert } from "lucide-react";
 import { LanguageSwitcher } from "@/components/language/language-switcher";
 import { defaultLocale, hasLocale, type Locale } from "@/lib/i18n";
+import { useEffect, useState } from "react";
 
 const translations: Record<
   Locale,
@@ -15,22 +16,22 @@ const translations: Record<
   }
 > = {
   en: {
-    pageNotFound: "Page not found",
+    pageNotFound: "System Error 404",
     description:
-      "Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or never existed in the first place.",
-    goBackHome: "Go back home",
+      "This portal is restricted or the requested resource does not exist. Please authenticate to access the administrative dashboard.",
+    goBackHome: "Proceed to Login",
   },
   fr: {
-    pageNotFound: "Page introuvable",
+    pageNotFound: "Erreur Système 404",
     description:
-      "Désolé, nous n'avons pas pu trouver la page que vous cherchez. Elle a peut-être été déplacée, supprimée ou n'a jamais existé.",
-    goBackHome: "Retour à l'accueil",
+      "Ce portail est restreint ou la ressource demandée n'existe pas. Veuillez vous authentifier pour accéder au tableau de bord administratif.",
+    goBackHome: "Procéder à la connexion",
   },
   de: {
-    pageNotFound: "Seite nicht gefunden",
+    pageNotFound: "Systemfehler 404",
     description:
-      "Entschuldigung, wir konnten die gesuchte Seite nicht finden. Möglicherweise wurde sie verschoben, gelöscht oder hat nie existiert.",
-    goBackHome: "Zurück zur Startseite",
+      "Dieses Portal ist eingeschränkt oder die angeforderte Ressource existiert nicht. Bitte authentifizieren Sie sich, um auf das administrative Dashboard zuzugreifen.",
+    goBackHome: "Zur Anmeldung",
   },
 };
 
@@ -40,52 +41,105 @@ export default function NotFound() {
   const lang = hasLocale(urlLang) ? urlLang : defaultLocale;
   const t = translations[lang];
 
+  const [mousePosition, setMousePosition] = useState({ x: -1000, y: -1000 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: e.clientX,
+        y: e.clientY,
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    // Initial position to center
+    setMousePosition({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
-    <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden bg-background px-6 py-24 text-center">
-      {/* Language Switcher */}
-      <div className="absolute right-4 top-4 z-50 rounded-lg border border-border/50 bg-background/80 px-2 py-1 shadow-sm backdrop-blur-md">
+    <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-center overflow-hidden bg-background text-foreground">
+      {/* Dynamic Background Spotlight */}
+      <div 
+        className="pointer-events-none absolute z-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 bg-brand opacity-[0.15] blur-[120px] transition-all duration-300 ease-out will-change-transform"
+        style={{
+          left: mousePosition.x,
+          top: mousePosition.y,
+        }}
+      />
+      
+      {/* Grid Pattern overlay */}
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+
+      {/* Top Navbar */}
+      <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-border/40 bg-background/50 px-6 py-4 backdrop-blur-md">
+        <div className="flex items-center gap-2 text-xl font-bold tracking-tighter">
+          <Lock className="size-5 text-brand" />
+          ADMIN PORTAL
+        </div>
         <LanguageSwitcher lang={lang} dropDirection="down" />
       </div>
 
-      {/* Geometric Decorative Background Elements (sharp corners, house style) */}
-      <div className="absolute top-1/4 left-1/4 -z-10 h-64 w-64 -translate-x-1/2 -translate-y-1/2 animate-[spin_20s_linear_infinite] border border-border/40 opacity-50"></div>
-      <div className="absolute top-3/4 right-1/4 -z-10 h-96 w-96 translate-x-1/3 translate-y-1/4 animate-[spin_30s_linear_infinite_reverse] border border-border/30 opacity-50"></div>
-      <div className="absolute top-1/2 left-1/2 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite] border-[0.5px] border-brand/5 bg-brand/5 opacity-50 blur-3xl"></div>
-
-      {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center">
-        {/* Animated Icon Container */}
-        <div className="relative mb-10 flex items-center justify-center">
-          <div className="absolute h-32 w-32 animate-[ping_3s_cubic-bezier(0,0,0.2,1)_infinite] bg-brand/10"></div>
-          <div className="absolute h-24 w-24 animate-[ping_2s_cubic-bezier(0,0,0.2,1)_infinite] bg-brand/20"></div>
-          <div className="relative flex h-20 w-20 items-center justify-center bg-brand text-brand-foreground shadow-2xl shadow-brand/20">
-            <SearchX className="size-10" />
+      <div className="relative z-10 flex w-full max-w-7xl flex-col items-center px-6 lg:flex-row lg:justify-between lg:px-12">
+        
+        {/* Abstract Visual (Mobile First, then moves to right) */}
+        <div className="mb-12 lg:hidden">
+          <div className="relative flex items-center justify-center">
+            <h2 className="select-none text-[8rem] font-black leading-none tracking-tighter text-transparent" style={{ WebkitTextStroke: "2px var(--brand)", opacity: 0.2 }}>
+              404
+            </h2>
+            <div className="absolute text-[8rem] font-black leading-none tracking-tighter text-foreground" style={{ clipPath: "inset(0 0 52% 0)" }}>
+              404
+            </div>
+            <div className="absolute text-[8rem] font-black leading-none tracking-tighter text-brand" style={{ clipPath: "inset(48% 0 0 0)", transform: "translate(5px, 3px)" }}>
+              404
+            </div>
+            <div className="absolute top-1/2 left-[-10%] h-[2px] w-[120%] -translate-y-1/2 -rotate-3 bg-brand shadow-lg shadow-brand/50"></div>
           </div>
         </div>
 
-        {/* 404 Heading */}
-        <h1 className="mb-4 text-7xl font-extrabold tracking-tighter text-foreground sm:text-9xl">
-          4<span className="text-brand">0</span>4
-        </h1>
+        {/* Text Content */}
+        <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+          <div className="mb-4 inline-flex items-center gap-2 border border-brand/30 bg-brand/10 px-3 py-1 text-sm font-medium text-brand">
+            <ShieldAlert className="size-4" />
+            <span>Unauthorized / Not Found</span>
+          </div>
+          <h1 className="mb-4 text-5xl font-extrabold tracking-tight sm:text-7xl">
+            {t.pageNotFound}.
+          </h1>
+          <p className="mb-10 max-w-lg text-lg text-muted-foreground sm:text-xl">
+            {t.description}
+          </p>
+          
+          <div className="flex w-full flex-col gap-4 sm:flex-row sm:w-auto">
+            <Link
+              href={`/${lang}/login`}
+              className="group relative flex h-14 w-full sm:w-auto items-center justify-center gap-3 border border-brand bg-brand px-8 text-base font-semibold text-brand-foreground transition-all hover:bg-brand-hover hover:scale-[1.02] active:scale-[0.98]"
+            >
+              {t.goBackHome}
+              <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </div>
 
-        <h2 className="mb-6 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-          {t.pageNotFound}
-        </h2>
-
-        <p className="mx-auto mb-10 max-w-md text-base text-muted-foreground sm:text-lg">
-          {t.description}
-        </p>
-
-        {/* Action Button */}
-        <div className="group relative">
-          <div className="absolute -inset-1 animate-pulse bg-brand/20 blur transition duration-1000 group-hover:bg-brand/40 group-hover:duration-200"></div>
-          <Link
-            href={`/${lang}`}
-            className="relative flex h-12 items-center justify-center border border-brand bg-brand px-8 text-base font-semibold text-brand-foreground transition-all hover:bg-brand-hover hover:scale-105 active:scale-95"
-          >
-            <ArrowLeft className="mr-2 size-4 transition-transform group-hover:-translate-x-1" />
-            {t.goBackHome}
-          </Link>
+        {/* Right Abstract Visual */}
+        <div className="mt-16 hidden lg:block lg:mt-0">
+          <div className="relative flex items-center justify-center">
+            {/* Outline */}
+            <h2 className="select-none text-[15rem] font-black leading-none tracking-tighter text-transparent" style={{ WebkitTextStroke: "2px var(--brand)", opacity: 0.2 }}>
+              404
+            </h2>
+            {/* Top Half */}
+            <div className="absolute text-[15rem] font-black leading-none tracking-tighter text-foreground" style={{ clipPath: "inset(0 0 52% 0)" }}>
+              404
+            </div>
+            {/* Bottom Half */}
+            <div className="absolute text-[15rem] font-black leading-none tracking-tighter text-brand" style={{ clipPath: "inset(48% 0 0 0)", transform: "translate(8px, 4px)" }}>
+              404
+            </div>
+            {/* Line connecting the split */}
+            <div className="absolute top-1/2 left-[-10%] h-[3px] w-[120%] -translate-y-1/2 -rotate-2 bg-brand shadow-lg shadow-brand/50"></div>
+          </div>
         </div>
       </div>
     </div>
