@@ -65,7 +65,7 @@ export default async function UsersDashboardPage({
     console.error("Failed to fetch data:", error);
   }
 
-  const usersDict = (dict.dashboard as any).users;
+  const usersDict = dict.dashboard.users;
 
   const tabs = [
     { label: usersDict?.tabs?.all || "All", value: "" },
@@ -79,8 +79,11 @@ export default async function UsersDashboardPage({
     <div className="space-y-6">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
+          <p className="text-sm font-medium text-brand">
+            {usersDict?.eyebrow || "User management"}
+          </p>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            {dict.dashboard.sidebar.users || "User Management"}
+            {usersDict?.title || dict.dashboard.sidebar.users || "User Management"}
           </h1>
           <p className="text-sm text-muted-foreground">
             {dict.common.usersDescription || "Manage customers, braiders, and other admins."}

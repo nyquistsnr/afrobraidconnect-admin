@@ -565,6 +565,13 @@
         "commentEn": "English comment",
         "commentDe": "German comment",
         "commentFr": "French comment"
+      },
+      "confirmation": {
+        "approveTitle": "Approve this review?",
+        "approveDescription": "The comment will become publicly visible and the rating will count toward the braider average.",
+        "rejectTitle": "Reject this review?",
+        "rejectDescription": "The review will be rejected and its rating will be excluded from the braider average.",
+        "processing": "Processing..."
       }
     },
     "header": {
@@ -732,6 +739,8 @@
       }
     },
     "users": {
+      "eyebrow": "User management",
+      "title": "User Management",
       "tabs": {
         "all": "All",
         "admin": "Admin",

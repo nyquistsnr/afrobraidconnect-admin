@@ -49,6 +49,10 @@ export function ReviewsManager({
   const [reviews, setReviews] = useState(initialReviews);
   const [selectedReview, setSelectedReview] = useState<AdminReview | null>(null);
   const [actingId, setActingId] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<{
+    review: AdminReview;
+    action: "approve" | "reject";
+  } | null>(null);
 
   async function moderate(review: AdminReview, action: "approve" | "reject") {
     setActingId(review.id);
@@ -68,8 +72,10 @@ export function ReviewsManager({
         action === "approve" ? dict.approvedToast : dict.rejectedToast
       );
       router.refresh();
+      return true;
     } catch (error) {
       toast.error(error instanceof Error ? error.message : dict.actionError);
+      return false;
     } finally {
       setActingId(null);
     }
@@ -144,7 +150,7 @@ export function ReviewsManager({
             </button>
             <button
               type="button"
-              onClick={() => moderate(review, "approve")}
+              onClick={() => setPendingAction({ review, action: "approve" })}
               title={dict.approve}
               aria-label={`${dict.approve} ${review.id}`}
               disabled={actingId === review.id || review.status === "APPROVED"}
@@ -154,7 +160,7 @@ export function ReviewsManager({
             </button>
             <button
               type="button"
-              onClick={() => moderate(review, "reject")}
+              onClick={() => setPendingAction({ review, action: "reject" })}
               title={dict.reject}
               aria-label={`${dict.reject} ${review.id}`}
               disabled={actingId === review.id || review.status === "REJECTED"}
@@ -249,8 +255,8 @@ export function ReviewsManager({
               lang={lang}
               acting={actingId === review.id}
               onReview={() => setSelectedReview(review)}
-              onApprove={() => moderate(review, "approve")}
-              onReject={() => moderate(review, "reject")}
+              onApprove={() => setPendingAction({ review, action: "approve" })}
+              onReject={() => setPendingAction({ review, action: "reject" })}
             />
           )}
           emptyState={
@@ -285,8 +291,30 @@ export function ReviewsManager({
           lang={lang}
           acting={actingId === selectedReview.id}
           onClose={() => setSelectedReview(null)}
-          onApprove={() => moderate(selectedReview, "approve")}
-          onReject={() => moderate(selectedReview, "reject")}
+          onApprove={() =>
+            setPendingAction({ review: selectedReview, action: "approve" })
+          }
+          onReject={() =>
+            setPendingAction({ review: selectedReview, action: "reject" })
+          }
+        />
+      )}
+
+      {pendingAction && (
+        <ModerationConfirmModal
+          review={pendingAction.review}
+          action={pendingAction.action}
+          dict={dict}
+          lang={lang}
+          acting={actingId === pendingAction.review.id}
+          onClose={() => setPendingAction(null)}
+          onConfirm={async () => {
+            const succeeded = await moderate(
+              pendingAction.review,
+              pendingAction.action
+            );
+            if (succeeded) setPendingAction(null);
+          }}
         />
       )}
     </div>
@@ -507,6 +535,92 @@ function ReviewModal({
           >
             <Check className="size-4" />
             {dict.approve}
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+function ModerationConfirmModal({
+  review,
+  action,
+  dict,
+  lang,
+  acting,
+  onClose,
+  onConfirm,
+}: {
+  review: AdminReview;
+  action: "approve" | "reject";
+  dict: ReviewsDict;
+  lang: Locale;
+  acting: boolean;
+  onClose: () => void;
+  onConfirm: () => Promise<void>;
+}) {
+  const isApprove = action === "approve";
+
+  return (
+    <Modal open onClose={onClose} labelledBy="review-confirm-modal">
+      <div className="space-y-4">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 id="review-confirm-modal" className="text-lg font-bold">
+              {isApprove
+                ? dict.confirmation.approveTitle
+                : dict.confirmation.rejectTitle}
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {isApprove
+                ? dict.confirmation.approveDescription
+                : dict.confirmation.rejectDescription}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={dict.cancel}
+            className="p-1 text-muted-foreground hover:text-foreground"
+            disabled={acting}
+          >
+            <X className="size-5" />
+          </button>
+        </div>
+
+        <div className="border border-border bg-border/10 p-3">
+          <p className="text-sm font-semibold text-foreground">
+            {review.braider_name}
+          </p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {localizedComment(review, lang) || dict.noComment}
+          </p>
+        </div>
+
+        <div className="flex justify-end gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            className="w-auto"
+            onClick={onClose}
+            disabled={acting}
+          >
+            {dict.cancel}
+          </Button>
+          <Button
+            type="button"
+            className={`w-auto ${
+              isApprove ? "" : "bg-red-600 text-white hover:bg-red-700"
+            }`}
+            onClick={onConfirm}
+            disabled={acting}
+          >
+            {isApprove ? <Check className="size-4" /> : <Trash2 className="size-4" />}
+            {acting
+              ? dict.confirmation.processing
+              : isApprove
+                ? dict.approve
+                : dict.reject}
           </Button>
         </div>
       </div>

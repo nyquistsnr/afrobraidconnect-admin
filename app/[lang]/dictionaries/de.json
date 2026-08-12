@@ -565,6 +565,13 @@
         "commentEn": "Englischer Kommentar",
         "commentDe": "Deutscher Kommentar",
         "commentFr": "Französischer Kommentar"
+      },
+      "confirmation": {
+        "approveTitle": "Diese Bewertung freigeben?",
+        "approveDescription": "Der Kommentar wird öffentlich sichtbar und die Bewertung fließt in den Durchschnitt des Braiders ein.",
+        "rejectTitle": "Diese Bewertung ablehnen?",
+        "rejectDescription": "Die Bewertung wird abgelehnt und ihre Sterne zählen nicht zum Durchschnitt des Braiders.",
+        "processing": "Wird verarbeitet..."
       }
     },
     "header": {
@@ -732,6 +739,8 @@
       }
     },
     "users": {
+      "eyebrow": "Benutzerverwaltung",
+      "title": "Benutzerverwaltung",
       "tabs": {
         "all": "Alle",
         "admin": "Admin",

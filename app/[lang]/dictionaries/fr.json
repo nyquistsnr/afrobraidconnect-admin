@@ -565,6 +565,13 @@
         "commentEn": "Commentaire anglais",
         "commentDe": "Commentaire allemand",
         "commentFr": "Commentaire français"
+      },
+      "confirmation": {
+        "approveTitle": "Approuver cet avis ?",
+        "approveDescription": "Le commentaire deviendra public et la note comptera dans la moyenne de la tresseuse.",
+        "rejectTitle": "Rejeter cet avis ?",
+        "rejectDescription": "L'avis sera rejeté et sa note sera exclue de la moyenne de la tresseuse.",
+        "processing": "Traitement..."
       }
     },
     "header": {
@@ -732,6 +739,8 @@
       }
     },
     "users": {
+      "eyebrow": "Gestion des utilisateurs",
+      "title": "Gestion des utilisateurs",
       "tabs": {
         "all": "Tous",
         "admin": "Admin",
