@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -179,26 +179,26 @@ export function AdminDashboardPage({
         subtitle={dict.overviewSubtitle}
       >
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <MetricCard icon={CalendarCheck} label={dict.overview.totalBookings} value={formatCount(overview?.total_bookings)} />
-          <MetricCard icon={Scissors} label={dict.overview.completed} value={formatCount(overview?.completed_count)} />
-          <MetricCard icon={CreditCard} label={dict.overview.netPaid} value={moneyFromMinor(overview?.net_amount_minor, currency, lang)} />
-          <MetricCard icon={TrendingUp} label={dict.overview.bookingValue} value={moneyFromMinor(overview?.total_booking_value_minor, currency, lang)} />
-          <MetricCard icon={WalletCards} label={dict.overview.paid} value={moneyFromMinor(overview?.paid_amount_minor, currency, lang)} />
-          <MetricCard icon={RefreshCw} label={dict.overview.refunded} value={moneyFromMinor(overview?.refunded_amount_minor, currency, lang)} />
-          <MetricCard icon={Banknote} label={dict.overview.pendingAmount} value={moneyFromMinor(overview?.pending_payment_amount_minor, currency, lang)} />
-          <MetricCard icon={CreditCard} label={dict.overview.braiderEarnings} value={moneyFromMinor(overview?.braider_earnings_minor, currency, lang)} />
-          <MetricCard icon={Users} label={dict.overview.uniqueCustomers} value={formatCount(firstNumber(overview?.unique_customer_count, overview?.unique_counterpart_count))} />
-          <MetricCard icon={Users} label={dict.overview.repeatCustomers} value={formatCount(firstNumber(overview?.repeat_customer_count, overview?.repeat_counterpart_count))} />
-          <MetricCard icon={Scissors} label={dict.overview.uniqueBraiders} value={formatCount(firstNumber(overview?.unique_braider_count))} />
-          <MetricCard icon={Scissors} label={dict.overview.repeatBraiders} value={formatCount(firstNumber(overview?.repeat_braider_count))} />
+          <MetricCard icon={CalendarCheck} label={dict.overview.totalBookings} value={extractCount(overview, ["total_bookings"])} />
+          <MetricCard icon={Scissors} label={dict.overview.completed} value={extractCount(overview, ["completed_count", "completed_bookings"])} />
+          <MetricCard icon={CreditCard} label={dict.overview.netPaid} value={extractMoney(overview, ["net_amount_minor", "net_amount_paid", "net_amount"], currency, lang)} />
+          <MetricCard icon={TrendingUp} label={dict.overview.bookingValue} value={extractMoney(overview, ["total_booking_value_minor", "total_booking_value"], currency, lang)} />
+          <MetricCard icon={WalletCards} label={dict.overview.paid} value={extractMoney(overview, ["paid_amount_minor", "total_amount_paid", "paid_amount"], currency, lang)} />
+          <MetricCard icon={RefreshCw} label={dict.overview.refunded} value={extractMoney(overview, ["refunded_amount_minor", "total_amount_refunded", "refunded_amount"], currency, lang)} />
+          <MetricCard icon={Banknote} label={dict.overview.pendingAmount} value={extractMoney(overview, ["pending_payment_amount_minor", "pending_payment_amount"], currency, lang)} />
+          <MetricCard icon={CreditCard} label={dict.overview.braiderEarnings} value={extractMoney(overview, ["braider_earnings_minor", "total_amount_made_by_braider", "braider_earnings"], currency, lang)} />
+          <MetricCard icon={Users} label={dict.overview.uniqueCustomers} value={extractCount(overview, ["unique_customer_count", "unique_customers", "unique_counterpart_count"])} />
+          <MetricCard icon={Users} label={dict.overview.repeatCustomers} value={extractCount(overview, ["repeat_customer_count", "repeat_customers", "repeat_counterpart_count"])} />
+          <MetricCard icon={Scissors} label={dict.overview.uniqueBraiders} value={extractCount(overview, ["unique_braider_count", "unique_braiders"])} />
+          <MetricCard icon={Scissors} label={dict.overview.repeatBraiders} value={extractCount(overview, ["repeat_braider_count", "repeat_braiders"])} />
         </div>
 
         <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,360px)]">
           <SplitPanel
             mobileLabel={dict.overview.mobile}
-            mobileValue={firstNumber(overview?.mobile_count)}
+            mobileValue={firstNumber(overview?.mobile_count, overview?.mobile_bookings)}
             salonLabel={dict.overview.salon}
-            salonValue={firstNumber(overview?.salon_count)}
+            salonValue={firstNumber(overview?.salon_count, overview?.salon_bookings)}
           />
           <StatusBreakdown dict={dict} overview={overview} />
         </div>
@@ -210,17 +210,17 @@ export function AdminDashboardPage({
         subtitle={dict.financialsSubtitle}
       >
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <MetricCard icon={Scissors} label={dict.financials.serviceSubtotal} value={moneyFromMinor(financials?.service_subtotal_minor, currency, lang)} />
-          <MetricCard icon={CreditCard} label={dict.financials.platformFee} value={moneyFromMinor(financials?.platform_fee_total_minor, currency, lang)} />
-          <MetricCard icon={Banknote} label={dict.financials.vatTotal} value={moneyFromMinor(financials?.vat_total_minor, currency, lang)} />
-          <MetricCard icon={TrendingUp} label={dict.financials.grossBookingValue} value={moneyFromMinor(financials?.gross_booking_value_minor ?? financials?.total_booking_value_minor, currency, lang)} />
-          <MetricCard icon={WalletCards} label={dict.financials.paid} value={moneyFromMinor(financials?.paid_amount_minor, currency, lang)} />
-          <MetricCard icon={RefreshCw} label={dict.financials.refunded} value={moneyFromMinor(financials?.refunded_amount_minor, currency, lang)} />
-          <MetricCard icon={CreditCard} label={dict.financials.netPaid} value={moneyFromMinor(financials?.net_amount_minor, currency, lang)} />
-          <MetricCard icon={Banknote} label={dict.financials.pendingPayment} value={moneyFromMinor(financials?.pending_payment_amount_minor, currency, lang)} />
-          <MetricCard icon={Scissors} label={dict.financials.braiderEarnings} value={moneyFromMinor(financials?.braider_earnings_minor, currency, lang)} />
-          <MetricCard icon={TrendingUp} label={dict.financials.grossMarginBeforeTax} value={moneyFromMinor(financials?.gross_margin_before_tax_minor, currency, lang)} />
-          <MetricCard icon={Banknote} label={dict.financials.estimatedProfitAfterVat} value={moneyFromMinor(financials?.estimated_profit_after_vat_minor, currency, lang)} />
+          <MetricCard icon={Scissors} label={dict.financials.serviceSubtotal} value={extractMoney(financials, ["service_subtotal_minor", "service_subtotal"], currency, lang)} />
+          <MetricCard icon={CreditCard} label={dict.financials.platformFee} value={extractMoney(financials, ["platform_fee_total_minor", "platform_fee_total"], currency, lang)} />
+          <MetricCard icon={Banknote} label={dict.financials.vatTotal} value={extractMoney(financials, ["vat_total_minor", "vat_total"], currency, lang)} />
+          <MetricCard icon={TrendingUp} label={dict.financials.grossBookingValue} value={extractMoney(financials, ["gross_booking_value_minor", "total_booking_value_minor", "total_booking_value"], currency, lang)} />
+          <MetricCard icon={WalletCards} label={dict.financials.paid} value={extractMoney(financials, ["paid_amount_minor", "total_amount_paid"], currency, lang)} />
+          <MetricCard icon={RefreshCw} label={dict.financials.refunded} value={extractMoney(financials, ["refunded_amount_minor", "total_amount_refunded"], currency, lang)} />
+          <MetricCard icon={CreditCard} label={dict.financials.netPaid} value={extractMoney(financials, ["net_amount_minor", "net_amount_paid"], currency, lang)} />
+          <MetricCard icon={Banknote} label={dict.financials.pendingPayment} value={extractMoney(financials, ["pending_payment_amount_minor", "pending_payment_amount"], currency, lang)} />
+          <MetricCard icon={Scissors} label={dict.financials.braiderEarnings} value={extractMoney(financials, ["braider_earnings_minor", "braider_earnings"], currency, lang)} />
+          <MetricCard icon={TrendingUp} label={dict.financials.grossMarginBeforeTax} value={extractMoney(financials, ["gross_margin_before_tax_minor", "gross_margin_before_tax"], currency, lang)} />
+          <MetricCard icon={Banknote} label={dict.financials.estimatedProfitAfterVat} value={extractMoney(financials, ["estimated_profit_after_vat_minor", "estimated_profit_after_vat"], currency, lang)} />
         </div>
       </MetricSection>
 
@@ -277,14 +277,39 @@ function DashboardFilterForm({
   const [paymentSchedule, setPaymentSchedule] = useState<PaymentSchedule | "">(
     filters.payment_schedule ?? ""
   );
-  const [interval, setInterval] = useState<AdminRevenueChartInterval>(
-    chartFilters.interval ?? "month"
+  const [interval, setInterval] = useState<AdminRevenueChartInterval | "">(
+    chartFilters.interval ?? ""
   );
   const [limit, setLimit] = useState<StyleLimit>(
     chartFilters.limit === 5 || chartFilters.limit === 12 || chartFilters.limit === 25
       ? String(chartFilters.limit) as StyleLimit
       : "8"
   );
+
+  useEffect(() => {
+    setSearch(filters.search ?? "");
+    setStatus(filters.status ?? "");
+    setAppointmentFrom(filters.date_from ?? "");
+    setAppointmentTo(filters.date_to ?? "");
+    setCreatedFrom(filters.created_from ?? "");
+    setCreatedTo(filters.created_to ?? "");
+    setPaymentFrom(filters.payment_date_from ?? "");
+    setPaymentTo(filters.payment_date_to ?? "");
+    setCountry(filters.country === "DE" || filters.country === "FR" ? filters.country : "");
+    setCurrency(
+      filters.currency === "EUR" || filters.currency === "GBP" || filters.currency === "USD"
+        ? filters.currency
+        : ""
+    );
+    setIsMobile(filters.is_mobile === undefined ? "" : (String(filters.is_mobile) as MobileFilter));
+    setPaymentSchedule(filters.payment_schedule ?? "");
+    setInterval(chartFilters.interval ?? "");
+    setLimit(
+      chartFilters.limit === 5 || chartFilters.limit === 12 || chartFilters.limit === 25
+        ? (String(chartFilters.limit) as StyleLimit)
+        : "8"
+    );
+  }, [filters, chartFilters]);
 
   const statusOptions: SelectOption<BookingStatus>[] = bookingStatuses.map((value) => ({
     value,
@@ -303,7 +328,8 @@ function DashboardFilterForm({
     { value: "GBP", label: dict.filters.gbp },
     { value: "USD", label: dict.filters.usd },
   ];
-  const intervalOptions: SelectOption<AdminRevenueChartInterval>[] = [
+  const intervalOptions: SelectOption<AdminRevenueChartInterval | "">[] = [
+    { value: "", label: dict.filters.all },
     { value: "day", label: dict.filters.day },
     { value: "week", label: dict.filters.week },
     { value: "month", label: dict.filters.month },
@@ -331,7 +357,7 @@ function DashboardFilterForm({
     if (currency) params.set("currency", currency);
     if (isMobile) params.set("is_mobile", String(isMobile === "true"));
     if (paymentSchedule) params.set("payment_schedule", paymentSchedule);
-    if (interval !== "month") params.set("interval", interval);
+    if (interval !== "") params.set("interval", interval);
     if (limit !== "8") params.set("limit", limit);
 
     router.push(params.size > 0 ? `${pathname}?${params.toString()}` : pathname);
@@ -573,7 +599,7 @@ function StatusBreakdown({
   dict: AdminDashboardDict;
   overview: AdminDashboardOverview | null;
 }) {
-  const counts = overview?.counts_by_status || overview?.per_status_counts || {};
+  const counts = overview?.counts_by_status || overview?.per_status_counts || overview?.status_counts || {};
   const rows = bookingStatuses
     .map((status) => ({ status, value: firstNumber(counts[status]) }))
     .filter((row) => row.value > 0);
@@ -788,7 +814,7 @@ function hasActiveFilters(
       filters.currency ||
       filters.is_mobile !== undefined ||
       filters.payment_schedule ||
-      chartFilters.interval !== "month" ||
+      chartFilters.interval !== undefined ||
       chartFilters.limit !== 8
   );
 }
@@ -799,6 +825,7 @@ function chartPoints(chart: AdminChartResponse | AdminChartPoint[] | null): Admi
   if (Array.isArray(chart.items)) return chart.items;
   if (Array.isArray(chart.points)) return chart.points;
   if (Array.isArray(chart.data)) return chart.data;
+  if (Array.isArray((chart as any).slices)) return (chart as any).slices;
   return [];
 }
 
@@ -879,6 +906,41 @@ function moneyValue(point: AdminChartPoint) {
   );
   if (minor) return minor / 100;
   return firstNumber(point.amount, point.value, point.revenue, point.total);
+}
+
+function extractMoney(
+  stats: AdminDashboardOverview | AdminDashboardFinancials | null | undefined,
+  keys: string[],
+  currency: Currency | null | undefined,
+  lang: Locale
+) {
+  if (!stats) return "-";
+  for (const key of keys) {
+    const val = (stats as Record<string, any>)[key];
+    if (val !== null && val !== undefined && val !== "") {
+      const numeric = Number(val);
+      if (!Number.isFinite(numeric)) continue;
+      if (key.endsWith("_minor")) {
+        return formatCurrency(numeric / 100, currency || "EUR", lang);
+      }
+      return formatCurrency(numeric, currency || "EUR", lang);
+    }
+  }
+  return "-";
+}
+
+function extractCount(
+  stats: AdminDashboardOverview | AdminDashboardFinancials | null | undefined,
+  keys: string[]
+) {
+  if (!stats) return "-";
+  for (const key of keys) {
+    const val = (stats as Record<string, any>)[key];
+    if (val !== null && val !== undefined && val !== "") {
+      return formatCount(val);
+    }
+  }
+  return "-";
 }
 
 function firstNumber(...values: unknown[]) {

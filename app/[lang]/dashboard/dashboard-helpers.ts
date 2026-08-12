@@ -79,7 +79,7 @@ export function parseAdminDashboardChartParams(
     interval:
       interval === "day" || interval === "week" || interval === "month"
         ? (interval as AdminRevenueChartInterval)
-        : "month",
+        : undefined,
     limit: Number.isFinite(limit) && limit > 0 ? Math.min(limit, 25) : 8,
   };
 }
