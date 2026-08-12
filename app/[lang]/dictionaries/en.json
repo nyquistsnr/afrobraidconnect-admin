@@ -325,7 +325,19 @@
       "serviceStyle": "Service Style",
       "onboardingStatus": "Onboarding Status",
       "logout": "Logout",
-      "users": "Users"
+      "users": "Users",
+      "styleCatalog": "Style Catalog"
+    },
+    "styleCatalog": {
+      "eyebrow": "Catalog management",
+      "title": "Style Catalog",
+      "subtitle": "Manage styles, categories, and add-ons for every locale.",
+      "tabs": { "styles": "Styles", "categories": "Categories", "addons": "Add-ons" },
+      "addStyle": "Add style", "addCategory": "Add category", "addAddon": "Add add-on",
+      "searchLabel": "Search styles", "searchPlaceholder": "Search styles", "emptyStyles": "No styles yet", "emptyCategories": "No categories yet", "emptyAddons": "No add-ons yet",
+      "order": "Order", "suggestedPrice": "Suggested", "noSuggestedPrice": "No suggested price", "variations": "variations", "uncategorized": "Uncategorized", "noDescription": "No description",
+      "deleteTitle": "Delete item", "deleteDescription": "This action cannot be undone.", "cancel": "Cancel", "delete": "Delete", "deleting": "Deleting…", "deleted": "Deleted successfully.",
+      "saved": "Saved successfully.", "saveError": "Could not save. Please try again.", "edit": "Edit", "add": "Add", "save": "Save", "englishName": "English name", "displayOrder": "Display order", "editStyle": "Edit style", "authoringHint": "English changes are translated into German and French.", "category": "Category", "englishDescription": "English description", "publish": "Publish this style"
     },
     "header": {
       "notifications": "Notifications",

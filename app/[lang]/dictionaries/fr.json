@@ -325,7 +325,19 @@
       "serviceStyle": "Style de service",
       "onboardingStatus": "Statut d'intégration",
       "logout": "Déconnexion",
-      "users": "Utilisateurs"
+      "users": "Utilisateurs",
+      "styleCatalog": "Catalogue de styles"
+    },
+    "styleCatalog": {
+      "eyebrow": "Gestion du catalogue",
+      "title": "Catalogue de styles",
+      "subtitle": "Gérez les styles, catégories et options pour chaque langue.",
+      "tabs": { "styles": "Styles", "categories": "Catégories", "addons": "Options" },
+      "addStyle": "Ajouter un style", "addCategory": "Ajouter une catégorie", "addAddon": "Ajouter une option",
+      "searchLabel": "Rechercher des styles", "searchPlaceholder": "Rechercher des styles", "emptyStyles": "Aucun style", "emptyCategories": "Aucune catégorie", "emptyAddons": "Aucune option",
+      "order": "Ordre", "suggestedPrice": "Suggéré", "noSuggestedPrice": "Aucun prix suggéré", "variations": "variantes", "uncategorized": "Sans catégorie", "noDescription": "Aucune description",
+      "deleteTitle": "Supprimer l’élément", "deleteDescription": "Cette action est irréversible.", "cancel": "Annuler", "delete": "Supprimer", "deleting": "Suppression…", "deleted": "Suppression réussie.",
+      "saved": "Enregistré avec succès.", "saveError": "Impossible d’enregistrer. Réessayez.", "edit": "Modifier", "add": "Ajouter", "save": "Enregistrer", "englishName": "Nom anglais", "displayOrder": "Ordre d’affichage", "editStyle": "Modifier le style", "authoringHint": "Les modifications en anglais sont traduites en allemand et en français.", "category": "Catégorie", "englishDescription": "Description anglaise", "publish": "Publier ce style"
     },
     "header": {
       "notifications": "Notifications",

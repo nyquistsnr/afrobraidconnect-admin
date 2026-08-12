@@ -165,6 +165,71 @@ export interface PaginatedData<T> {
   pagination: PaginationMeta;
 }
 
+// ---------------------------------------------------------------------------
+// Admin style catalog
+// ---------------------------------------------------------------------------
+
+export type TranslationSource = "HUMAN" | "MACHINE" | "PENDING" | "FAILED" | null;
+
+export interface StyleCategory {
+  id: string;
+  slug: string;
+  name_en: string;
+  name_de: string | null;
+  name_fr: string | null;
+  name_en_source: TranslationSource;
+  name_de_source: TranslationSource;
+  name_fr_source: TranslationSource;
+  display_order: number;
+}
+
+export interface StyleImage { id: string; url: string; position: number; }
+export interface StyleVariation {
+  id: string;
+  name_en: string;
+  name_de: string | null;
+  name_fr: string | null;
+  name_en_source: TranslationSource;
+  name_de_source: TranslationSource;
+  name_fr_source: TranslationSource;
+  display_order: number;
+  is_active: boolean;
+}
+
+export interface AdminStyle {
+  id: string;
+  slug: string;
+  category_id: string | null;
+  name_en: string;
+  name_de: string | null;
+  name_fr: string | null;
+  name_en_source: TranslationSource;
+  name_de_source: TranslationSource;
+  name_fr_source: TranslationSource;
+  description_en: string | null;
+  description_de: string | null;
+  description_fr: string | null;
+  description_en_source: TranslationSource;
+  description_de_source: TranslationSource;
+  description_fr_source: TranslationSource;
+  is_active: boolean;
+  images: StyleImage[];
+  variations: StyleVariation[];
+}
+
+export interface AdminAddon {
+  id: string;
+  slug: string;
+  name_en: string;
+  name_de: string | null;
+  name_fr: string | null;
+  name_en_source: TranslationSource;
+  name_de_source: TranslationSource;
+  name_fr_source: TranslationSource;
+  suggested_price: string | null;
+  is_active: boolean;
+}
+
 export type NotificationType = "CHAT_NEW_MESSAGE" | "CHAT_MESSAGE_FLAGGED";
 
 export interface Notification {
