@@ -327,7 +327,9 @@
       "logout": "Logout",
       "users": "Users",
       "styleCatalog": "Style Catalog",
-      "platformSettings": "Platform Settings"
+      "platformSettings": "Platform Settings",
+      "chatReports": "Chat Reports",
+      "reviews": "Reviews"
     },
     "styleCatalog": {
       "eyebrow": "Catalog management",
@@ -447,6 +449,122 @@
           "platformFeeVat": "Platform fee VAT",
           "actions": "Actions"
         }
+      }
+    },
+    "chatReports": {
+      "eyebrow": "Moderation",
+      "title": "Chat Reports",
+      "subtitle": "Review reported chat activity and update moderation workflow status.",
+      "tabsLabel": "Report status",
+      "listTitle": "Reported conversations",
+      "listSubtitle": "Reports are shown newest first. The backend defaults to open reports when no status is selected.",
+      "loadError": "We couldn't load chat reports. Please refresh and try again.",
+      "review": "Review",
+      "save": "Save changes",
+      "saving": "Saving...",
+      "saved": "Report updated.",
+      "saveError": "Could not update the report. Please try again.",
+      "cancel": "Cancel",
+      "noDetails": "No additional details provided.",
+      "emptyTitle": "No reports in this status",
+      "emptyDescription": "Reports will appear here when users submit them.",
+      "statusLabels": {
+        "OPEN": "Open",
+        "UNDER_REVIEW": "Under review",
+        "RESOLVED": "Resolved",
+        "DISMISSED": "Dismissed"
+      },
+      "reasonLabels": {
+        "HARASSMENT": "Harassment",
+        "INAPPROPRIATE_CONTENT": "Inappropriate content",
+        "SPAM": "Spam",
+        "SCAM_OR_FRAUD": "Scam or fraud",
+        "OFF_PLATFORM_SOLICITATION": "Off-platform solicitation",
+        "OTHER": "Other"
+      },
+      "table": {
+        "created": "Created",
+        "people": "People",
+        "reporter": "Reporter",
+        "reported": "Reported",
+        "reason": "Reason",
+        "details": "Details",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "pagination": {
+        "summary": "Page {page} of {totalPages} - {totalItems} reports",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "modal": {
+        "title": "Review chat report",
+        "subtitle": "Update the workflow status and add internal moderation notes.",
+        "reporter": "Reporter",
+        "reportedUser": "Reported user",
+        "bookingId": "Booking ID",
+        "threadId": "Thread ID",
+        "messageId": "Message ID",
+        "noMessage": "No specific message",
+        "updatedAt": "Last updated",
+        "reason": "Report reason",
+        "statusLabel": "Workflow status",
+        "notesLabel": "Admin notes",
+        "notesPlaceholder": "Add investigation notes for other admins...",
+        "notesHelp": "Blank notes are ignored by the API and will not clear existing notes."
+      }
+    },
+    "reviews": {
+      "eyebrow": "Moderation",
+      "title": "Reviews",
+      "subtitle": "Review customer comments and decide whether they should count toward braider ratings.",
+      "tabsLabel": "Review status",
+      "listTitle": "Review queue",
+      "listSubtitle": "Pending reviews are shown oldest first so the moderation queue can be cleared fairly.",
+      "loadError": "We couldn't load reviews. Please refresh and try again.",
+      "review": "Review",
+      "approve": "Approve",
+      "reject": "Reject",
+      "cancel": "Cancel",
+      "approvedToast": "Review approved.",
+      "rejectedToast": "Review rejected.",
+      "actionError": "Could not update the review. Please try again.",
+      "noComment": "No comment provided.",
+      "star": "stars",
+      "emptyTitle": "No reviews in this status",
+      "emptyDescription": "Reviews will appear here when customers submit them.",
+      "statusLabels": {
+        "PENDING": "Pending",
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected"
+      },
+      "table": {
+        "created": "Created",
+        "people": "People",
+        "braider": "Braider",
+        "customer": "Customer",
+        "rating": "Rating",
+        "comment": "Comment",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "pagination": {
+        "summary": "Page {page} of {totalPages} - {totalItems} reviews",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "modal": {
+        "title": "Review customer feedback",
+        "subtitle": "Approve public comments or reject reviews that should not count toward a braider rating.",
+        "braider": "Braider",
+        "customer": "Customer",
+        "reviewId": "Review ID",
+        "braiderId": "Braider ID",
+        "customerId": "Customer ID",
+        "updatedAt": "Last updated",
+        "commentEn": "English comment",
+        "commentDe": "German comment",
+        "commentFr": "French comment"
       }
     },
     "header": {

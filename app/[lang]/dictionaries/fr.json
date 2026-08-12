@@ -327,7 +327,9 @@
       "logout": "Déconnexion",
       "users": "Utilisateurs",
       "styleCatalog": "Catalogue de styles",
-      "platformSettings": "Paramètres de plateforme"
+      "platformSettings": "Paramètres de plateforme",
+      "chatReports": "Signalements chat",
+      "reviews": "Avis"
     },
     "styleCatalog": {
       "eyebrow": "Gestion du catalogue",
@@ -447,6 +449,122 @@
           "platformFeeVat": "TVA frais plateforme",
           "actions": "Actions"
         }
+      }
+    },
+    "chatReports": {
+      "eyebrow": "Modération",
+      "title": "Signalements chat",
+      "subtitle": "Examinez les activités de chat signalées et mettez à jour le statut de modération.",
+      "tabsLabel": "Statut du signalement",
+      "listTitle": "Conversations signalées",
+      "listSubtitle": "Les signalements sont affichés du plus récent au plus ancien. Sans statut sélectionné, l'API charge les signalements ouverts.",
+      "loadError": "Impossible de charger les signalements chat. Veuillez actualiser et réessayer.",
+      "review": "Examiner",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "saved": "Signalement mis à jour.",
+      "saveError": "Impossible de mettre à jour le signalement. Veuillez réessayer.",
+      "cancel": "Annuler",
+      "noDetails": "Aucun détail supplémentaire fourni.",
+      "emptyTitle": "Aucun signalement avec ce statut",
+      "emptyDescription": "Les signalements apparaîtront ici lorsque les utilisateurs en soumettront.",
+      "statusLabels": {
+        "OPEN": "Ouvert",
+        "UNDER_REVIEW": "En cours d'examen",
+        "RESOLVED": "Résolu",
+        "DISMISSED": "Rejeté"
+      },
+      "reasonLabels": {
+        "HARASSMENT": "Harcèlement",
+        "INAPPROPRIATE_CONTENT": "Contenu inapproprié",
+        "SPAM": "Spam",
+        "SCAM_OR_FRAUD": "Arnaque ou fraude",
+        "OFF_PLATFORM_SOLICITATION": "Sollicitation hors plateforme",
+        "OTHER": "Autre"
+      },
+      "table": {
+        "created": "Créé",
+        "people": "Personnes",
+        "reporter": "Auteur du signalement",
+        "reported": "Personne signalée",
+        "reason": "Motif",
+        "details": "Détails",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "pagination": {
+        "summary": "Page {page} sur {totalPages} - {totalItems} signalements",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "modal": {
+        "title": "Examiner le signalement chat",
+        "subtitle": "Mettez à jour le statut du workflow et ajoutez des notes internes de modération.",
+        "reporter": "Auteur du signalement",
+        "reportedUser": "Personne signalée",
+        "bookingId": "ID de réservation",
+        "threadId": "ID du fil",
+        "messageId": "ID du message",
+        "noMessage": "Aucun message spécifique",
+        "updatedAt": "Dernière mise à jour",
+        "reason": "Motif du signalement",
+        "statusLabel": "Statut du workflow",
+        "notesLabel": "Notes admin",
+        "notesPlaceholder": "Ajoutez des notes d'enquête pour les autres admins...",
+        "notesHelp": "Les notes vides sont ignorées par l'API et ne suppriment pas les notes existantes."
+      }
+    },
+    "reviews": {
+      "eyebrow": "Modération",
+      "title": "Avis",
+      "subtitle": "Examinez les commentaires clients et décidez s'ils doivent compter dans les notes des tresseuses.",
+      "tabsLabel": "Statut de l'avis",
+      "listTitle": "File de modération des avis",
+      "listSubtitle": "Les avis en attente sont affichés du plus ancien au plus récent afin de traiter la file équitablement.",
+      "loadError": "Impossible de charger les avis. Veuillez actualiser et réessayer.",
+      "review": "Examiner",
+      "approve": "Approuver",
+      "reject": "Rejeter",
+      "cancel": "Annuler",
+      "approvedToast": "Avis approuvé.",
+      "rejectedToast": "Avis rejeté.",
+      "actionError": "Impossible de mettre à jour l'avis. Veuillez réessayer.",
+      "noComment": "Aucun commentaire fourni.",
+      "star": "étoiles",
+      "emptyTitle": "Aucun avis avec ce statut",
+      "emptyDescription": "Les avis apparaîtront ici lorsque les clients en soumettront.",
+      "statusLabels": {
+        "PENDING": "En attente",
+        "APPROVED": "Approuvé",
+        "REJECTED": "Rejeté"
+      },
+      "table": {
+        "created": "Créé",
+        "people": "Personnes",
+        "braider": "Tresseuse",
+        "customer": "Client",
+        "rating": "Note",
+        "comment": "Commentaire",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "pagination": {
+        "summary": "Page {page} sur {totalPages} - {totalItems} avis",
+        "previous": "Précédent",
+        "next": "Suivant"
+      },
+      "modal": {
+        "title": "Examiner l'avis client",
+        "subtitle": "Approuvez les commentaires publics ou rejetez les avis qui ne doivent pas compter dans la note d'une tresseuse.",
+        "braider": "Tresseuse",
+        "customer": "Client",
+        "reviewId": "ID de l'avis",
+        "braiderId": "ID tresseuse",
+        "customerId": "ID client",
+        "updatedAt": "Dernière mise à jour",
+        "commentEn": "Commentaire anglais",
+        "commentDe": "Commentaire allemand",
+        "commentFr": "Commentaire français"
       }
     },
     "header": {

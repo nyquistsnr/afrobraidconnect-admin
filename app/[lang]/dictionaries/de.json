@@ -327,7 +327,9 @@
       "logout": "Abmelden",
       "users": "Benutzer",
       "styleCatalog": "Stilkatalog",
-      "platformSettings": "Plattformeinstellungen"
+      "platformSettings": "Plattformeinstellungen",
+      "chatReports": "Chat-Meldungen",
+      "reviews": "Bewertungen"
     },
     "styleCatalog": {
       "eyebrow": "Katalogverwaltung",
@@ -447,6 +449,122 @@
           "platformFeeVat": "Plattformgebühr-MwSt.",
           "actions": "Aktionen"
         }
+      }
+    },
+    "chatReports": {
+      "eyebrow": "Moderation",
+      "title": "Chat-Meldungen",
+      "subtitle": "Prüfen Sie gemeldete Chat-Aktivitäten und aktualisieren Sie den Moderationsstatus.",
+      "tabsLabel": "Meldungsstatus",
+      "listTitle": "Gemeldete Unterhaltungen",
+      "listSubtitle": "Meldungen werden nach neuesten zuerst angezeigt. Ohne Statusauswahl lädt das Backend offene Meldungen.",
+      "loadError": "Chat-Meldungen konnten nicht geladen werden. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut.",
+      "review": "Prüfen",
+      "save": "Änderungen speichern",
+      "saving": "Speichern...",
+      "saved": "Meldung aktualisiert.",
+      "saveError": "Die Meldung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+      "cancel": "Abbrechen",
+      "noDetails": "Keine zusätzlichen Details angegeben.",
+      "emptyTitle": "Keine Meldungen mit diesem Status",
+      "emptyDescription": "Meldungen erscheinen hier, sobald Benutzer sie einreichen.",
+      "statusLabels": {
+        "OPEN": "Offen",
+        "UNDER_REVIEW": "In Prüfung",
+        "RESOLVED": "Erledigt",
+        "DISMISSED": "Abgewiesen"
+      },
+      "reasonLabels": {
+        "HARASSMENT": "Belästigung",
+        "INAPPROPRIATE_CONTENT": "Unangemessene Inhalte",
+        "SPAM": "Spam",
+        "SCAM_OR_FRAUD": "Betrug",
+        "OFF_PLATFORM_SOLICITATION": "Kontakt oder Zahlung außerhalb der Plattform",
+        "OTHER": "Sonstiges"
+      },
+      "table": {
+        "created": "Erstellt",
+        "people": "Personen",
+        "reporter": "Meldende Person",
+        "reported": "Gemeldete Person",
+        "reason": "Grund",
+        "details": "Details",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "pagination": {
+        "summary": "Seite {page} von {totalPages} - {totalItems} Meldungen",
+        "previous": "Zurück",
+        "next": "Weiter"
+      },
+      "modal": {
+        "title": "Chat-Meldung prüfen",
+        "subtitle": "Aktualisieren Sie den Workflow-Status und fügen Sie interne Moderationsnotizen hinzu.",
+        "reporter": "Meldende Person",
+        "reportedUser": "Gemeldete Person",
+        "bookingId": "Buchungs-ID",
+        "threadId": "Thread-ID",
+        "messageId": "Nachrichten-ID",
+        "noMessage": "Keine bestimmte Nachricht",
+        "updatedAt": "Zuletzt aktualisiert",
+        "reason": "Meldegrund",
+        "statusLabel": "Workflow-Status",
+        "notesLabel": "Admin-Notizen",
+        "notesPlaceholder": "Fügen Sie Untersuchungsnotizen für andere Admins hinzu...",
+        "notesHelp": "Leere Notizen werden von der API ignoriert und löschen bestehende Notizen nicht."
+      }
+    },
+    "reviews": {
+      "eyebrow": "Moderation",
+      "title": "Bewertungen",
+      "subtitle": "Prüfen Sie Kundenkommentare und entscheiden Sie, ob sie in Braider-Bewertungen einfließen sollen.",
+      "tabsLabel": "Bewertungsstatus",
+      "listTitle": "Bewertungswarteschlange",
+      "listSubtitle": "Ausstehende Bewertungen werden mit den ältesten zuerst angezeigt, damit die Moderation fair abgearbeitet wird.",
+      "loadError": "Bewertungen konnten nicht geladen werden. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut.",
+      "review": "Prüfen",
+      "approve": "Freigeben",
+      "reject": "Ablehnen",
+      "cancel": "Abbrechen",
+      "approvedToast": "Bewertung freigegeben.",
+      "rejectedToast": "Bewertung abgelehnt.",
+      "actionError": "Die Bewertung konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+      "noComment": "Kein Kommentar angegeben.",
+      "star": "Sterne",
+      "emptyTitle": "Keine Bewertungen mit diesem Status",
+      "emptyDescription": "Bewertungen erscheinen hier, sobald Kunden sie einreichen.",
+      "statusLabels": {
+        "PENDING": "Ausstehend",
+        "APPROVED": "Freigegeben",
+        "REJECTED": "Abgelehnt"
+      },
+      "table": {
+        "created": "Erstellt",
+        "people": "Personen",
+        "braider": "Braider",
+        "customer": "Kunde",
+        "rating": "Bewertung",
+        "comment": "Kommentar",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "pagination": {
+        "summary": "Seite {page} von {totalPages} - {totalItems} Bewertungen",
+        "previous": "Zurück",
+        "next": "Weiter"
+      },
+      "modal": {
+        "title": "Kundenfeedback prüfen",
+        "subtitle": "Geben Sie öffentliche Kommentare frei oder lehnen Sie Bewertungen ab, die nicht in die Braider-Bewertung einfließen sollen.",
+        "braider": "Braider",
+        "customer": "Kunde",
+        "reviewId": "Bewertungs-ID",
+        "braiderId": "Braider-ID",
+        "customerId": "Kunden-ID",
+        "updatedAt": "Zuletzt aktualisiert",
+        "commentEn": "Englischer Kommentar",
+        "commentDe": "Deutscher Kommentar",
+        "commentFr": "Französischer Kommentar"
       }
     },
     "header": {

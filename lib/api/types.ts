@@ -274,6 +274,79 @@ export interface CountryVatUpsertRequest {
   vat_platform_fee_value: string | number;
 }
 
+// ---------------------------------------------------------------------------
+// Admin chat reports
+// ---------------------------------------------------------------------------
+
+export type ChatReportReason =
+  | "HARASSMENT"
+  | "INAPPROPRIATE_CONTENT"
+  | "SPAM"
+  | "SCAM_OR_FRAUD"
+  | "OFF_PLATFORM_SOLICITATION"
+  | "OTHER";
+
+export type ChatReportStatus =
+  | "OPEN"
+  | "UNDER_REVIEW"
+  | "RESOLVED"
+  | "DISMISSED";
+
+export interface AdminChatReport {
+  id: string;
+  thread_id: string;
+  booking_id: string;
+  reporter_id: string;
+  reporter_name: string;
+  reported_user_id: string;
+  reported_user_name: string;
+  message_id: string | null;
+  reason: ChatReportReason;
+  details: string | null;
+  status: ChatReportStatus;
+  admin_notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ChatReportsListParams {
+  status?: ChatReportStatus;
+  page?: number;
+  page_size?: number;
+}
+
+export interface ChatReportUpdateRequest {
+  status: ChatReportStatus;
+  admin_notes?: string | null;
+}
+
+// ---------------------------------------------------------------------------
+// Admin reviews
+// ---------------------------------------------------------------------------
+
+export type ReviewStatus = "PENDING" | "APPROVED" | "REJECTED";
+
+export interface AdminReview {
+  id: string;
+  braider_id: string;
+  braider_name: string;
+  customer_id: string;
+  customer_name: string;
+  rating: number;
+  comment_en: string | null;
+  comment_de: string | null;
+  comment_fr: string | null;
+  status: ReviewStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ReviewsListParams {
+  status?: ReviewStatus;
+  page?: number;
+  page_size?: number;
+}
+
 export type NotificationType = "CHAT_NEW_MESSAGE" | "CHAT_MESSAGE_FLAGGED";
 
 export interface Notification {

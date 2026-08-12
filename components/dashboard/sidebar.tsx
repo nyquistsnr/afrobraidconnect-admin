@@ -10,7 +10,9 @@ import {
   X,
   Users,
   Scissors,
-  Settings2
+  Settings2,
+  MessageSquareWarning,
+  Star
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -29,6 +31,8 @@ export function Sidebar({
     users?: string; 
     styleCatalog?: string;
     platformSettings?: string;
+    chatReports?: string;
+    reviews?: string;
     home?: string;
   };
   userName: string;
@@ -75,6 +79,18 @@ export function Sidebar({
       label: dict.platformSettings || "Platform Settings",
       icon: Settings2,
       active: pathname === `/${lang}/dashboard/platform-settings`,
+    },
+    {
+      href: `/${lang}/dashboard/chat-reports`,
+      label: dict.chatReports || "Chat Reports",
+      icon: MessageSquareWarning,
+      active: pathname === `/${lang}/dashboard/chat-reports`,
+    },
+    {
+      href: `/${lang}/dashboard/reviews`,
+      label: dict.reviews || "Reviews",
+      icon: Star,
+      active: pathname === `/${lang}/dashboard/reviews`,
     },
   ];
 
