@@ -1,6 +1,8 @@
 import type {
+  AdminBookingChartParams,
   AdminBookingStatsParams,
   AdminBookingsListParams,
+  AdminRevenueChartInterval,
   BookingStatus,
   PaginationMeta,
   PaymentSchedule,
@@ -83,6 +85,23 @@ export function statsParamsFromListParams(
     is_mobile: listParams.is_mobile,
     payment_schedule: listParams.payment_schedule,
     search: listParams.search,
+  };
+}
+
+export function chartParamsFromListParams(
+  searchParams: { [key: string]: string | string[] | undefined },
+  listParams: AdminBookingsListParams
+): AdminBookingChartParams {
+  const interval = stringParam(searchParams.interval);
+  const limit = Number.parseInt(stringParam(searchParams.limit) ?? "", 10);
+
+  return {
+    ...statsParamsFromListParams(searchParams, listParams),
+    interval:
+      interval === "day" || interval === "week" || interval === "month"
+        ? (interval as AdminRevenueChartInterval)
+        : "month",
+    limit: Number.isFinite(limit) && limit > 0 ? Math.min(limit, 25) : 8,
   };
 }
 

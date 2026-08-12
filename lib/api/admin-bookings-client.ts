@@ -1,9 +1,11 @@
 import { apiFetch, ApiError } from "@/lib/api/http";
 import type {
   AdminBookingDetail,
+  AdminBookingChartParams,
   AdminBookingListItem,
   AdminBookingStats,
   AdminBookingStatsParams,
+  AdminChartResponse,
   AdminBookingsListParams,
   PaginatedData,
 } from "@/lib/api/types";
@@ -55,6 +57,13 @@ function buildStatsQuery(params: AdminBookingStatsParams) {
   appendParam(query, "is_mobile", params.is_mobile);
   appendParam(query, "payment_schedule", params.payment_schedule);
   appendParam(query, "search", params.search);
+  return query.toString();
+}
+
+function buildChartQuery(params: AdminBookingChartParams) {
+  const query = new URLSearchParams(buildStatsQuery(params));
+  appendParam(query, "interval", params.interval);
+  appendParam(query, "limit", params.limit);
   return query.toString();
 }
 
@@ -186,6 +195,67 @@ export const adminBookingsApi = {
           braiderId
         )}/customers/${encodeURIComponent(customerId)}/stats`,
         buildStatsQuery(params)
+      ),
+      {
+        accessToken,
+        lang,
+      }
+    ),
+
+  chartForBraider: (
+    accessToken: string,
+    lang: Locale,
+    braiderId: string,
+    chart: "revenue" | "weekday" | "status" | "styles",
+    params: AdminBookingChartParams = {}
+  ) =>
+    apiFetch<AdminChartResponse>(
+      withQuery(
+        `${ADMIN_BOOKINGS_PATH}/braiders/${encodeURIComponent(
+          braiderId
+        )}/charts/${chart}`,
+        buildChartQuery(params)
+      ),
+      {
+        accessToken,
+        lang,
+      }
+    ),
+
+  chartForCustomer: (
+    accessToken: string,
+    lang: Locale,
+    customerId: string,
+    chart: "revenue" | "weekday" | "status" | "styles",
+    params: AdminBookingChartParams = {}
+  ) =>
+    apiFetch<AdminChartResponse>(
+      withQuery(
+        `${ADMIN_BOOKINGS_PATH}/customers/${encodeURIComponent(
+          customerId
+        )}/charts/${chart}`,
+        buildChartQuery(params)
+      ),
+      {
+        accessToken,
+        lang,
+      }
+    ),
+
+  chartForBraiderCustomer: (
+    accessToken: string,
+    lang: Locale,
+    braiderId: string,
+    customerId: string,
+    chart: "revenue" | "weekday" | "status" | "styles",
+    params: AdminBookingChartParams = {}
+  ) =>
+    apiFetch<AdminChartResponse>(
+      withQuery(
+        `${ADMIN_BOOKINGS_PATH}/braiders/${encodeURIComponent(
+          braiderId
+        )}/customers/${encodeURIComponent(customerId)}/charts/${chart}`,
+        buildChartQuery(params)
       ),
       {
         accessToken,

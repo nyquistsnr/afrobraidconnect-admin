@@ -404,6 +404,13 @@ export interface AdminBookingStatsParams
   payment_date_to?: string;
 }
 
+export type AdminRevenueChartInterval = "day" | "week" | "month";
+
+export interface AdminBookingChartParams extends AdminBookingStatsParams {
+  interval?: AdminRevenueChartInterval;
+  limit?: number;
+}
+
 export interface AdminBookingStats {
   total_bookings?: number;
   counts_by_status?: Partial<Record<BookingStatus | string, number>>;
@@ -431,6 +438,57 @@ export interface AdminBookingStats {
   customer_spend_minor?: number | string | null;
   currency?: Currency | null;
   [key: string]: unknown;
+}
+
+export interface AdminChartPoint {
+  label?: string | null;
+  name?: string | null;
+  date?: string | null;
+  period?: string | null;
+  weekday?: string | number | null;
+  status?: BookingStatus | string | null;
+  style_name?: string | null;
+  value?: number | string | null;
+  count?: number | string | null;
+  amount?: number | string | null;
+  amount_minor?: number | string | null;
+  value_minor?: number | string | null;
+  revenue_minor?: number | string | null;
+  earnings_minor?: number | string | null;
+  spend_minor?: number | string | null;
+  currency?: Currency | null;
+  [key: string]: unknown;
+}
+
+export interface AdminChartResponse {
+  items?: AdminChartPoint[];
+  points?: AdminChartPoint[];
+  data?: AdminChartPoint[];
+  currency?: Currency | null;
+  [key: string]: unknown;
+}
+
+export type AdminOnboardingStep =
+  | "BUSINESS_INFO"
+  | "PHONE_VERIFICATION"
+  | "VERIFF"
+  | "SERVICE_TYPE"
+  | "PORTFOLIO"
+  | "SERVICE_LOCATION"
+  | "AVAILABILITY"
+  | "PAYMENT_SETUP";
+
+export interface AdminBraiderOnboardingStep {
+  step: AdminOnboardingStep | string;
+  completed: boolean;
+  completed_at: string | null;
+}
+
+export interface AdminBraiderOnboarding {
+  braider_id?: string;
+  current_step: AdminOnboardingStep | string | null;
+  completed_at: string | null;
+  steps: AdminBraiderOnboardingStep[];
 }
 
 export interface AdminPaymentsListParams {

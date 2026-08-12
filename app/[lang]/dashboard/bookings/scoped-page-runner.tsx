@@ -2,16 +2,20 @@ import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import {
+  chartParamsFromListParams,
   fallbackPagination,
   parseScopedBookingListParams,
   statsParamsFromListParams,
 } from "@/app/[lang]/dashboard/bookings/scoped-helpers";
 import { getAdminBookingsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
 import { ScopedBookingsPage } from "@/components/dashboard/bookings/scoped-bookings-page";
+import { adminBraidersApi } from "@/lib/api/admin-braiders-client";
 import { adminBookingsApi } from "@/lib/api/admin-bookings-client";
 import type {
   AdminBookingListItem,
   AdminBookingStats,
+  AdminBraiderOnboarding,
+  AdminChartResponse,
   PaginationMeta,
 } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
@@ -42,8 +46,16 @@ export async function renderScopedBookingsPage({
   const dict = getAdminBookingsDict(locale);
   const filters = parseScopedBookingListParams(searchParams);
   const statsFilters = statsParamsFromListParams(searchParams, filters);
+  const chartFilters = chartParamsFromListParams(searchParams, filters);
   let bookings: AdminBookingListItem[] = [];
   let stats: AdminBookingStats | null = null;
+  let onboarding: AdminBraiderOnboarding | null = null;
+  let charts: ScopedCharts = {
+    revenue: null,
+    weekday: null,
+    status: null,
+    styles: null,
+  };
   let pagination: PaginationMeta = {
     page: filters.page ?? 1,
     page_size: 20,
@@ -54,6 +66,8 @@ export async function renderScopedBookingsPage({
   };
   let initialLoadError = false;
   let statsLoadError = false;
+  let onboardingLoadError = false;
+  let chartsLoadError = false;
 
   try {
     const response =
@@ -126,6 +140,41 @@ export async function renderScopedBookingsPage({
     );
   }
 
+  if (braiderId) {
+    try {
+      onboarding = await adminBraidersApi.getOnboarding(
+        session.accessToken,
+        locale,
+        braiderId
+      );
+    } catch (error) {
+      onboardingLoadError = true;
+      console.warn(
+        "Failed to load admin braider onboarding:",
+        error instanceof Error ? error.message : error
+      );
+    }
+  }
+
+  try {
+    const chartResult = await fetchScopedCharts({
+      accessToken: session.accessToken,
+      locale,
+      scopeKind,
+      braiderId,
+      customerId,
+      chartFilters,
+    });
+    charts = chartResult.charts;
+    chartsLoadError = chartResult.failed;
+  } catch (error) {
+    chartsLoadError = true;
+    console.warn(
+      "Failed to load scoped admin booking charts:",
+      error instanceof Error ? error.message : error
+    );
+  }
+
   return (
     <ScopedBookingsPage
       lang={locale}
@@ -135,12 +184,92 @@ export async function renderScopedBookingsPage({
       subtitle={scopedSubtitle(scopeKind, braiderId, customerId)}
       stats={stats}
       statsLoadError={statsLoadError}
+      onboarding={onboarding}
+      onboardingLoadError={onboardingLoadError}
+      charts={charts}
+      chartsLoadError={chartsLoadError}
       bookings={bookings}
       pagination={pagination}
       filters={filters}
       initialLoadError={initialLoadError}
     />
   );
+}
+
+interface ScopedCharts {
+  revenue: AdminChartResponse | null;
+  weekday: AdminChartResponse | null;
+  status: AdminChartResponse | null;
+  styles: AdminChartResponse | null;
+}
+
+interface ScopedChartsResult {
+  charts: ScopedCharts;
+  failed: boolean;
+}
+
+async function fetchScopedCharts({
+  accessToken,
+  locale,
+  scopeKind,
+  braiderId,
+  customerId,
+  chartFilters,
+}: {
+  accessToken: string;
+  locale: Locale;
+  scopeKind: ScopeKind;
+  braiderId?: string;
+  customerId?: string;
+  chartFilters: ReturnType<typeof chartParamsFromListParams>;
+}): Promise<ScopedChartsResult> {
+  const chartNames = ["revenue", "weekday", "status", "styles"] as const;
+  const results = await Promise.allSettled(
+    chartNames.map(async (chart) => {
+      if (scopeKind === "relationship" && braiderId && customerId) {
+        return adminBookingsApi.chartForBraiderCustomer(
+          accessToken,
+          locale,
+          braiderId,
+          customerId,
+          chart,
+          chartFilters
+        );
+      }
+      if (scopeKind === "braider" && braiderId) {
+        return adminBookingsApi.chartForBraider(
+          accessToken,
+          locale,
+          braiderId,
+          chart,
+          chartFilters
+        );
+      }
+      if (customerId) {
+        return adminBookingsApi.chartForCustomer(
+          accessToken,
+          locale,
+          customerId,
+          chart,
+          chartFilters
+        );
+      }
+      return null;
+    })
+  );
+  const chartValues = results.map((result) =>
+    result.status === "fulfilled" ? result.value : null
+  );
+
+  return {
+    charts: {
+      revenue: chartValues[0],
+      weekday: chartValues[1],
+      status: chartValues[2],
+      styles: chartValues[3],
+    },
+    failed: results.some((result) => result.status === "rejected"),
+  };
 }
 
 function scopedTitle(scopeKind: ScopeKind) {
