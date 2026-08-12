@@ -347,6 +347,170 @@ export interface ReviewsListParams {
   page_size?: number;
 }
 
+// ---------------------------------------------------------------------------
+// Admin bookings and payments
+// ---------------------------------------------------------------------------
+
+export type BookingStatus =
+  | "PENDING_PAYMENT"
+  | "CONFIRMED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "NO_SHOW"
+  | "CANCELLED_BY_CUSTOMER"
+  | "CANCELLED_BY_BRAIDER"
+  | "CANCELLED_NO_PAYMENT"
+  | "EXPIRED"
+  | "DISPUTED";
+
+export type Currency = "EUR" | "GBP" | "USD" | string;
+
+export type PaymentSchedule = "FULL_UPFRONT" | "DEPOSIT_THEN_BALANCE";
+
+export type PaymentPurpose = "FULL" | "DEPOSIT" | "BALANCE";
+
+export type PaymentStatus =
+  | "PENDING"
+  | "SUCCEEDED"
+  | "FAILED"
+  | "CANCELED"
+  | "PROCESSING"
+  | "REQUIRES_ACTION"
+  | "REFUNDED";
+
+export interface AdminBookingsListParams {
+  status?: BookingStatus;
+  date_from?: string;
+  date_to?: string;
+  created_from?: string;
+  created_to?: string;
+  customer_id?: string;
+  braider_id?: string;
+  country?: string;
+  currency?: Currency;
+  is_mobile?: boolean;
+  payment_schedule?: PaymentSchedule;
+  search?: string;
+  page?: number;
+  page_size?: number;
+}
+
+export interface AdminPaymentsListParams {
+  purpose?: PaymentPurpose;
+  status?: PaymentStatus;
+  date_from?: string;
+  date_to?: string;
+  booking_date_from?: string;
+  booking_date_to?: string;
+  customer_id?: string;
+  braider_id?: string;
+  booking_id?: string;
+  currency?: Currency;
+  is_refunded?: boolean;
+  search?: string;
+  page?: number;
+  page_size?: number;
+}
+
+export interface AdminBookingListItem {
+  id: string;
+  reference?: string | null;
+  booking_reference?: string | null;
+  status: BookingStatus;
+  style_name?: string | null;
+  customer_id?: string | null;
+  customer_name?: string | null;
+  customer_email?: string | null;
+  braider_id?: string | null;
+  braider_name?: string | null;
+  braider_business_name?: string | null;
+  braider_email?: string | null;
+  starts_at?: string | null;
+  ends_at?: string | null;
+  created_at: string;
+  country?: string | null;
+  currency: Currency;
+  is_mobile?: boolean | null;
+  payment_schedule?: PaymentSchedule | null;
+  total_amount_minor?: number | string | null;
+  total_minor?: number | string | null;
+  amount_total_minor?: number | string | null;
+}
+
+export interface AdminBookingItem {
+  id: string;
+  type?: string | null;
+  label?: string | null;
+  name?: string | null;
+  quantity?: number | null;
+  amount_minor?: number | string | null;
+  total_amount_minor?: number | string | null;
+  currency?: Currency | null;
+}
+
+export interface AdminBookingPayment {
+  id: string;
+  purpose?: PaymentPurpose | string | null;
+  status?: PaymentStatus | string | null;
+  amount_minor?: number | string | null;
+  amount_refunded_minor?: number | string | null;
+  currency?: Currency | null;
+  stripe_payment_intent_id?: string | null;
+  stripe_charge_id?: string | null;
+  failure_code?: string | null;
+  failure_message?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface AdminBookingDetail extends AdminBookingListItem {
+  customer_first_name?: string | null;
+  customer_last_name?: string | null;
+  braider_first_name?: string | null;
+  braider_last_name?: string | null;
+  timezone?: string | null;
+  duration_minutes?: number | null;
+  address_line1?: string | null;
+  address_line2?: string | null;
+  city?: string | null;
+  postal_code?: string | null;
+  latitude?: number | string | null;
+  longitude?: number | string | null;
+  service_subtotal_minor?: number | string | null;
+  travel_fee_minor?: number | string | null;
+  subtotal_minor?: number | string | null;
+  platform_fee_minor?: number | string | null;
+  vat_service_minor?: number | string | null;
+  vat_platform_fee_minor?: number | string | null;
+  vat_total_minor?: number | string | null;
+  deposit_amount_minor?: number | string | null;
+  balance_amount_minor?: number | string | null;
+  cancellation_cutoff_at?: string | null;
+  cancelled_at?: string | null;
+  confirmed_at?: string | null;
+  completed_at?: string | null;
+  expired_at?: string | null;
+  updated_at?: string | null;
+  items?: AdminBookingItem[];
+  booking_items?: AdminBookingItem[];
+  payments?: AdminBookingPayment[];
+}
+
+export interface AdminPaymentListItem extends AdminBookingPayment {
+  booking_id: string;
+  booking_reference?: string | null;
+  booking_status?: BookingStatus | string | null;
+  booking_starts_at?: string | null;
+  customer_id?: string | null;
+  customer_name?: string | null;
+  customer_email?: string | null;
+  braider_id?: string | null;
+  braider_name?: string | null;
+  braider_business_name?: string | null;
+  braider_email?: string | null;
+  is_mobile?: boolean | null;
+}
+
 export type NotificationType = "CHAT_NEW_MESSAGE" | "CHAT_MESSAGE_FLAGGED";
 
 export interface Notification {

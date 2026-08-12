@@ -12,7 +12,9 @@ import {
   Scissors,
   Settings2,
   MessageSquareWarning,
-  Star
+  Star,
+  CalendarCheck,
+  CreditCard
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -29,6 +31,9 @@ export function Sidebar({
   lang: Locale;
   dict: Dictionary["dashboard"]["sidebar"] & { 
     users?: string; 
+    bookings?: string;
+    payments?: string;
+    payment?: string;
     styleCatalog?: string;
     platformSettings?: string;
     chatReports?: string;
@@ -67,6 +72,18 @@ export function Sidebar({
       label: dict.users || "Users",
       icon: Users,
       active: pathname === `/${lang}/dashboard/users`,
+    },
+    {
+      href: `/${lang}/dashboard/bookings`,
+      label: dict.bookings || "Bookings",
+      icon: CalendarCheck,
+      active: pathname.startsWith(`/${lang}/dashboard/bookings`),
+    },
+    {
+      href: `/${lang}/dashboard/payments`,
+      label: dict.payments || dict.payment || "Payments",
+      icon: CreditCard,
+      active: pathname === `/${lang}/dashboard/payments`,
     },
     {
       href: `/${lang}/dashboard/style-catalog`,
