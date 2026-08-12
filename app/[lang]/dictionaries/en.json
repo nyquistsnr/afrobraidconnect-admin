@@ -329,6 +329,7 @@
       "styleCatalog": "Style Catalog",
       "platformSettings": "Platform Settings",
       "chatReports": "Chat Reports",
+      "contactSubmissions": "Contact Us",
       "reviews": "Reviews"
     },
     "styleCatalog": {
@@ -512,6 +513,90 @@
         "notesLabel": "Admin notes",
         "notesPlaceholder": "Add investigation notes for other admins...",
         "notesHelp": "Blank notes are ignored by the API and will not clear existing notes."
+      }
+    },
+    "contactSubmissions": {
+      "eyebrow": "Support inbox",
+      "title": "Contact Us Submissions",
+      "subtitle": "Review messages submitted through the public Contact Us form.",
+      "listTitle": "Submitted messages",
+      "listSubtitle": "Newest submissions appear first.",
+      "loadError": "We could not load contact submissions. Check the filters and try again.",
+      "loadDetailError": "We could not load this submission.",
+      "showFilters": "Show filters",
+      "hideFilters": "Hide filters",
+      "view": "View",
+      "loading": "Loading...",
+      "read": "Read",
+      "unread": "Unread",
+      "markRead": "Mark read",
+      "markUnread": "Mark unread",
+      "markedRead": "Submission marked read.",
+      "markedUnread": "Submission marked unread.",
+      "saving": "Saving...",
+      "actionError": "Could not update the submission. Please try again.",
+      "close": "Close",
+      "noSubject": "No subject",
+      "noPurpose": "No purpose",
+      "emptyTitle": "No submissions found",
+      "emptyDescription": "Contact submissions matching the current filters will appear here.",
+      "platformLabels": {
+        "CUSTOMER": "Customer",
+        "BRAIDER": "Braider"
+      },
+      "purposeLabels": {
+        "GENERAL": "General",
+        "PARTNER": "Partner",
+        "PRICING": "Pricing",
+        "FAQS": "FAQs"
+      },
+      "filters": {
+        "title": "Filters",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Name, email, phone, subject, message",
+        "platform": "Platform",
+        "allPlatforms": "All platforms",
+        "purpose": "Purpose",
+        "allPurposes": "All purposes",
+        "readStatus": "Read status",
+        "allReadStatuses": "All statuses",
+        "createdRange": "Submitted range",
+        "dateRangePlaceholder": "Choose dates",
+        "presets": "Presets",
+        "today": "Today",
+        "last7Days": "Last 7 days",
+        "thisMonth": "This month",
+        "lastMonth": "Last month",
+        "clear": "Clear",
+        "applyRange": "Apply range",
+        "previousMonth": "Previous month",
+        "nextMonth": "Next month",
+        "reset": "Reset",
+        "apply": "Apply filters"
+      },
+      "table": {
+        "created": "Submitted",
+        "sender": "Sender",
+        "topic": "Topic",
+        "message": "Message",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "pagination": {
+        "summary": "Page {page} of {totalPages} - {totalItems} submissions",
+        "previous": "Previous",
+        "next": "Next"
+      },
+      "modal": {
+        "title": "Contact submission",
+        "subtitle": "Review the submitted details and mark the message read or unread.",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "createdAt": "Submitted",
+        "readAt": "Read at",
+        "readBy": "Read by admin",
+        "subject": "Subject"
       }
     },
     "reviews": {

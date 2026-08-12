@@ -324,6 +324,41 @@ export interface ChatReportUpdateRequest {
 }
 
 // ---------------------------------------------------------------------------
+// Admin Contact Submissions
+// ---------------------------------------------------------------------------
+
+export type ContactSubmissionPlatform = "CUSTOMER" | "BRAIDER";
+export type ContactSubmissionPurpose = "GENERAL" | "PARTNER" | "PRICING" | "FAQS";
+
+export interface AdminContactSubmission {
+  id: string;
+  first_name: string;
+  last_name: string | null;
+  phone_number: string | null;
+  email: string;
+  subject: string | null;
+  message: string;
+  platform: ContactSubmissionPlatform;
+  purpose: ContactSubmissionPurpose | null;
+  is_read: boolean;
+  read_at: string | null;
+  read_by_admin_id: string | null;
+  created_at: string;
+  updated_at?: string | null;
+}
+
+export interface AdminContactSubmissionsListParams {
+  platform?: ContactSubmissionPlatform;
+  purpose?: ContactSubmissionPurpose;
+  is_read?: boolean;
+  date_from?: string;
+  date_to?: string;
+  search?: string;
+  page?: number;
+  page_size?: number;
+}
+
+// ---------------------------------------------------------------------------
 // Admin reviews
 // ---------------------------------------------------------------------------
 

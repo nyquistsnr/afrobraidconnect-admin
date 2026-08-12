@@ -329,6 +329,7 @@
       "styleCatalog": "Stilkatalog",
       "platformSettings": "Plattformeinstellungen",
       "chatReports": "Chat-Meldungen",
+      "contactSubmissions": "Kontakt",
       "reviews": "Bewertungen"
     },
     "styleCatalog": {
@@ -512,6 +513,90 @@
         "notesLabel": "Admin-Notizen",
         "notesPlaceholder": "Fügen Sie Untersuchungsnotizen für andere Admins hinzu...",
         "notesHelp": "Leere Notizen werden von der API ignoriert und löschen bestehende Notizen nicht."
+      }
+    },
+    "contactSubmissions": {
+      "eyebrow": "Support-Posteingang",
+      "title": "Kontaktanfragen",
+      "subtitle": "Pruefen Sie Nachrichten aus dem oeffentlichen Kontaktformular.",
+      "listTitle": "Eingereichte Nachrichten",
+      "listSubtitle": "Neueste Anfragen erscheinen zuerst.",
+      "loadError": "Kontaktanfragen konnten nicht geladen werden. Pruefen Sie die Filter und versuchen Sie es erneut.",
+      "loadDetailError": "Diese Anfrage konnte nicht geladen werden.",
+      "showFilters": "Filter anzeigen",
+      "hideFilters": "Filter ausblenden",
+      "view": "Ansehen",
+      "loading": "Laedt...",
+      "read": "Gelesen",
+      "unread": "Ungelesen",
+      "markRead": "Als gelesen markieren",
+      "markUnread": "Als ungelesen markieren",
+      "markedRead": "Anfrage als gelesen markiert.",
+      "markedUnread": "Anfrage als ungelesen markiert.",
+      "saving": "Speichern...",
+      "actionError": "Die Anfrage konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+      "close": "Schliessen",
+      "noSubject": "Kein Betreff",
+      "noPurpose": "Kein Zweck",
+      "emptyTitle": "Keine Anfragen gefunden",
+      "emptyDescription": "Kontaktanfragen mit den aktuellen Filtern erscheinen hier.",
+      "platformLabels": {
+        "CUSTOMER": "Kunde",
+        "BRAIDER": "Braider"
+      },
+      "purposeLabels": {
+        "GENERAL": "Allgemein",
+        "PARTNER": "Partner",
+        "PRICING": "Preise",
+        "FAQS": "FAQs"
+      },
+      "filters": {
+        "title": "Filter",
+        "searchLabel": "Suche",
+        "searchPlaceholder": "Name, E-Mail, Telefon, Betreff, Nachricht",
+        "platform": "Plattform",
+        "allPlatforms": "Alle Plattformen",
+        "purpose": "Zweck",
+        "allPurposes": "Alle Zwecke",
+        "readStatus": "Lesestatus",
+        "allReadStatuses": "Alle Status",
+        "createdRange": "Eingereicht im Zeitraum",
+        "dateRangePlaceholder": "Datum auswaehlen",
+        "presets": "Vorgaben",
+        "today": "Heute",
+        "last7Days": "Letzte 7 Tage",
+        "thisMonth": "Dieser Monat",
+        "lastMonth": "Letzter Monat",
+        "clear": "Leeren",
+        "applyRange": "Zeitraum anwenden",
+        "previousMonth": "Vorheriger Monat",
+        "nextMonth": "Naechster Monat",
+        "reset": "Zuruecksetzen",
+        "apply": "Filter anwenden"
+      },
+      "table": {
+        "created": "Eingereicht",
+        "sender": "Absender",
+        "topic": "Thema",
+        "message": "Nachricht",
+        "status": "Status",
+        "actions": "Aktionen"
+      },
+      "pagination": {
+        "summary": "Seite {page} von {totalPages} - {totalItems} Anfragen",
+        "previous": "Zurueck",
+        "next": "Weiter"
+      },
+      "modal": {
+        "title": "Kontaktanfrage",
+        "subtitle": "Pruefen Sie die eingereichten Details und markieren Sie die Nachricht als gelesen oder ungelesen.",
+        "name": "Name",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "createdAt": "Eingereicht",
+        "readAt": "Gelesen am",
+        "readBy": "Gelesen von Admin",
+        "subject": "Betreff"
       }
     },
     "reviews": {

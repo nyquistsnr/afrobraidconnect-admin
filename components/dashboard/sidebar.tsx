@@ -12,6 +12,7 @@ import {
   Scissors,
   Settings2,
   MessageSquareWarning,
+  MessageSquareText,
   Star,
   CalendarCheck,
   CreditCard
@@ -37,6 +38,7 @@ export function Sidebar({
     styleCatalog?: string;
     platformSettings?: string;
     chatReports?: string;
+    contactSubmissions?: string;
     reviews?: string;
     home?: string;
   };
@@ -102,6 +104,12 @@ export function Sidebar({
       label: dict.chatReports || "Chat Reports",
       icon: MessageSquareWarning,
       active: pathname === `/${lang}/dashboard/chat-reports`,
+    },
+    {
+      href: `/${lang}/dashboard/contact-submissions`,
+      label: dict.contactSubmissions || "Contact Us",
+      icon: MessageSquareText,
+      active: pathname === `/${lang}/dashboard/contact-submissions`,
     },
     {
       href: `/${lang}/dashboard/reviews`,

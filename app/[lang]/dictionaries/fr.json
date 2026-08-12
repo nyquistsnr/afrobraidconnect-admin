@@ -329,6 +329,7 @@
       "styleCatalog": "Catalogue de styles",
       "platformSettings": "Paramètres de plateforme",
       "chatReports": "Signalements chat",
+      "contactSubmissions": "Contact",
       "reviews": "Avis"
     },
     "styleCatalog": {
@@ -512,6 +513,90 @@
         "notesLabel": "Notes admin",
         "notesPlaceholder": "Ajoutez des notes d'enquête pour les autres admins...",
         "notesHelp": "Les notes vides sont ignorées par l'API et ne suppriment pas les notes existantes."
+      }
+    },
+    "contactSubmissions": {
+      "eyebrow": "Boite support",
+      "title": "Demandes de contact",
+      "subtitle": "Examinez les messages envoyes depuis le formulaire public de contact.",
+      "listTitle": "Messages envoyes",
+      "listSubtitle": "Les demandes les plus recentes apparaissent en premier.",
+      "loadError": "Impossible de charger les demandes de contact. Verifiez les filtres et reessayez.",
+      "loadDetailError": "Impossible de charger cette demande.",
+      "showFilters": "Afficher les filtres",
+      "hideFilters": "Masquer les filtres",
+      "view": "Voir",
+      "loading": "Chargement...",
+      "read": "Lu",
+      "unread": "Non lu",
+      "markRead": "Marquer comme lu",
+      "markUnread": "Marquer comme non lu",
+      "markedRead": "Demande marquee comme lue.",
+      "markedUnread": "Demande marquee comme non lue.",
+      "saving": "Enregistrement...",
+      "actionError": "Impossible de mettre a jour la demande. Veuillez reessayer.",
+      "close": "Fermer",
+      "noSubject": "Aucun objet",
+      "noPurpose": "Aucun motif",
+      "emptyTitle": "Aucune demande trouvee",
+      "emptyDescription": "Les demandes correspondant aux filtres actuels apparaitront ici.",
+      "platformLabels": {
+        "CUSTOMER": "Cliente",
+        "BRAIDER": "Braider"
+      },
+      "purposeLabels": {
+        "GENERAL": "General",
+        "PARTNER": "Partenaire",
+        "PRICING": "Tarifs",
+        "FAQS": "FAQ"
+      },
+      "filters": {
+        "title": "Filtres",
+        "searchLabel": "Recherche",
+        "searchPlaceholder": "Nom, e-mail, telephone, objet, message",
+        "platform": "Plateforme",
+        "allPlatforms": "Toutes les plateformes",
+        "purpose": "Motif",
+        "allPurposes": "Tous les motifs",
+        "readStatus": "Statut de lecture",
+        "allReadStatuses": "Tous les statuts",
+        "createdRange": "Periode d'envoi",
+        "dateRangePlaceholder": "Choisir des dates",
+        "presets": "Raccourcis",
+        "today": "Aujourd'hui",
+        "last7Days": "7 derniers jours",
+        "thisMonth": "Ce mois",
+        "lastMonth": "Mois dernier",
+        "clear": "Effacer",
+        "applyRange": "Appliquer la periode",
+        "previousMonth": "Mois precedent",
+        "nextMonth": "Mois suivant",
+        "reset": "Reinitialiser",
+        "apply": "Appliquer les filtres"
+      },
+      "table": {
+        "created": "Envoye",
+        "sender": "Expediteur",
+        "topic": "Sujet",
+        "message": "Message",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "pagination": {
+        "summary": "Page {page} sur {totalPages} - {totalItems} demandes",
+        "previous": "Precedent",
+        "next": "Suivant"
+      },
+      "modal": {
+        "title": "Demande de contact",
+        "subtitle": "Examinez les details envoyes et marquez le message comme lu ou non lu.",
+        "name": "Nom",
+        "email": "E-mail",
+        "phone": "Telephone",
+        "createdAt": "Envoye",
+        "readAt": "Lu le",
+        "readBy": "Lu par l'admin",
+        "subject": "Objet"
       }
     },
     "reviews": {
