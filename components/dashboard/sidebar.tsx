@@ -9,7 +9,8 @@ import {
   LogOut, 
   X,
   Users,
-  Scissors
+  Scissors,
+  Settings2
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -27,6 +28,7 @@ export function Sidebar({
   dict: Dictionary["dashboard"]["sidebar"] & { 
     users?: string; 
     styleCatalog?: string;
+    platformSettings?: string;
     home?: string;
   };
   userName: string;
@@ -67,6 +69,12 @@ export function Sidebar({
       label: dict.styleCatalog || "Style Catalog",
       icon: Scissors,
       active: pathname === `/${lang}/dashboard/style-catalog`,
+    },
+    {
+      href: `/${lang}/dashboard/platform-settings`,
+      label: dict.platformSettings || "Platform Settings",
+      icon: Settings2,
+      active: pathname === `/${lang}/dashboard/platform-settings`,
     },
   ];
 

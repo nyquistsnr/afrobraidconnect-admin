@@ -326,7 +326,8 @@
       "onboardingStatus": "Statut d'intégration",
       "logout": "Déconnexion",
       "users": "Utilisateurs",
-      "styleCatalog": "Catalogue de styles"
+      "styleCatalog": "Catalogue de styles",
+      "platformSettings": "Paramètres de plateforme"
     },
     "styleCatalog": {
       "eyebrow": "Gestion du catalogue",
@@ -377,6 +378,76 @@
       "newVariationPlaceholder": "ex. Longueur taille",
       "imagesTitle": "Images",
       "imagesDescription": "Téléchargez jusqu'à 6 images présentant ce style."
+    },
+    "platformSettings": {
+      "eyebrow": "Contrôles admin",
+      "title": "Paramètres de plateforme",
+      "subtitle": "Gérez les frais de marketplace, la TVA, les acomptes et les remplacements TVA par pays.",
+      "refresh": "Actualiser",
+      "loadError": "Impossible de charger les derniers paramètres de plateforme. Vérifiez les valeurs avant d'enregistrer.",
+      "pricingTitle": "Règles de tarification par défaut",
+      "pricingSubtitle": "Ces valeurs s'appliquent partout sauf si un remplacement TVA existe pour le pays.",
+      "typeLabel": "type",
+      "valueLabel": "valeur",
+      "typeLabels": {
+        "PERCENTAGE": "Pourcentage",
+        "FIXED": "Fixe"
+      },
+      "fields": {
+        "platformFee": {
+          "title": "Frais de plateforme",
+          "description": "Frais de marketplace facturés sur les réservations."
+        },
+        "vat": {
+          "title": "TVA sur le service",
+          "description": "TVA par défaut appliquée au sous-total du service de la tresseuse."
+        },
+        "vatPlatformFee": {
+          "title": "TVA sur les frais de plateforme",
+          "description": "TVA par défaut appliquée aux frais de plateforme."
+        },
+        "deposit": {
+          "title": "Acompte de réservation",
+          "description": "Montant payé d'avance par les clients pour réserver un rendez-vous."
+        }
+      },
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "saved": "Paramètres enregistrés.",
+      "saveError": "Impossible d'enregistrer les paramètres. Veuillez réessayer.",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "cancel": "Annuler",
+      "deleted": "Remplacement supprimé.",
+      "errors": {
+        "validation": "Veuillez vérifier les champs signalés.",
+        "invalidNumber": "Saisissez un nombre supérieur ou égal à 0.",
+        "percentageTooHigh": "Les pourcentages doivent être inférieurs ou égaux à 100.",
+        "invalidCountry": "Utilisez un code pays à deux lettres."
+      },
+      "countryVat": {
+        "title": "Remplacements TVA par pays",
+        "subtitle": "Remplacez les paramètres TVA par défaut pour certains pays.",
+        "add": "Ajouter un remplacement",
+        "addTitle": "Ajouter un remplacement TVA",
+        "editTitle": "Modifier le remplacement TVA",
+        "modalDescription": "Les remplacements pays remplacent les valeurs TVA par défaut pour ce pays.",
+        "countryLabel": "Code pays",
+        "serviceVatTypeLabel": "Type de TVA service",
+        "serviceVatValueLabel": "Valeur de TVA service",
+        "platformVatTypeLabel": "Type de TVA frais plateforme",
+        "platformVatValueLabel": "Valeur de TVA frais plateforme",
+        "deleteTitle": "Supprimer le remplacement TVA ?",
+        "deleteDescription": "La tarification de ce pays reviendra aux paramètres TVA par défaut.",
+        "emptyTitle": "Aucun remplacement pays",
+        "emptyDescription": "Ajoutez un remplacement lorsqu'un pays a besoin de valeurs TVA différentes des valeurs par défaut.",
+        "table": {
+          "country": "Pays",
+          "serviceVat": "TVA service",
+          "platformFeeVat": "TVA frais plateforme",
+          "actions": "Actions"
+        }
+      }
     },
     "header": {
       "notifications": "Notifications",

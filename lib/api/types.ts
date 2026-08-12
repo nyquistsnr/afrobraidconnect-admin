@@ -230,6 +230,50 @@ export interface AdminAddon {
   is_active: boolean;
 }
 
+// ---------------------------------------------------------------------------
+// Admin platform settings
+// ---------------------------------------------------------------------------
+
+export type SettingValueType = "PERCENTAGE" | "FIXED";
+
+export interface PlatformSettings {
+  id: string;
+  platform_fee_type: SettingValueType;
+  platform_fee_value: string;
+  vat_type: SettingValueType;
+  vat_value: string;
+  vat_platform_fee_type: SettingValueType;
+  vat_platform_fee_value: string;
+  deposit_type: SettingValueType;
+  deposit_value: string;
+}
+
+export interface PlatformSettingsUpdateRequest {
+  platform_fee_type?: SettingValueType | null;
+  platform_fee_value?: string | number | null;
+  vat_type?: SettingValueType | null;
+  vat_value?: string | number | null;
+  vat_platform_fee_type?: SettingValueType | null;
+  vat_platform_fee_value?: string | number | null;
+  deposit_type?: SettingValueType | null;
+  deposit_value?: string | number | null;
+}
+
+export interface CountryVatSettings {
+  country: string;
+  vat_type: SettingValueType;
+  vat_value: string;
+  vat_platform_fee_type: SettingValueType;
+  vat_platform_fee_value: string;
+}
+
+export interface CountryVatUpsertRequest {
+  vat_type: SettingValueType;
+  vat_value: string | number;
+  vat_platform_fee_type: SettingValueType;
+  vat_platform_fee_value: string | number;
+}
+
 export type NotificationType = "CHAT_NEW_MESSAGE" | "CHAT_MESSAGE_FLAGGED";
 
 export interface Notification {

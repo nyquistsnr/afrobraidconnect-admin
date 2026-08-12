@@ -326,7 +326,8 @@
       "onboardingStatus": "Onboarding-Status",
       "logout": "Abmelden",
       "users": "Benutzer",
-      "styleCatalog": "Stilkatalog"
+      "styleCatalog": "Stilkatalog",
+      "platformSettings": "Plattformeinstellungen"
     },
     "styleCatalog": {
       "eyebrow": "Katalogverwaltung",
@@ -377,6 +378,76 @@
       "newVariationPlaceholder": "z.B. Taillenlänge",
       "imagesTitle": "Bilder",
       "imagesDescription": "Laden Sie bis zu 6 Bilder hoch, die diesen Style zeigen."
+    },
+    "platformSettings": {
+      "eyebrow": "Admin-Steuerung",
+      "title": "Plattformeinstellungen",
+      "subtitle": "Verwalten Sie Marktplatzgebühren, MwSt., Anzahlungen und länderspezifische MwSt.-Overrides.",
+      "refresh": "Aktualisieren",
+      "loadError": "Die neuesten Plattformeinstellungen konnten nicht geladen werden. Prüfen Sie die Werte vor dem Speichern.",
+      "pricingTitle": "Standard-Preisregeln",
+      "pricingSubtitle": "Diese Werte gelten überall, sofern kein länderspezifischer MwSt.-Override existiert.",
+      "typeLabel": "Typ",
+      "valueLabel": "Wert",
+      "typeLabels": {
+        "PERCENTAGE": "Prozent",
+        "FIXED": "Fest"
+      },
+      "fields": {
+        "platformFee": {
+          "title": "Plattformgebühr",
+          "description": "Marktplatzgebühr, die bei Buchungen berechnet wird."
+        },
+        "vat": {
+          "title": "MwSt. auf Leistung",
+          "description": "Standard-MwSt. auf die Leistungssumme der Flechterin."
+        },
+        "vatPlatformFee": {
+          "title": "MwSt. auf Plattformgebühr",
+          "description": "Standard-MwSt. auf die Marktplatzgebühr."
+        },
+        "deposit": {
+          "title": "Reservierungsanzahlung",
+          "description": "Betrag, den Kunden vorab zahlen, um einen Termin zu reservieren."
+        }
+      },
+      "save": "Änderungen speichern",
+      "saving": "Speichern...",
+      "saved": "Einstellungen gespeichert.",
+      "saveError": "Einstellungen konnten nicht gespeichert werden. Bitte versuchen Sie es erneut.",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "cancel": "Abbrechen",
+      "deleted": "Override gelöscht.",
+      "errors": {
+        "validation": "Bitte prüfen Sie die markierten Felder.",
+        "invalidNumber": "Geben Sie eine Zahl ab 0 ein.",
+        "percentageTooHigh": "Prozentwerte dürfen höchstens 100 sein.",
+        "invalidCountry": "Verwenden Sie einen zweistelligen Ländercode."
+      },
+      "countryVat": {
+        "title": "Länderspezifische MwSt.-Overrides",
+        "subtitle": "Überschreiben Sie die Standard-MwSt.-Einstellungen für einzelne Länder.",
+        "add": "Override hinzufügen",
+        "addTitle": "MwSt.-Override für Land hinzufügen",
+        "editTitle": "MwSt.-Override für Land bearbeiten",
+        "modalDescription": "Länder-Overrides ersetzen die Standard-MwSt.-Werte für dieses Land.",
+        "countryLabel": "Ländercode",
+        "serviceVatTypeLabel": "Typ für Leistungs-MwSt.",
+        "serviceVatValueLabel": "Wert für Leistungs-MwSt.",
+        "platformVatTypeLabel": "Typ für Plattformgebühr-MwSt.",
+        "platformVatValueLabel": "Wert für Plattformgebühr-MwSt.",
+        "deleteTitle": "MwSt.-Override löschen?",
+        "deleteDescription": "Die Preisberechnung für dieses Land fällt auf die Standard-MwSt.-Einstellungen zurück.",
+        "emptyTitle": "Keine Länder-Overrides",
+        "emptyDescription": "Fügen Sie einen Override hinzu, wenn ein Land andere MwSt.-Werte als die Standards benötigt.",
+        "table": {
+          "country": "Land",
+          "serviceVat": "Leistungs-MwSt.",
+          "platformFeeVat": "Plattformgebühr-MwSt.",
+          "actions": "Aktionen"
+        }
+      }
     },
     "header": {
       "notifications": "Benachrichtigungen",

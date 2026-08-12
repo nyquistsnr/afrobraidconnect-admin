@@ -326,7 +326,8 @@
       "onboardingStatus": "Onboarding Status",
       "logout": "Logout",
       "users": "Users",
-      "styleCatalog": "Style Catalog"
+      "styleCatalog": "Style Catalog",
+      "platformSettings": "Platform Settings"
     },
     "styleCatalog": {
       "eyebrow": "Catalog management",
@@ -377,6 +378,76 @@
       "newVariationPlaceholder": "e.g. Waist length",
       "imagesTitle": "Images",
       "imagesDescription": "Upload up to 6 images showcasing this style."
+    },
+    "platformSettings": {
+      "eyebrow": "Admin controls",
+      "title": "Platform Settings",
+      "subtitle": "Manage marketplace fees, VAT, deposits, and country VAT overrides.",
+      "refresh": "Refresh",
+      "loadError": "We couldn't load the latest platform settings. Review the values before saving.",
+      "pricingTitle": "Default pricing rules",
+      "pricingSubtitle": "These values apply everywhere unless a country-specific VAT override exists.",
+      "typeLabel": "type",
+      "valueLabel": "value",
+      "typeLabels": {
+        "PERCENTAGE": "Percentage",
+        "FIXED": "Fixed"
+      },
+      "fields": {
+        "platformFee": {
+          "title": "Platform fee",
+          "description": "Marketplace fee charged on bookings."
+        },
+        "vat": {
+          "title": "VAT on service",
+          "description": "Default VAT charged on the braider service subtotal."
+        },
+        "vatPlatformFee": {
+          "title": "VAT on platform fee",
+          "description": "Default VAT charged on the marketplace platform fee."
+        },
+        "deposit": {
+          "title": "Reservation deposit",
+          "description": "Upfront amount customers pay to reserve an appointment."
+        }
+      },
+      "save": "Save changes",
+      "saving": "Saving...",
+      "saved": "Settings saved.",
+      "saveError": "Could not save settings. Please try again.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "deleted": "Override deleted.",
+      "errors": {
+        "validation": "Please check the highlighted fields.",
+        "invalidNumber": "Enter a number of 0 or higher.",
+        "percentageTooHigh": "Percentage values must be 100 or lower.",
+        "invalidCountry": "Use a two-letter country code."
+      },
+      "countryVat": {
+        "title": "Country VAT overrides",
+        "subtitle": "Override the default VAT settings for individual countries.",
+        "add": "Add override",
+        "addTitle": "Add country VAT override",
+        "editTitle": "Edit country VAT override",
+        "modalDescription": "Country overrides replace the default VAT values for that country.",
+        "countryLabel": "Country code",
+        "serviceVatTypeLabel": "Service VAT type",
+        "serviceVatValueLabel": "Service VAT value",
+        "platformVatTypeLabel": "Platform fee VAT type",
+        "platformVatValueLabel": "Platform fee VAT value",
+        "deleteTitle": "Delete VAT override?",
+        "deleteDescription": "Pricing for this country will fall back to the default VAT settings.",
+        "emptyTitle": "No country overrides",
+        "emptyDescription": "Add an override when a country needs VAT values that differ from the defaults.",
+        "table": {
+          "country": "Country",
+          "serviceVat": "Service VAT",
+          "platformFeeVat": "Platform fee VAT",
+          "actions": "Actions"
+        }
+      }
     },
     "header": {
       "notifications": "Notifications",
