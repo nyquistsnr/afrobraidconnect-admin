@@ -136,6 +136,9 @@ export interface AdminUserResponse {
   email: string;
   phone_number: string | null;
   user_type: UserType;
+  braider_id?: string | null;
+  braider_profile_id?: string | null;
+  profile_id?: string | null;
   is_email_verified: boolean;
   is_active: boolean;
   suspension_reason: string | null;
@@ -393,6 +396,41 @@ export interface AdminBookingsListParams {
   search?: string;
   page?: number;
   page_size?: number;
+}
+
+export interface AdminBookingStatsParams
+  extends Omit<AdminBookingsListParams, "page" | "page_size" | "customer_id" | "braider_id"> {
+  payment_date_from?: string;
+  payment_date_to?: string;
+}
+
+export interface AdminBookingStats {
+  total_bookings?: number;
+  counts_by_status?: Partial<Record<BookingStatus | string, number>>;
+  per_status_counts?: Partial<Record<BookingStatus | string, number>>;
+  completed_count?: number;
+  upcoming_count?: number;
+  declined_count?: number;
+  pending_count?: number;
+  no_show_count?: number;
+  disputed_count?: number;
+  mobile_count?: number;
+  salon_count?: number;
+  unique_counterpart_count?: number;
+  repeat_counterpart_count?: number;
+  total_booking_value_minor?: number | string | null;
+  average_booking_value_minor?: number | string | null;
+  service_subtotal_minor?: number | string | null;
+  platform_fee_total_minor?: number | string | null;
+  vat_total_minor?: number | string | null;
+  paid_amount_minor?: number | string | null;
+  refunded_amount_minor?: number | string | null;
+  net_amount_minor?: number | string | null;
+  pending_payment_amount_minor?: number | string | null;
+  braider_earnings_minor?: number | string | null;
+  customer_spend_minor?: number | string | null;
+  currency?: Currency | null;
+  [key: string]: unknown;
 }
 
 export interface AdminPaymentsListParams {

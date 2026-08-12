@@ -4,12 +4,13 @@ import { hasLocale } from "@/app/[lang]/dictionaries";
 import { getAdminBookingsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
 import { AdminBookingsManager } from "@/components/dashboard/bookings/admin-bookings-manager";
 import { adminBookingsApi } from "@/lib/api/admin-bookings-client";
+import {
+  fallbackPagination,
+  parseScopedBookingListParams,
+} from "@/app/[lang]/dashboard/bookings/scoped-helpers";
 import type {
   AdminBookingListItem,
-  AdminBookingsListParams,
-  BookingStatus,
   PaginationMeta,
-  PaymentSchedule,
 } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 
@@ -21,62 +22,6 @@ export async function generateMetadata({
   const { lang } = await params;
   const locale = hasLocale(lang) ? lang : "en";
   return { title: `${getAdminBookingsDict(locale).title} - Admin` };
-}
-
-const bookingStatuses: BookingStatus[] = [
-  "PENDING_PAYMENT",
-  "CONFIRMED",
-  "IN_PROGRESS",
-  "COMPLETED",
-  "NO_SHOW",
-  "CANCELLED_BY_CUSTOMER",
-  "CANCELLED_BY_BRAIDER",
-  "CANCELLED_NO_PAYMENT",
-  "EXPIRED",
-  "DISPUTED",
-];
-
-const paymentSchedules: PaymentSchedule[] = [
-  "FULL_UPFRONT",
-  "DEPOSIT_THEN_BALANCE",
-];
-
-function stringParam(value: string | string[] | undefined) {
-  return typeof value === "string" && value.trim() ? value.trim() : undefined;
-}
-
-function pageParam(value: string | string[] | undefined) {
-  const parsed = Number.parseInt(stringParam(value) ?? "", 10);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
-}
-
-function boolParam(value: string | string[] | undefined) {
-  if (value === "true") return true;
-  if (value === "false") return false;
-  return undefined;
-}
-
-function enumParam<T extends string>(
-  value: string | string[] | undefined,
-  allowed: readonly T[]
-) {
-  const normalized = stringParam(value)?.toUpperCase();
-  return allowed.includes(normalized as T) ? (normalized as T) : undefined;
-}
-
-function fallbackPagination(
-  page: number,
-  pageSize: number,
-  itemCount: number
-): PaginationMeta {
-  return {
-    page,
-    page_size: pageSize,
-    total_items: itemCount,
-    total_pages: itemCount > 0 ? 1 : 0,
-    has_next: false,
-    has_previous: false,
-  };
 }
 
 export default async function AdminBookingsPage({
@@ -97,23 +42,7 @@ export default async function AdminBookingsPage({
   }
 
   const resolvedSearchParams = await searchParams;
-  const filters: AdminBookingsListParams = {
-    status: enumParam(resolvedSearchParams.status, bookingStatuses),
-    date_from: stringParam(resolvedSearchParams.date_from),
-    date_to: stringParam(resolvedSearchParams.date_to),
-    created_from: stringParam(resolvedSearchParams.created_from),
-    created_to: stringParam(resolvedSearchParams.created_to),
-    country: stringParam(resolvedSearchParams.country)?.toUpperCase(),
-    currency: stringParam(resolvedSearchParams.currency)?.toUpperCase(),
-    is_mobile: boolParam(resolvedSearchParams.is_mobile),
-    payment_schedule: enumParam(
-      resolvedSearchParams.payment_schedule,
-      paymentSchedules
-    ),
-    search: stringParam(resolvedSearchParams.search),
-    page: pageParam(resolvedSearchParams.page),
-    page_size: 20,
-  };
+  const filters = parseScopedBookingListParams(resolvedSearchParams);
   let bookings: AdminBookingListItem[] = [];
   let pagination: PaginationMeta = {
     page: filters.page ?? 1,

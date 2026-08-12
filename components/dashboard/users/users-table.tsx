@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { MoreHorizontal, ShieldAlert, ShieldCheck } from "lucide-react";
+import { CalendarCheck, MoreHorizontal, ShieldAlert, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { adminUsersApi } from "@/lib/api/admin-users-client";
 import type { AdminUserResponse } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
@@ -24,10 +26,11 @@ export function UsersTable({
   users: AdminUserResponse[];
   accessToken: string;
   lang: Locale;
-  errorsDict: any;
-  dict: any;
+  errorsDict: Dictionary["common"]["errors"];
+  dict: Partial<Dictionary["dashboard"]["users"]["table"]> & {
+    viewBookings?: string;
+  };
 }) {
-  const queryClient = useQueryClient();
   const router = useRouter();
   const [suspendModalOpen, setSuspendModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -41,8 +44,8 @@ export function UsersTable({
       setSuspendModalOpen(false);
       router.refresh();
     },
-    onError: (error: any) => {
-      toast.error(getAuthErrorMessage(error.message, errorsDict));
+    onError: (error: unknown) => {
+      toast.error(getAuthErrorMessage(errorCode(error), errorsDict));
     },
   });
 
@@ -54,8 +57,8 @@ export function UsersTable({
       toast.success(response.status_label || "User unsuspended successfully.");
       router.refresh();
     },
-    onError: (error: any) => {
-      toast.error(getAuthErrorMessage(error.message, errorsDict));
+    onError: (error: unknown) => {
+      toast.error(getAuthErrorMessage(errorCode(error), errorsDict));
     },
   });
 
@@ -70,6 +73,16 @@ export function UsersTable({
   function openSuspendModal(userId: string) {
     setSelectedUserId(userId);
     setSuspendModalOpen(true);
+  }
+
+  function bookingsHref(user: AdminUserResponse) {
+    if (user.user_type === "BRAIDER") {
+      return `/${lang}/dashboard/bookings/braiders/${braiderProfileId(user)}`;
+    }
+    if (user.user_type === "CUSTOMER") {
+      return `/${lang}/dashboard/bookings/customers/${user.id}`;
+    }
+    return null;
   }
 
   return (
@@ -126,6 +139,14 @@ export function UsersTable({
                         </Button>
                       }
                     >
+                      {bookingsHref(user) && (
+                        <DropdownMenuItem
+                          onClick={() => router.push(bookingsHref(user) || "#")}
+                        >
+                          <CalendarCheck className="mr-2 size-4" />
+                          {dict.viewBookings || "View bookings"}
+                        </DropdownMenuItem>
+                      )}
                       {user.is_active ? (
                         <DropdownMenuItem
                           onClick={() => openSuspendModal(user.id)}
@@ -172,6 +193,14 @@ export function UsersTable({
                     </Button>
                   }
                 >
+                  {bookingsHref(user) && (
+                    <DropdownMenuItem
+                      onClick={() => router.push(bookingsHref(user) || "#")}
+                    >
+                      <CalendarCheck className="mr-2 size-4" />
+                      {dict.viewBookings || "View bookings"}
+                    </DropdownMenuItem>
+                  )}
                   {user.is_active ? (
                     <DropdownMenuItem
                       onClick={() => openSuspendModal(user.id)}
@@ -202,6 +231,15 @@ export function UsersTable({
                   </span>
                 )}
               </div>
+              {bookingsHref(user) && (
+                <Link
+                  href={bookingsHref(user) || "#"}
+                  className="inline-flex items-center justify-center gap-2 border border-border bg-input px-3 py-2 text-sm font-semibold text-foreground transition-colors hover:bg-border/40"
+                >
+                  <CalendarCheck className="size-4" />
+                  {dict.viewBookings || "View bookings"}
+                </Link>
+              )}
             </div>
           ))
         )}
@@ -240,4 +278,12 @@ export function UsersTable({
       </Modal>
     </>
   );
+}
+
+function braiderProfileId(user: AdminUserResponse) {
+  return user.braider_id || user.braider_profile_id || user.profile_id || user.id;
+}
+
+function errorCode(error: unknown) {
+  return error instanceof Error ? error.message : undefined;
 }

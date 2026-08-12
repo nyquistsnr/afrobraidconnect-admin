@@ -2,6 +2,8 @@ import { apiFetch, ApiError } from "@/lib/api/http";
 import type {
   AdminBookingDetail,
   AdminBookingListItem,
+  AdminBookingStats,
+  AdminBookingStatsParams,
   AdminBookingsListParams,
   PaginatedData,
 } from "@/lib/api/types";
@@ -39,6 +41,27 @@ function buildQuery(params: AdminBookingsListParams) {
   return query.toString();
 }
 
+function buildStatsQuery(params: AdminBookingStatsParams) {
+  const query = new URLSearchParams();
+  appendParam(query, "status", params.status);
+  appendParam(query, "date_from", params.date_from);
+  appendParam(query, "date_to", params.date_to);
+  appendParam(query, "created_from", params.created_from);
+  appendParam(query, "created_to", params.created_to);
+  appendParam(query, "payment_date_from", params.payment_date_from);
+  appendParam(query, "payment_date_to", params.payment_date_to);
+  appendParam(query, "country", params.country);
+  appendParam(query, "currency", params.currency);
+  appendParam(query, "is_mobile", params.is_mobile);
+  appendParam(query, "payment_schedule", params.payment_schedule);
+  appendParam(query, "search", params.search);
+  return query.toString();
+}
+
+function withQuery(path: string, query: string) {
+  return query ? `${path}?${query}` : path;
+}
+
 export const adminBookingsApi = {
   list: (
     accessToken: string,
@@ -56,6 +79,114 @@ export const adminBookingsApi = {
   get: (accessToken: string, lang: Locale, bookingId: string) =>
     apiFetch<AdminBookingDetail>(
       `${ADMIN_BOOKINGS_PATH}/${encodeURIComponent(bookingId)}`,
+      {
+        accessToken,
+        lang,
+      }
+    ),
+
+  listForBraider: (
+    accessToken: string,
+    lang: Locale,
+    braiderId: string,
+    params: AdminBookingsListParams = {}
+  ) =>
+    apiFetch<PaginatedData<AdminBookingListItem>>(
+      withQuery(
+        `${ADMIN_BOOKINGS_PATH}/braiders/${encodeURIComponent(braiderId)}`,
+        buildQuery(params)
+      ),
+      {
+        accessToken,
+        lang,
+      }
+    ),
+
+  listForCustomer: (
+    accessToken: string,
+    lang: Locale,
+    customerId: string,
+    params: AdminBookingsListParams = {}
+  ) =>
+    apiFetch<PaginatedData<AdminBookingListItem>>(
+      withQuery(
+        `${ADMIN_BOOKINGS_PATH}/customers/${encodeURIComponent(customerId)}`,
+        buildQuery(params)
+      ),
+      {
+        accessToken,
+        lang,
+      }
+    ),
+
+  listForBraiderCustomer: (
+    accessToken: string,
+    lang: Locale,
+    braiderId: string,
+    customerId: string,
+    params: AdminBookingsListParams = {}
+  ) =>
+    apiFetch<PaginatedData<AdminBookingListItem>>(
+      withQuery(
+        `${ADMIN_BOOKINGS_PATH}/braiders/${encodeURIComponent(
+          braiderId
+        )}/customers/${encodeURIComponent(customerId)}`,
+        buildQuery(params)
+      ),
+      {
+        accessToken,
+        lang,
+      }
+    ),
+
+  statsForBraider: (
+    accessToken: string,
+    lang: Locale,
+    braiderId: string,
+    params: AdminBookingStatsParams = {}
+  ) =>
+    apiFetch<AdminBookingStats>(
+      withQuery(
+        `${ADMIN_BOOKINGS_PATH}/braiders/${encodeURIComponent(braiderId)}/stats`,
+        buildStatsQuery(params)
+      ),
+      {
+        accessToken,
+        lang,
+      }
+    ),
+
+  statsForCustomer: (
+    accessToken: string,
+    lang: Locale,
+    customerId: string,
+    params: AdminBookingStatsParams = {}
+  ) =>
+    apiFetch<AdminBookingStats>(
+      withQuery(
+        `${ADMIN_BOOKINGS_PATH}/customers/${encodeURIComponent(customerId)}/stats`,
+        buildStatsQuery(params)
+      ),
+      {
+        accessToken,
+        lang,
+      }
+    ),
+
+  statsForBraiderCustomer: (
+    accessToken: string,
+    lang: Locale,
+    braiderId: string,
+    customerId: string,
+    params: AdminBookingStatsParams = {}
+  ) =>
+    apiFetch<AdminBookingStats>(
+      withQuery(
+        `${ADMIN_BOOKINGS_PATH}/braiders/${encodeURIComponent(
+          braiderId
+        )}/customers/${encodeURIComponent(customerId)}/stats`,
+        buildStatsQuery(params)
+      ),
       {
         accessToken,
         lang,
