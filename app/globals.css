@@ -26,7 +26,7 @@
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
   --color-brand-foreground: var(--brand-foreground);
-  --font-sans: var(--font-fira-sans), var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  --font-sans: var(--font-roboto), var(--font-geist-sans), Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 

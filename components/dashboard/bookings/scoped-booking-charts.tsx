@@ -191,6 +191,7 @@ function chartPoints(chart: AdminChartResponse | AdminChartPoint[] | null): Admi
   if (Array.isArray(chart.items)) return chart.items;
   if (Array.isArray(chart.points)) return chart.points;
   if (Array.isArray(chart.data)) return chart.data;
+  if (Array.isArray(chart.slices)) return chart.slices;
   return [];
 }
 

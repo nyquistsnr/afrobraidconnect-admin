@@ -2,10 +2,10 @@ import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import { getAdminBookingsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
+import { extractPagination } from "@/components/dashboard/admin-commerce/formatters";
 import { AdminBookingsManager } from "@/components/dashboard/bookings/admin-bookings-manager";
 import { adminBookingsApi } from "@/lib/api/admin-bookings-client";
 import {
-  fallbackPagination,
   parseScopedBookingListParams,
 } from "@/app/[lang]/dashboard/bookings/scoped-helpers";
 import type {
@@ -61,9 +61,7 @@ export default async function AdminBookingsPage({
       filters
     );
     bookings = Array.isArray(response.items) ? response.items : [];
-    pagination =
-      response.pagination ??
-      fallbackPagination(filters.page ?? 1, filters.page_size ?? 20, bookings.length);
+    pagination = extractPagination(response, filters.page ?? 1, filters.page_size ?? 20, bookings.length);
   } catch (error) {
     initialLoadError = true;
     console.warn(

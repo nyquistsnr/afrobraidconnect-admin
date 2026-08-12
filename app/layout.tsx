@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Fira_Sans } from "next/font/google";
+import { Geist, Geist_Mono, Roboto } from "next/font/google";
 import Script from "next/script";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@/components/theme/theme-provider";
@@ -15,10 +15,10 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const firaSans = Fira_Sans({
-  variable: "--font-fira-sans",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.className} ${firaSans.className} ${geistMono.className} h-full antialiased`}
+      className={`${geistSans.variable} ${roboto.variable} ${geistMono.variable} font-sans h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

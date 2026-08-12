@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import { getAdminPaymentsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
+import { extractPagination } from "@/components/dashboard/admin-commerce/formatters";
 import { AdminPaymentsManager } from "@/components/dashboard/payments/admin-payments-manager";
 import { adminPaymentsApi } from "@/lib/api/admin-payments-client";
 import type {
@@ -57,20 +58,6 @@ function enumParam<T extends string>(
   return allowed.includes(normalized as T) ? (normalized as T) : undefined;
 }
 
-function fallbackPagination(
-  page: number,
-  pageSize: number,
-  itemCount: number
-): PaginationMeta {
-  return {
-    page,
-    page_size: pageSize,
-    total_items: itemCount,
-    total_pages: itemCount > 0 ? 1 : 0,
-    has_next: false,
-    has_previous: false,
-  };
-}
 
 export default async function AdminPaymentsPage({
   params,
@@ -121,9 +108,7 @@ export default async function AdminPaymentsPage({
       filters
     );
     payments = Array.isArray(response.items) ? response.items : [];
-    pagination =
-      response.pagination ??
-      fallbackPagination(filters.page ?? 1, filters.page_size ?? 20, payments.length);
+    pagination = extractPagination(response, filters.page ?? 1, filters.page_size ?? 20, payments.length);
   } catch (error) {
     initialLoadError = true;
     console.warn(

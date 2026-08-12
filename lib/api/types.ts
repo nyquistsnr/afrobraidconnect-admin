@@ -565,6 +565,7 @@ export interface AdminChartResponse {
   items?: AdminChartPoint[];
   points?: AdminChartPoint[];
   data?: AdminChartPoint[];
+  slices?: AdminChartPoint[];
   currency?: Currency | null;
   [key: string]: unknown;
 }

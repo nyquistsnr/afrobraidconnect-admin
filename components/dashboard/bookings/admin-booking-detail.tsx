@@ -8,6 +8,7 @@ import {
   compactDateTime,
   customerName,
   moneyFromMinor,
+  extractMoney,
 } from "@/components/dashboard/admin-commerce/formatters";
 import { Badge, type BadgeTone } from "@/components/ui/badge";
 import type {
@@ -133,16 +134,16 @@ export function AdminBookingDetail({
       <section className="grid gap-4 xl:grid-cols-2">
         <Panel icon={ReceiptText} title={dict.detail.priceTitle}>
           <dl className="divide-y divide-border">
-            <MoneyRow label={dict.detail.serviceSubtotal} amount={booking.service_subtotal_minor} currency={booking.currency} lang={lang} />
-            <MoneyRow label={dict.detail.travelFee} amount={booking.travel_fee_minor} currency={booking.currency} lang={lang} />
-            <MoneyRow label={dict.detail.subtotal} amount={booking.subtotal_minor} currency={booking.currency} lang={lang} />
-            <MoneyRow label={dict.detail.platformFee} amount={booking.platform_fee_minor} currency={booking.currency} lang={lang} />
-            <MoneyRow label={dict.detail.vatOnService} amount={booking.vat_service_minor} currency={booking.currency} lang={lang} />
-            <MoneyRow label={dict.detail.vatOnPlatformFee} amount={booking.vat_platform_fee_minor} currency={booking.currency} lang={lang} />
-            <MoneyRow label={dict.detail.vatTotal} amount={booking.vat_total_minor} currency={booking.currency} lang={lang} />
-            <MoneyRow label={dict.detail.depositAmount} amount={booking.deposit_amount_minor} currency={booking.currency} lang={lang} />
-            <MoneyRow label={dict.detail.balanceAmount} amount={booking.balance_amount_minor} currency={booking.currency} lang={lang} />
-            <MoneyRow label={dict.detail.total} amount={bookingTotalMinor(booking)} currency={booking.currency} lang={lang} strong />
+            <MoneyRow label={dict.detail.serviceSubtotal} value={extractMoney(booking, ["service_subtotal_minor", "service_subtotal"], booking.currency, lang)} strong={false} />
+            <MoneyRow label={dict.detail.travelFee} value={extractMoney(booking, ["travel_fee_minor", "travel_fee"], booking.currency, lang)} strong={false} />
+            <MoneyRow label={dict.detail.subtotal} value={extractMoney(booking, ["subtotal_minor", "subtotal"], booking.currency, lang)} strong={false} />
+            <MoneyRow label={dict.detail.platformFee} value={extractMoney(booking, ["platform_fee_minor", "platform_fee"], booking.currency, lang)} strong={false} />
+            <MoneyRow label={dict.detail.vatOnService} value={extractMoney(booking, ["vat_service_minor", "vat_service", "vat_on_service"], booking.currency, lang)} strong={false} />
+            <MoneyRow label={dict.detail.vatOnPlatformFee} value={extractMoney(booking, ["vat_platform_fee_minor", "vat_platform_fee", "vat_on_platform_fee"], booking.currency, lang)} strong={false} />
+            <MoneyRow label={dict.detail.vatTotal} value={extractMoney(booking, ["vat_total_minor", "vat_total"], booking.currency, lang)} strong={false} />
+            <MoneyRow label={dict.detail.depositAmount} value={extractMoney(booking, ["deposit_amount_minor", "deposit_amount"], booking.currency, lang)} strong={false} />
+            <MoneyRow label={dict.detail.balanceAmount} value={extractMoney(booking, ["balance_amount_minor", "balance_amount"], booking.currency, lang)} strong={false} />
+            <MoneyRow label={dict.detail.total} value={moneyFromMinor(bookingTotalMinor(booking), booking.currency, lang)} strong />
           </dl>
         </Panel>
 
@@ -179,7 +180,7 @@ export function AdminBookingDetail({
                     <td className="px-4 py-3 text-foreground">{item.label || item.name || "-"}</td>
                     <td className="px-4 py-3 text-right text-foreground">{item.quantity ?? "-"}</td>
                     <td className="px-4 py-3 text-right font-semibold text-foreground">
-                      {moneyFromMinor(item.total_amount_minor ?? item.amount_minor, item.currency || booking.currency, lang)}
+                      {extractMoney(item, ["total_amount_minor", "amount_minor", "line_amount", "amount", "total_amount"], item.currency || booking.currency, lang)}
                     </td>
                   </tr>
                 ))}
@@ -230,10 +231,10 @@ export function AdminBookingDetail({
                       </td>
                       <td className="px-4 py-3 text-right">
                         <p className="font-semibold text-foreground">
-                          {moneyFromMinor(payment.amount_minor, payment.currency || booking.currency, lang)}
+                          {extractMoney(payment, ["amount_minor", "amount"], payment.currency || booking.currency, lang)}
                         </p>
                         <p className="mt-1 text-xs text-muted-foreground">
-                          {dict.detail.refunded}: {moneyFromMinor(payment.amount_refunded_minor, payment.currency || booking.currency, lang)}
+                          {dict.detail.refunded}: {extractMoney(payment, ["amount_refunded_minor", "amount_refunded"], payment.currency || booking.currency, lang)}
                         </p>
                       </td>
                       <td className="px-4 py-3">
@@ -303,22 +304,18 @@ function Detail({
 
 function MoneyRow({
   label,
-  amount,
-  currency,
-  lang,
+  value,
   strong = false,
 }: {
   label: string;
-  amount: number | string | null | undefined;
-  currency: string | null | undefined;
-  lang: Locale;
+  value: React.ReactNode;
   strong?: boolean;
 }) {
   return (
     <div className="flex items-center justify-between gap-4 py-3">
       <dt className="text-sm text-muted-foreground">{label}</dt>
       <dd className={`text-sm text-foreground ${strong ? "font-bold" : "font-semibold"}`}>
-        {moneyFromMinor(amount, currency, lang)}
+        {value}
       </dd>
     </div>
   );
@@ -346,7 +343,7 @@ function PaymentCard({
         </div>
         <div className="shrink-0 text-right">
           <p className="text-base font-bold text-foreground">
-            {moneyFromMinor(payment.amount_minor, payment.currency || bookingCurrency, lang)}
+            {extractMoney(payment, ["amount_minor", "amount"], payment.currency || bookingCurrency, lang)}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
             {paymentPurposeLabel(payment, dict)}
@@ -357,7 +354,7 @@ function PaymentCard({
       <dl className="mt-4 space-y-3 border-t border-border pt-4">
         <MobileDetail
           label={dict.detail.refunded}
-          value={moneyFromMinor(payment.amount_refunded_minor, payment.currency || bookingCurrency, lang)}
+          value={extractMoney(payment, ["amount_refunded_minor", "amount_refunded"], payment.currency || bookingCurrency, lang)}
         />
         <div>
           <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">

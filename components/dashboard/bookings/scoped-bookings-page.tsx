@@ -12,6 +12,9 @@ import type { AdminBookingsDict } from "@/components/dashboard/admin-commerce/ad
 import {
   compactDateTime,
   moneyFromMinor,
+  extractMoney,
+  extractCount,
+  formatCount,
 } from "@/components/dashboard/admin-commerce/formatters";
 import { AdminBookingsManager } from "@/components/dashboard/bookings/admin-bookings-manager";
 import {
@@ -109,35 +112,36 @@ export function ScopedBookingsPage({
           <StatCard
             icon={CalendarCheck}
             label={dict.scoped.totalBookings}
-            value={formatCount(stats?.total_bookings)}
+            value={extractCount(stats, ["total_bookings"])}
           />
           <StatCard
             icon={Scissors}
             label={dict.scoped.completed}
-            value={formatCount(stats?.completed_count)}
+            value={extractCount(stats, ["completed_count", "completed_bookings"])}
           />
           <StatCard
             icon={CreditCard}
             label={dict.scoped.netAmount}
-            value={moneyFromMinor(stats?.net_amount_minor, stats?.currency || "EUR", lang)}
+            value={extractMoney(stats, ["net_amount_minor", "net_amount_paid", "net_amount"], stats?.currency || "EUR", lang)}
           />
           <StatCard
             icon={TrendingUp}
             label={dict.scoped.averageValue}
-            value={moneyFromMinor(stats?.average_booking_value_minor, stats?.currency || "EUR", lang)}
+            value={extractMoney(stats, ["average_booking_value_minor", "average_booking_value"], stats?.currency || "EUR", lang)}
           />
           <StatCard
             icon={RefreshCw}
             label={dict.scoped.refunded}
-            value={moneyFromMinor(stats?.refunded_amount_minor, stats?.currency || "EUR", lang)}
+            value={extractMoney(stats, ["refunded_amount_minor", "total_amount_refunded", "refunded_amount"], stats?.currency || "EUR", lang)}
           />
           <StatCard
             icon={CreditCard}
             label={scopeKind === "customer" ? dict.scoped.customerSpend : dict.scoped.braiderEarnings}
-            value={moneyFromMinor(
+            value={extractMoney(
+              stats,
               scopeKind === "customer"
-                ? stats?.customer_spend_minor
-                : stats?.braider_earnings_minor,
+                ? ["customer_spend_minor", "customer_spend", "total_amount_spent_by_customer"]
+                : ["braider_earnings_minor", "braider_earnings", "total_amount_made_by_braider"],
               stats?.currency || "EUR",
               lang
             )}
@@ -145,12 +149,12 @@ export function ScopedBookingsPage({
           <StatCard
             icon={CalendarCheck}
             label={dict.scoped.pending}
-            value={formatCount(stats?.pending_count)}
+            value={extractCount(stats, ["pending_count", "pending_payment_bookings"])}
           />
           <StatCard
             icon={CalendarCheck}
             label={dict.scoped.disputed}
-            value={formatCount(stats?.disputed_count)}
+            value={extractCount(stats, ["disputed_count", "disputed_bookings"])}
           />
         </div>
       </section>
@@ -308,13 +312,11 @@ function scopeEyebrow(scopeKind: ScopeKind) {
   return "Customer bookings";
 }
 
-function formatCount(value: number | undefined) {
-  return typeof value === "number" ? new Intl.NumberFormat().format(value) : "-";
-}
 
-function formatStepLabel(value: string | null | undefined) {
-  if (!value) return "-";
-  return value
+
+function formatStepLabel(step: string | null | undefined) {
+  if (!step) return "-";
+  return step
     .toLowerCase()
     .replace(/_/g, " ")
     .replace(/\b\w/g, (character) => character.toUpperCase());

@@ -3,10 +3,14 @@ import { auth } from "@/auth";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import {
   chartParamsFromListParams,
-  fallbackPagination,
+  parseScopedBookingChartsParams,
   parseScopedBookingListParams,
   statsParamsFromListParams,
 } from "@/app/[lang]/dashboard/bookings/scoped-helpers";
+import {
+  extractMoney,
+  extractPagination,
+} from "@/components/dashboard/admin-commerce/formatters";
 import { getAdminBookingsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
 import { ScopedBookingsPage } from "@/components/dashboard/bookings/scoped-bookings-page";
 import { adminBraidersApi } from "@/lib/api/admin-braiders-client";
@@ -97,8 +101,7 @@ export async function renderScopedBookingsPage({
 
     bookings = Array.isArray(response?.items) ? response.items : [];
     pagination =
-      response?.pagination ??
-      fallbackPagination(filters.page ?? 1, filters.page_size ?? 20, bookings.length);
+      extractPagination(response, filters.page ?? 1, filters.page_size ?? 20, bookings.length);
   } catch (error) {
     initialLoadError = true;
     console.warn(
