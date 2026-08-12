@@ -3,7 +3,6 @@ import { auth } from "@/auth";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import {
   chartParamsFromListParams,
-  parseScopedBookingChartsParams,
   parseScopedBookingListParams,
   statsParamsFromListParams,
 } from "@/app/[lang]/dashboard/bookings/scoped-helpers";
