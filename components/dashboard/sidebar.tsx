@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -15,7 +15,9 @@ import {
   MessageSquareText,
   Star,
   CalendarCheck,
-  CreditCard
+  CreditCard,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -44,11 +46,15 @@ export function Sidebar({
   };
   userName: string;
   userLogo: string | null;
+  userName: string;
+  userLogo: string | null;
   open: boolean;
   onClose: () => void;
   onLogoutClick: () => void;
 }) {
   const pathname = usePathname();
+
+  const [minimized, setMinimized] = useState(false);
 
   // Only relevant on mobile, where the sidebar is an off-canvas drawer —
   // at the lg breakpoint it's always visible and this has no effect.
@@ -130,18 +136,25 @@ export function Sidebar({
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex h-full w-64 shrink-0 flex-col border-r border-border bg-surface transition-transform duration-200 ease-in-out lg:static lg:z-auto lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex h-full shrink-0 flex-col border-r border-border bg-surface transition-all duration-300 ease-in-out lg:static lg:z-auto lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } ${minimized ? "lg:w-20" : "w-64"}`}
       >
-        <div className="flex items-center justify-between px-6 py-6">
-          <Link href={`/${lang}`}>
+        <button 
+          onClick={() => setMinimized(!minimized)}
+          className="hidden lg:flex items-center justify-center absolute -right-3 top-8 size-6 bg-surface border border-border rounded-full text-muted-foreground shadow-sm hover:text-foreground hover:bg-border/40 z-10 transition-transform hover:scale-110"
+        >
+          {minimized ? <ChevronRight className="size-3.5" /> : <ChevronLeft className="size-3.5" />}
+        </button>
+
+        <div className={`flex items-center py-6 relative transition-all duration-300 ${minimized ? "lg:px-0 lg:justify-center" : "px-6 justify-between"}`}>
+          <Link href={`/${lang}`} className={`transition-all duration-300 overflow-hidden flex items-center ${minimized ? "lg:w-0 lg:opacity-0" : "w-32 opacity-100"}`}>
             <Image
               src="/logo/logo.webp"
               alt="Afrobraid Connect"
               width={126}
               height={32}
-              className="theme-invert transition-opacity hover:opacity-80"
+              className="theme-invert transition-opacity hover:opacity-80 shrink-0"
               priority
             />
           </Link>
@@ -155,29 +168,37 @@ export function Sidebar({
           </button>
         </div>
 
-        <nav className="flex-1 space-y-1 px-3">
+        <nav className={`flex-1 space-y-1 ${minimized ? "lg:px-2 px-3" : "px-3"}`}>
           {navItems.map(({ href, label, icon: Icon, active }) => (
             <Link
               key={href}
               href={href}
               onClick={onClose}
+              title={minimized ? label : undefined}
               aria-current={active ? "page" : undefined}
-              className={`flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 py-2.5 text-sm font-medium transition-colors ${
+                minimized ? "lg:justify-center px-3 lg:px-0 rounded-md" : "px-3"
+              } ${
                 active
                   ? "bg-brand text-brand-foreground"
                   : "text-muted-foreground hover:bg-border/40 hover:text-foreground"
               }`}
             >
-              <Icon className="size-5" />
-              {label}
+              <Icon className="size-5 shrink-0" />
+              <span className={`truncate transition-all duration-300 ${minimized ? "lg:w-0 lg:opacity-0" : "w-auto opacity-100"}`}>
+                {label}
+              </span>
             </Link>
           ))}
         </nav>
 
-        <div className="border-t border-border px-3 py-4">
+        <div className={`border-t border-border py-4 transition-all duration-300 ${minimized ? "lg:px-2 px-3" : "px-3"}`}>
           <Link
             href={`/${lang}/dashboard/profile`}
-            className={`flex items-center gap-3 rounded-md px-3 py-2 transition-colors ${
+            title={minimized ? userName : undefined}
+            className={`flex items-center gap-3 rounded-md py-2 transition-colors ${
+              minimized ? "lg:justify-center lg:px-0 px-3" : "px-3"
+            } ${
               pathname === `/${lang}/dashboard/profile`
                 ? "bg-border/80 text-foreground"
                 : "hover:bg-border/40"
@@ -190,7 +211,7 @@ export function Sidebar({
               height={36}
               className="size-9 shrink-0 rounded-full object-cover ring-1 ring-border"
             />
-            <span className="truncate text-sm font-semibold text-foreground">
+            <span className={`truncate text-sm font-semibold text-foreground transition-all duration-300 ${minimized ? "lg:w-0 lg:opacity-0" : "w-auto opacity-100"}`}>
               {userName}
             </span>
           </Link>
@@ -198,10 +219,15 @@ export function Sidebar({
           <button
             type="button"
             onClick={onLogoutClick}
-            className="mt-1 flex w-full items-center gap-3 px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-border/40 hover:text-foreground"
+            title={minimized ? dict.logout : undefined}
+            className={`mt-1 flex w-full items-center gap-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-border/40 hover:text-foreground rounded-md ${
+              minimized ? "lg:justify-center lg:px-0 px-3" : "px-3"
+            }`}
           >
-            <LogOut className="size-5" />
-            {dict.logout}
+            <LogOut className="size-5 shrink-0" />
+            <span className={`truncate transition-all duration-300 ${minimized ? "lg:w-0 lg:opacity-0" : "w-auto opacity-100"}`}>
+              {dict.logout}
+            </span>
           </button>
         </div>
       </aside>
