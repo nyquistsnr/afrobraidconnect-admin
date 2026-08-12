@@ -86,21 +86,170 @@ function CatalogCard({ name, subtitle, de, fr, onEdit, onDelete }: { name: strin
 function ItemEditor({ state, token, lang, dict, onClose, onSaved }: { state: { kind: "category" | "addon"; item: StyleCategory | AdminAddon | "new" } | null; token: string; lang: Locale; dict: CatalogDictionary; onClose: () => void; onSaved: () => Promise<void> }) {
   if (!state) return null; const existing = state.item === "new" ? null : state.item;
   const save = async (form: FormData) => { const name = String(form.get("name") || "").trim(); if (!name) return; try { if (state.kind === "category") { const body = { name, display_order: Number(form.get("order") || 0) }; existing ? await styleCatalogApi.updateCategory(existing.id, body, token, lang) : await styleCatalogApi.createCategory(body, token, lang); } else { const body = { name, suggested_price: String(form.get("price") || "") || undefined }; existing ? await styleCatalogApi.updateAddon(existing.id, body, token, lang) : await styleCatalogApi.createAddon(body, token, lang); } toast.success(dict.saved); await onSaved(); } catch (error) { toast.error(error instanceof Error ? error.message : dict.saveError); } };
-  return <Modal open onClose={onClose} labelledBy="catalog-item"><form action={save} className="space-y-4"><div className="flex justify-between"><h2 id="catalog-item" className="text-lg font-bold">{existing ? dict.edit : dict.add} {state.kind === "category" ? dict.tabs.categories : dict.tabs.addons}</h2><button type="button" onClick={onClose}><X className="size-5" /></button></div><Input label={dict.englishName} showLabel name="name" defaultValue={existing?.name_en} required />{state.kind === "category" ? <Input label={dict.displayOrder} showLabel name="order" type="number" defaultValue={(existing as StyleCategory | null)?.display_order ?? 0} /> : <Input label={dict.suggestedPrice} showLabel name="price" type="number" min="0" step="0.01" defaultValue={(existing as AdminAddon | null)?.suggested_price ?? ""} />}<Button>{dict.save}</Button></form></Modal>;
+  return <Modal open onClose={onClose} labelledBy="catalog-item"><form action={save} className="space-y-4"><div className="flex justify-between"><h2 id="catalog-item" className="text-lg font-bold">{existing ? dict.edit : dict.add} {state.kind === "category" ? dict.tabs.categories : dict.tabs.addons}</h2><button type="button" onClick={onClose}><X className="size-5" /></button></div><Input label={(dict as any).name || (dict as any).englishName} showLabel name="name" defaultValue={(existing as any)?.[`name_${lang}`] || existing?.name_en || ""} required />{state.kind === "category" ? <Input label={dict.displayOrder} showLabel name="order" type="number" defaultValue={(existing as StyleCategory | null)?.display_order ?? 0} /> : <Input label={dict.suggestedPrice} showLabel name="price" type="number" min="0" step="0.01" defaultValue={(existing as AdminAddon | null)?.suggested_price ?? ""} />}<Button>{dict.save}</Button></form></Modal>;
 }
 
 function StyleEditor({ item, categories, token, lang, dict, onClose, onSaved }: { item: AdminStyle | "new" | null; categories: StyleCategory[]; token: string; lang: Locale; dict: CatalogDictionary; onClose: () => void; onSaved: () => Promise<void> }) {
   const [categoryId, setCategoryId] = useState("");
+  const [activeTab, setActiveTab] = useState<"basic" | "images" | "variations">("basic");
+
   useEffect(() => {
-    setCategoryId(item && item !== "new" ? item.category_id || "" : "");
+    if (item && item !== "new") setCategoryId(item.category_id || "");
+    else setCategoryId("");
+    setActiveTab("basic");
   }, [item]);
-  if (!item) return null; const existing = item === "new" ? null : item;
+
+  if (!item) return null; 
+  const existing = item === "new" ? null : item;
+  
   const save = async (form: FormData) => { const name = String(form.get("name") || "").trim(); if (!name) return; try { const body = { name, description: String(form.get("description") || "") || undefined, category_id: categoryId || undefined, ...(existing ? { is_active: form.get("active") === "on" } : {}) }; existing ? await styleCatalogApi.updateStyle(existing.id, body, token, lang) : await styleCatalogApi.createStyle(body, token, lang); toast.success(dict.saved); await onSaved(); } catch (error) { toast.error(error instanceof Error ? error.message : dict.saveError); } };
-  return <Modal open onClose={onClose} labelledBy="catalog-style" size="lg"><div className="space-y-4"><form action={save} className="space-y-4"><div className="flex justify-between"><div><h2 id="catalog-style" className="text-lg font-bold">{existing ? dict.editStyle : dict.addStyle}</h2><p className="text-sm text-muted-foreground">{dict.authoringHint}</p></div><button type="button" onClick={onClose}><X className="size-5" /></button></div><Input label={dict.englishName} showLabel name="name" defaultValue={existing?.name_en} required /><Select label={dict.category} showLabel value={categoryId} onChange={setCategoryId} options={[{ value: "", label: dict.uncategorized }, ...categories.map(c => ({ value: c.id, label: localized(c, lang) }))]} /><label className="block text-sm font-medium">{dict.englishDescription}<textarea name="description" defaultValue={existing?.description_en || ""} className="mt-1.5 min-h-28 w-full border border-border bg-input px-3 py-3" /></label>{existing && <label className="flex gap-2 text-sm"><input name="active" type="checkbox" defaultChecked={existing.is_active} />{dict.publish}</label>}<Button>{dict.save}</Button></form>{existing && <StyleDetails style={existing} token={token} lang={lang} onChanged={onSaved} />}</div></Modal>;
+
+  return (
+    <Modal open onClose={onClose} labelledBy="catalog-style" size="lg">
+      <div className="flex flex-col h-full sm:h-auto space-y-4 sm:space-y-6">
+        <div className="flex items-start justify-between shrink-0">
+          <div>
+            <h2 id="catalog-style" className="text-lg font-bold">{existing ? dict.editStyle : dict.addStyle}</h2>
+            <p className="text-sm text-muted-foreground">{dict.authoringHint}</p>
+          </div>
+          <button type="button" onClick={onClose} className="p-1 hover:bg-muted rounded-full transition-colors"><X className="size-5" /></button>
+        </div>
+
+        {existing && (
+          <div className="shrink-0 -mx-4 sm:mx-0 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="flex px-4 sm:px-0 border-b border-border">
+              <button onClick={() => setActiveTab("basic")} className={`whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${activeTab === "basic" ? "border-brand text-brand" : "border-transparent text-muted-foreground hover:text-foreground"}`}>{(dict as any).basicDetailsTitle || "Basic Details"}</button>
+              <button onClick={() => setActiveTab("images")} className={`whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${activeTab === "images" ? "border-brand text-brand" : "border-transparent text-muted-foreground hover:text-foreground"}`}>{(dict as any).imagesTitle || "Images"}</button>
+              <button onClick={() => setActiveTab("variations")} className={`whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${activeTab === "variations" ? "border-brand text-brand" : "border-transparent text-muted-foreground hover:text-foreground"}`}>{(dict as any).variationsTitle || "Variations"}</button>
+            </div>
+          </div>
+        )}
+
+        <div className="flex-1 overflow-y-auto min-h-[50vh] sm:min-h-0 sm:pb-2">
+          {(!existing || activeTab === "basic") && (
+            <form action={save} className="space-y-4 sm:space-y-5 pb-4">
+              <Input label={(dict as any).name || (dict as any).englishName} showLabel name="name" defaultValue={(existing as any)?.[`name_${lang}`] || existing?.name_en || ""} required />
+              <Select label={dict.category} showLabel value={categoryId} onChange={setCategoryId} options={[{ value: "", label: dict.uncategorized }, ...categories.map(c => ({ value: c.id, label: localized(c, lang) }))]} />
+              <label className="block text-sm font-medium text-foreground">
+                <span className="mb-1.5 block">{(dict as any).description || (dict as any).englishDescription}</span>
+                <textarea name="description" defaultValue={(existing as any)?.[`description_${lang}`] || existing?.description_en || ""} className="mt-1 w-full border border-border bg-input px-4 py-3 outline-none focus:border-brand transition-colors min-h-28 text-sm" />
+              </label>
+              {existing && (
+                <label className="flex items-center gap-3 text-sm cursor-pointer p-4 border border-border bg-muted/10 rounded-lg">
+                  <input name="active" type="checkbox" defaultChecked={existing.is_active} className="size-4 rounded border-border text-brand focus:ring-brand" />
+                  <span className="font-medium">{dict.publish}</span>
+                </label>
+              )}
+              <div className="pt-2">
+                <Button>{dict.save}</Button>
+              </div>
+            </form>
+          )}
+
+          {existing && activeTab === "images" && (
+            <StyleImages style={existing} token={token} lang={lang} dict={dict} onChanged={onSaved} />
+          )}
+
+          {existing && activeTab === "variations" && (
+            <StyleVariations style={existing} token={token} lang={lang} dict={dict} onChanged={onSaved} />
+          )}
+        </div>
+      </div>
+    </Modal>
+  );
 }
 
-function StyleDetails({ style, token, lang, onChanged }: { style: AdminStyle; token: string; lang: Locale; onChanged: () => Promise<void> }) {
-  const addVariation = async (form: FormData) => { const name = String(form.get("variation") || "").trim(); if (!name) return; try { await styleCatalogApi.createVariation(style.id, { name, display_order: style.variations.length + 1 }, token, lang); await onChanged(); } catch (error) { toast.error(error instanceof Error ? error.message : "Could not add variation."); } };
+function StyleImages({ style, token, lang, dict, onChanged }: { style: AdminStyle; token: string; lang: Locale; dict: CatalogDictionary; onChanged: () => Promise<void> }) {
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const upload = async (file?: File) => { if (!file) return; if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 5_242_880) return toast.error("Use a JPEG, PNG, or WEBP under 5MB."); try { const { upload_url, object_key } = await styleCatalogApi.uploadUrl(style.id, file.type, token, lang); const response = await fetch(upload_url, { method: "PUT", headers: { "Content-Type": file.type }, body: file }); if (!response.ok) throw new Error("Image upload failed."); await styleCatalogApi.confirmImage(style.id, object_key, token, lang); await onChanged(); } catch (error) { toast.error(error instanceof Error ? error.message : "Could not upload image."); } };
-  return <div className="space-y-3 rounded-lg border border-border p-3"><div><p className="text-sm font-semibold">Images</p><div className="mt-2 flex flex-wrap gap-2">{style.images.map((image) => <div key={image.id} className="relative"><img src={image.url} alt="" className="size-16 rounded object-cover" /><button type="button" className="absolute -right-1 -top-1 rounded-full bg-red-600 p-0.5 text-white" onClick={async () => { await styleCatalogApi.deleteImage(style.id, image.id, token, lang); await onChanged(); }}><X className="size-3" /></button></div>)}{style.images.length < 6 && <label className="flex size-16 cursor-pointer items-center justify-center rounded border border-dashed border-border"><ImagePlus className="size-4" /><input className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => upload(event.target.files?.[0])} /></label>}</div></div><div><p className="text-sm font-semibold">Variations</p>{style.variations.map((variation) => <div key={variation.id} className="flex items-center justify-between text-sm"><span>{localized(variation, lang)}</span><button type="button" className="text-red-600" onClick={async () => { await styleCatalogApi.deleteVariation(style.id, variation.id, token, lang); await onChanged(); }}><Trash2 className="size-4" /></button></div>)}<form action={addVariation} className="mt-2 flex gap-2"><input name="variation" className="min-w-0 flex-1 border border-border bg-input px-3 py-2 text-sm" /><button className="border border-border px-3 text-sm">Add</button></form></div></div>;
+  return (
+    <div className="pb-4">
+      <div className="mb-4">
+        <p className="text-sm font-semibold">{(dict as any).imagesTitle || "Images"}</p>
+        <p className="text-xs text-muted-foreground mt-1">{(dict as any).imagesDescription || "Upload up to 6 images showcasing this style."}</p>
+      </div>
+      <div className="flex flex-wrap gap-3">
+        {style.images.map((image) => (
+          <div key={image.id} className="group relative">
+            <img src={image.url} alt="" className="size-24 rounded-xl object-cover ring-1 ring-border shadow-sm" />
+            <button type="button" className="absolute -right-2 -top-2 rounded-full bg-red-600 p-1.5 text-white opacity-0 shadow-md transition-opacity group-hover:opacity-100" onClick={() => setDeletingId(image.id)}><X className="size-3.5" /></button>
+          </div>
+        ))}
+        {style.images.length < 6 && (
+          <label className="flex size-24 cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted/30 text-muted-foreground transition-colors hover:bg-muted hover:border-brand hover:text-brand">
+            <ImagePlus className="size-6" />
+            <input className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => upload(event.target.files?.[0])} />
+          </label>
+        )}
+      </div>
+
+      <Modal open={!!deletingId} onClose={() => setDeletingId(null)} labelledBy="delete-image" size="sm">
+        <div className="space-y-4">
+          <h2 id="delete-image" className="text-lg font-bold">{dict.deleteTitle}</h2>
+          <p className="text-sm text-muted-foreground">{dict.deleteDescription}</p>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setDeletingId(null)}>{dict.cancel}</Button>
+            <Button className="bg-red-600 hover:bg-red-700 text-white" onClick={async () => {
+              if (!deletingId) return;
+              try { await styleCatalogApi.deleteImage(style.id, deletingId, token, lang); await onChanged(); }
+              catch (e) { toast.error("Could not delete image."); }
+              finally { setDeletingId(null); }
+            }}>{dict.delete}</Button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+function StyleVariations({ style, token, lang, dict, onChanged }: { style: AdminStyle; token: string; lang: Locale; dict: CatalogDictionary; onChanged: () => Promise<void> }) {
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const addVariation = async (form: FormData) => { const name = String(form.get("variation") || "").trim(); if (!name) return; try { await styleCatalogApi.createVariation(style.id, { name, display_order: style.variations.length + 1 }, token, lang); await onChanged(); } catch (error) { toast.error(error instanceof Error ? error.message : "Could not add variation."); } };
+  return (
+    <div className="rounded-xl border border-border bg-muted/10 p-4 sm:p-5 shadow-sm mb-4">
+      <div className="mb-5">
+        <p className="text-sm font-semibold text-foreground">{(dict as any).variationsTitle || "Variations (Required)"}</p>
+        <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{(dict as any).variationsDescription || "Add options like length or size for this style (e.g. Waist length, Mid-back). Customers must choose one of these."}</p>
+      </div>
+      <div className="space-y-2.5">
+        {style.variations.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border bg-muted/50 p-8 text-center text-sm text-muted-foreground flex flex-col items-center gap-2">
+            <Plus className="size-6 text-border" />
+            {(dict as any).emptyVariations || "No variations added yet. Add your first variation below."}
+          </div>
+        ) : (
+          style.variations.map((variation) => (
+            <div key={variation.id} className="flex items-center justify-between rounded-lg border border-border bg-surface px-4 py-3.5 text-sm shadow-sm transition-colors hover:border-brand/30">
+              <span className="font-medium text-foreground">{localized(variation, lang)}</span>
+              <button type="button" className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-red-500/10 hover:text-red-600" onClick={() => setDeletingId(variation.id)}><Trash2 className="size-4.5" /></button>
+            </div>
+          ))
+        )}
+      </div>
+      <form action={addVariation} className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-end bg-surface p-4 rounded-xl border border-border shadow-sm">
+        <div className="w-full sm:flex-1">
+          <Input label={(dict as any).newVariationLabel || "New variation"} showLabel name="variation" placeholder={(dict as any).newVariationPlaceholder || "e.g. Waist length"} required />
+        </div>
+        <div className="w-full shrink-0 sm:w-max">
+          <Button variant="outline" className="gap-1.5 sm:px-6"><Plus className="size-4" /> {dict.add}</Button>
+        </div>
+      </form>
+
+      <Modal open={!!deletingId} onClose={() => setDeletingId(null)} labelledBy="delete-variation" size="sm">
+        <div className="space-y-4">
+          <h2 id="delete-variation" className="text-lg font-bold">{dict.deleteTitle}</h2>
+          <p className="text-sm text-muted-foreground">{dict.deleteDescription}</p>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setDeletingId(null)}>{dict.cancel}</Button>
+            <Button className="bg-red-600 hover:bg-red-700 text-white" onClick={async () => {
+              if (!deletingId) return;
+              try { await styleCatalogApi.deleteVariation(style.id, deletingId, token, lang); await onChanged(); }
+              catch (e) { toast.error("Could not delete variation."); }
+              finally { setDeletingId(null); }
+            }}>{dict.delete}</Button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
 }
