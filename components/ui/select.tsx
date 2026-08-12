@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Check, ChevronDown } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -33,22 +34,54 @@ export function Select<T extends string>({
 }: SelectProps<T>) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLUListElement>(null);
   const generatedId = useId();
   const selectId = id ?? generatedId;
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
 
   useEffect(() => {
     if (!open) return;
+    
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      setDropdownStyle({
+        top: rect.bottom,
+        left: rect.left,
+        width: rect.width,
+      });
+    }
 
     function handleClickOutside(event: MouseEvent) {
+      const target = event.target as Node;
       if (
         containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        !containerRef.current.contains(target) &&
+        (!dropdownRef.current || !dropdownRef.current.contains(target))
       ) {
         setOpen(false);
       }
     }
+    
+    function handleScroll(e: Event) {
+      // Don't close if scrolling inside the dropdown itself
+      if (dropdownRef.current && dropdownRef.current.contains(e.target as Node)) {
+        return;
+      }
+      setOpen(false);
+    }
+
+    function handleResize() {
+      setOpen(false);
+    }
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("resize", handleResize);
+    };
   }, [open]);
 
   function handleKeyDown(event: React.KeyboardEvent) {
@@ -103,40 +136,44 @@ export function Select<T extends string>({
         />
       </button>
 
-      {open && (
-        <ul
-          role="listbox"
-          className="absolute left-0 right-0 top-full z-10 mt-2 max-h-64 overflow-y-auto border border-border bg-surface py-1 shadow-lg [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-        >
-          {options.map((option) => {
-            const Icon = option.icon;
-            return (
-              <li key={option.value}>
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={option.value === value}
-                  onClick={() => {
-                    onChange(option.value);
-                    setOpen(false);
-                  }}
-                  className={`flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm hover:bg-border/40 ${
-                    option.value === value
-                      ? "font-semibold text-brand"
-                      : "text-foreground"
-                  }`}
-                >
-                  {Icon && <Icon className="size-4 shrink-0" />}
-                  <span className="flex-1 truncate">{option.label}</span>
-                  {option.value === value && (
-                    <Check className="size-4 shrink-0" />
-                  )}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      {open && typeof document !== "undefined" &&
+        createPortal(
+          <ul
+            ref={dropdownRef}
+            role="listbox"
+            style={dropdownStyle}
+            className="fixed z-[9999] mt-1 max-h-64 overflow-y-auto border border-border bg-surface py-1 shadow-lg [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          >
+            {options.map((option) => {
+              const Icon = option.icon;
+              return (
+                <li key={option.value}>
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={option.value === value}
+                    onClick={() => {
+                      onChange(option.value);
+                      setOpen(false);
+                    }}
+                    className={`flex w-full items-center gap-2.5 px-4 py-2 text-left text-sm hover:bg-border/40 ${
+                      option.value === value
+                        ? "font-semibold text-brand"
+                        : "text-foreground"
+                    }`}
+                  >
+                    {Icon && <Icon className="size-4 shrink-0" />}
+                    <span className="flex-1 truncate">{option.label}</span>
+                    {option.value === value && (
+                      <Check className="size-4 shrink-0" />
+                    )}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>,
+          document.body
+        )}
 
       {error && <p className="mt-1.5 text-xs text-red-500">{error}</p>}
     </div>
