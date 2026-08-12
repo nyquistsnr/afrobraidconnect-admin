@@ -26,11 +26,23 @@ function getWebSocketUrl(accessToken: string): string | null {
   return `${wsBase}/ws?token=${encodeURIComponent(accessToken)}`;
 }
 
+function playNotificationSound() {
+  try {
+    const audio = new Audio('/sounds/notification.mp3');
+    audio.play().catch(() => {
+      // Browser autoplay policy might block this if user hasn't interacted with page
+    });
+  } catch (e) {
+    // Ignore if Audio is not supported
+  }
+}
+
 function handleRealtimeEvent(queryClient: QueryClient, event: RealtimeEvent) {
   switch (event.type) {
 
     case "notification": {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      playNotificationSound();
       break;
     }
   }

@@ -446,6 +446,43 @@ export interface AdminBookingChartParams extends AdminBookingStatsParams {
   limit?: number;
 }
 
+export interface AdminDashboardFilters {
+  date_from?: string;
+  date_to?: string;
+  created_from?: string;
+  created_to?: string;
+  payment_date_from?: string;
+  payment_date_to?: string;
+  country?: string;
+  currency?: Currency;
+  is_mobile?: boolean;
+  payment_schedule?: PaymentSchedule;
+  search?: string;
+  status?: BookingStatus;
+}
+
+export interface AdminDashboardChartParams
+  extends Omit<
+    AdminDashboardFilters,
+    "created_from" | "created_to" | "payment_date_from" | "payment_date_to" | "status"
+  > {
+  interval?: AdminRevenueChartInterval;
+  limit?: number;
+}
+
+export interface AdminDashboardOverview extends AdminBookingStats {
+  unique_customer_count?: number | string | null;
+  repeat_customer_count?: number | string | null;
+  unique_braider_count?: number | string | null;
+  repeat_braider_count?: number | string | null;
+}
+
+export interface AdminDashboardFinancials extends AdminBookingStats {
+  gross_booking_value_minor?: number | string | null;
+  gross_margin_before_tax_minor?: number | string | null;
+  estimated_profit_after_vat_minor?: number | string | null;
+}
+
 export interface AdminBookingStats {
   total_bookings?: number;
   counts_by_status?: Partial<Record<BookingStatus | string, number>>;

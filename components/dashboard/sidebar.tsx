@@ -46,8 +46,6 @@ export function Sidebar({
   };
   userName: string;
   userLogo: string | null;
-  userName: string;
-  userLogo: string | null;
   open: boolean;
   onClose: () => void;
   onLogoutClick: () => void;
