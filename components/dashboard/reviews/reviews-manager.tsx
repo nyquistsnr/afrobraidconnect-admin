@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Eye, MessageSquareText, Star, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -27,26 +29,30 @@ const statusTone: Record<ReviewStatus, BadgeTone> = {
 };
 
 export function ReviewsManager({
-  accessToken,
   lang,
   dict,
-  initialReviews,
-  initialPagination,
   status,
   page,
-  initialLoadError,
 }: {
-  accessToken: string;
   lang: Locale;
   dict: ReviewsDict;
-  initialReviews: AdminReview[];
-  initialPagination: PaginationMeta;
   status: ReviewStatus;
   page: number;
-  initialLoadError: boolean;
 }) {
   const router = useRouter();
-  const [reviews, setReviews] = useState(initialReviews);
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken;
+  const reviewsQuery = useQuery({
+    queryKey: ["admin-reviews", lang, status, page],
+    queryFn: () =>
+      adminReviewsApi.list(accessToken!, lang, {
+        status,
+        page,
+        page_size: 20,
+      }),
+    enabled: Boolean(accessToken),
+  });
   const [selectedReview, setSelectedReview] = useState<AdminReview | null>(null);
   const [actingId, setActingId] = useState<string | null>(null);
   const [pendingAction, setPendingAction] = useState<{
@@ -55,6 +61,7 @@ export function ReviewsManager({
   } | null>(null);
 
   async function moderate(review: AdminReview, action: "approve" | "reject") {
+    if (!accessToken) return false;
     setActingId(review.id);
     try {
       const updated =
@@ -62,16 +69,23 @@ export function ReviewsManager({
           ? await adminReviewsApi.approve(accessToken, lang, review.id)
           : await adminReviewsApi.reject(accessToken, lang, review.id);
 
-      setReviews((current) =>
-        updated.status === status
-          ? current.map((item) => (item.id === updated.id ? updated : item))
-          : current.filter((item) => item.id !== updated.id)
+      queryClient.setQueryData(
+        ["admin-reviews", lang, status, page],
+        reviewsQuery.data
+          ? {
+              ...reviewsQuery.data,
+              items:
+                updated.status === status
+                  ? reviews.map((item) => (item.id === updated.id ? updated : item))
+                  : reviews.filter((item) => item.id !== updated.id),
+            }
+          : reviewsQuery.data
       );
       setSelectedReview(null);
       toast.success(
         action === "approve" ? dict.approvedToast : dict.rejectedToast
       );
-      router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["admin-reviews"] });
       return true;
     } catch (error) {
       toast.error(error instanceof Error ? error.message : dict.actionError);
@@ -80,6 +94,16 @@ export function ReviewsManager({
       setActingId(null);
     }
   }
+
+  const reviews = reviewsQuery.data?.items ?? [];
+  const pagination: PaginationMeta = reviewsQuery.data?.pagination ?? {
+    page,
+    page_size: 20,
+    total_items: 0,
+    total_pages: 0,
+    has_next: false,
+    has_previous: false,
+  };
 
   const columns: DataTableColumn<AdminReview>[] = [
       {
@@ -174,9 +198,9 @@ export function ReviewsManager({
     ];
 
   const paginationSummary = dict.pagination.summary
-    .replace("{page}", String(initialPagination.page))
-    .replace("{totalPages}", String(initialPagination.total_pages || 1))
-    .replace("{totalItems}", String(initialPagination.total_items));
+    .replace("{page}", String(pagination.page))
+    .replace("{totalPages}", String(pagination.total_pages || 1))
+    .replace("{totalItems}", String(pagination.total_items));
 
   function goToPage(nextPage: number) {
     router.push(`/${lang}/dashboard/reviews?status=${status}&page=${nextPage}`);
@@ -198,7 +222,7 @@ export function ReviewsManager({
         </div>
       </div>
 
-      {initialLoadError && (
+      {reviewsQuery.isError && (
         <div className="border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
           {dict.loadError}
         </div>
@@ -262,10 +286,10 @@ export function ReviewsManager({
           emptyState={
             <div className="text-center">
               <p className="text-sm font-semibold text-foreground">
-                {dict.emptyTitle}
+                {reviewsQuery.isLoading ? dict.listTitle : dict.emptyTitle}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                {dict.emptyDescription}
+                {reviewsQuery.isLoading ? dict.listSubtitle : dict.emptyDescription}
               </p>
             </div>
           }
@@ -273,9 +297,9 @@ export function ReviewsManager({
 
         <Pagination
           page={page}
-          totalPages={initialPagination.total_pages}
-          hasNext={initialPagination.has_next}
-          hasPrevious={initialPagination.has_previous}
+          totalPages={pagination.total_pages}
+          hasNext={pagination.has_next}
+          hasPrevious={pagination.has_previous}
           onPageChange={goToPage}
           summary={paginationSummary}
           previousLabel={dict.pagination.previous}

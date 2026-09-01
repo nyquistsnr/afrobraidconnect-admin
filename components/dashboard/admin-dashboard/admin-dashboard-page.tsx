@@ -3,6 +3,8 @@
 import { useState, useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Bar,
   BarChart,
@@ -33,11 +35,11 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { AdminDashboardDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
-import { moneyFromMinor } from "@/components/dashboard/admin-commerce/formatters";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Input } from "@/components/ui/input";
 import { Select, type SelectOption } from "@/components/ui/select";
 import { formatCurrency, formatDateOnly } from "@/lib/format";
+import { adminDashboardApi } from "@/lib/api/admin-dashboard-client";
 import type {
   AdminChartPoint,
   AdminChartResponse,
@@ -106,23 +108,47 @@ export function AdminDashboardPage({
   dict,
   filters,
   chartFilters,
-  overview,
-  financials,
-  charts,
-  loadError,
 }: {
   lang: Locale;
   dict: AdminDashboardDict;
   filters: AdminDashboardFilters;
   chartFilters: AdminDashboardChartParams;
-  overview: AdminDashboardOverview | null;
-  financials: AdminDashboardFinancials | null;
-  charts: AdminDashboardCharts;
-  loadError: boolean;
 }) {
-  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken;
   const [filtersOpen, setFiltersOpen] = useState(hasActiveFilters(filters, chartFilters));
+  const enabled = Boolean(accessToken);
+  const overviewQuery = useQuery({
+    queryKey: ["admin-dashboard", "overview", lang, filters],
+    queryFn: () => adminDashboardApi.overview(accessToken!, lang, filters),
+    enabled,
+  });
+  const financialsQuery = useQuery({
+    queryKey: ["admin-dashboard", "financials", lang, filters],
+    queryFn: () => adminDashboardApi.financials(accessToken!, lang, filters),
+    enabled,
+  });
+  const chartsQuery = useQuery({
+    queryKey: ["admin-dashboard", "charts", lang, chartFilters],
+    queryFn: () => fetchDashboardCharts(accessToken!, lang, chartFilters),
+    enabled,
+  });
+  const overview = overviewQuery.data ?? null;
+  const financials = financialsQuery.data ?? null;
+  const charts = chartsQuery.data?.charts ?? emptyCharts();
+  const loadError =
+    overviewQuery.isError ||
+    financialsQuery.isError ||
+    chartsQuery.isError ||
+    Boolean(chartsQuery.data?.failed);
+  const loading =
+    overviewQuery.isLoading || financialsQuery.isLoading || chartsQuery.isLoading;
   const currency = overview?.currency || financials?.currency || filters.currency || "EUR";
+
+  function refreshDashboard() {
+    queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
+  }
 
   return (
     <div className="space-y-6">
@@ -139,10 +165,10 @@ export function AdminDashboardPage({
         <div className="flex flex-col gap-2 sm:flex-row">
           <button
             type="button"
-            onClick={() => router.refresh()}
+            onClick={refreshDashboard}
             className="inline-flex items-center justify-center gap-2 border border-border bg-input px-4 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-border/40"
           >
-            <RefreshCw className="size-4" />
+            <RefreshCw className={`size-4 ${loading ? "animate-spin" : ""}`} />
             {dict.refresh}
           </button>
           <button
@@ -238,6 +264,52 @@ export function AdminDashboardPage({
       </MetricSection>
     </div>
   );
+}
+
+async function fetchDashboardCharts(
+  accessToken: string,
+  locale: Locale,
+  chartFilters: AdminDashboardChartParams
+): Promise<{ charts: AdminDashboardCharts; failed: boolean }> {
+  const chartNames = ["revenue", "weekday", "status", "countries", "styles"] as const;
+  const results = await Promise.allSettled(
+    chartNames.map((chart) =>
+      adminDashboardApi.chart(accessToken, locale, chart, chartFilters)
+    )
+  );
+  const values = results.map((result) =>
+    result.status === "fulfilled" ? result.value : null
+  );
+
+  results.forEach((result, index) => {
+    if (result.status === "rejected") {
+      console.warn(
+        `Failed to load admin dashboard ${chartNames[index]} chart:`,
+        result.reason instanceof Error ? result.reason.message : result.reason
+      );
+    }
+  });
+
+  return {
+    charts: {
+      revenue: values[0],
+      weekday: values[1],
+      status: values[2],
+      countries: values[3],
+      styles: values[4],
+    },
+    failed: results.some((result) => result.status === "rejected"),
+  };
+}
+
+function emptyCharts(): AdminDashboardCharts {
+  return {
+    revenue: null,
+    weekday: null,
+    status: null,
+    countries: null,
+    styles: null,
+  };
 }
 
 function DashboardFilterForm({

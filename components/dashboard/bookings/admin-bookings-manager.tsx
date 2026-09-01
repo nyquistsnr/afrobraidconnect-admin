@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
 import { CalendarCheck, Eye, Filter, RotateCcw, Search } from "lucide-react";
 import type { AdminBookingsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
 import {
@@ -11,6 +13,7 @@ import {
   braiderName,
   compactDateTime,
   customerName,
+  extractPagination,
   moneyFromMinor,
 } from "@/components/dashboard/admin-commerce/formatters";
 import { Badge, type BadgeTone } from "@/components/ui/badge";
@@ -19,6 +22,7 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/ui/pagination";
 import { Select, type SelectOption } from "@/components/ui/select";
+import { adminBookingsApi } from "@/lib/api/admin-bookings-client";
 import type {
   AdminBookingListItem,
   AdminBookingsListParams,
@@ -73,21 +77,45 @@ const statusTone: Record<BookingStatus, BadgeTone> = {
 export function AdminBookingsManager({
   lang,
   dict,
-  bookings,
-  pagination,
+  bookings: initialBookings,
+  pagination: initialPagination,
   filters,
-  initialLoadError,
+  initialLoadError = false,
 }: {
   lang: Locale;
   dict: BookingsDict;
-  bookings: AdminBookingListItem[];
-  pagination: PaginationMeta;
+  bookings?: AdminBookingListItem[];
+  pagination?: PaginationMeta;
   filters: AdminBookingsListParams;
-  initialLoadError: boolean;
+  initialLoadError?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken;
+  const bookingsQuery = useQuery({
+    queryKey: ["admin-bookings", lang, filters],
+    queryFn: async () => {
+      const response = await adminBookingsApi.list(accessToken!, lang, filters);
+      const items = Array.isArray(response.items) ? response.items : [];
+      return {
+        bookings: items,
+        pagination: extractPagination(
+          response,
+          filters.page ?? 1,
+          filters.page_size ?? 20,
+          items.length
+        ),
+      };
+    },
+    enabled: Boolean(accessToken),
+    initialData:
+      initialBookings && initialPagination
+        ? { bookings: initialBookings, pagination: initialPagination }
+        : undefined,
+  });
+  const bookings = bookingsQuery.data?.bookings ?? [];
   const hasActiveFilters = Boolean(
     filters.search ||
       filters.status ||
@@ -101,7 +129,7 @@ export function AdminBookingsManager({
       filters.payment_schedule
   );
   const [filtersOpen, setFiltersOpen] = useState(hasActiveFilters);
-  const safePagination = pagination || {
+  const safePagination: PaginationMeta = bookingsQuery.data?.pagination || {
     page: filters.page ?? 1,
     page_size: filters.page_size ?? 20,
     total_items: bookings.length,
@@ -232,7 +260,7 @@ export function AdminBookingsManager({
         </button>
       </div>
 
-      {initialLoadError && (
+      {(initialLoadError || bookingsQuery.isError) && (
         <div className="border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
           {dict.loadError}
         </div>
@@ -273,10 +301,10 @@ export function AdminBookingsManager({
           emptyState={
             <div className="text-center">
               <p className="text-sm font-semibold text-foreground">
-                {dict.emptyTitle}
+                {bookingsQuery.isLoading ? dict.listTitle : dict.emptyTitle}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">
-                {dict.emptyDescription}
+                {bookingsQuery.isLoading ? dict.listSubtitle : dict.emptyDescription}
               </p>
             </div>
           }
