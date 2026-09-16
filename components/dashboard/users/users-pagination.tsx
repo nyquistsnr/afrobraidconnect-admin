@@ -11,6 +11,7 @@ export function UsersPagination({
   summary,
   previousLabel,
   nextLabel,
+  isFetching = false,
 }: {
   page: number;
   totalPages: number;
@@ -19,6 +20,7 @@ export function UsersPagination({
   summary: string;
   previousLabel: string;
   nextLabel: string;
+  isFetching?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -40,6 +42,7 @@ export function UsersPagination({
       summary={summary}
       previousLabel={previousLabel}
       nextLabel={nextLabel}
+      isFetching={isFetching}
     />
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 export interface PaginationProps {
   page: number;
@@ -12,6 +12,8 @@ export interface PaginationProps {
   previousLabel: string;
   nextLabel: string;
   disabled?: boolean;
+  /** True while a new page's data is being fetched — shows a spinner and disables navigation without hiding current rows. */
+  isFetching?: boolean;
 }
 
 export function Pagination({
@@ -24,16 +26,24 @@ export function Pagination({
   previousLabel,
   nextLabel,
   disabled = false,
+  isFetching = false,
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
+  const navDisabled = disabled || isFetching;
+
   return (
     <div className="flex flex-col items-center justify-between gap-3 border-t border-border px-4 py-3.5 sm:flex-row sm:px-6">
-      <p className="text-xs text-muted-foreground">{summary}</p>
+      <p className="flex items-center gap-2 text-xs text-muted-foreground">
+        {summary}
+        {isFetching ? (
+          <Loader2 className="size-3.5 animate-spin text-brand" aria-hidden="true" />
+        ) : null}
+      </p>
       <div className="flex items-center gap-2">
         <button
           type="button"
-          disabled={disabled || !hasPrevious}
+          disabled={navDisabled || !hasPrevious}
           onClick={() => onPageChange(page - 1)}
           className="flex items-center gap-1 border border-border bg-input px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-border/40 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-input"
         >
@@ -42,12 +52,16 @@ export function Pagination({
         </button>
         <button
           type="button"
-          disabled={disabled || !hasNext}
+          disabled={navDisabled || !hasNext}
           onClick={() => onPageChange(page + 1)}
           className="flex items-center gap-1 border border-border bg-input px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-border/40 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-input"
         >
           {nextLabel}
-          <ChevronRight className="size-3.5" />
+          {isFetching ? (
+            <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+          ) : (
+            <ChevronRight className="size-3.5" />
+          )}
         </button>
       </div>
     </div>

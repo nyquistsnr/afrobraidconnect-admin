@@ -249,8 +249,8 @@
     "usersDescription": "Gérez les clients, les coiffeurs et les autres administrateurs."
   },
   "login": {
-    "title": "Content de vous revoir",
-    "subtitle": "Entrez vos informations pour accéder à votre compte.",
+    "title": "Connexion administrateur",
+    "subtitle": "Connectez-vous avec vos identifiants administrateur pour accéder au panneau.",
     "emailLabel": "E-mail",
     "emailPlaceholder": "hello@example.com",
     "passwordLabel": "Mot de passe",

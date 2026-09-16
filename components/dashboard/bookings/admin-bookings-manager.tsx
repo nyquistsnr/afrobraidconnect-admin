@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { CalendarCheck, Eye, Filter, RotateCcw, Search } from "lucide-react";
 import type { AdminBookingsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
 import {
@@ -114,6 +114,7 @@ export function AdminBookingsManager({
       initialBookings && initialPagination
         ? { bookings: initialBookings, pagination: initialPagination }
         : undefined,
+    placeholderData: keepPreviousData,
   });
   const bookings = bookingsQuery.data?.bookings ?? [];
   const hasActiveFilters = Boolean(
@@ -295,6 +296,7 @@ export function AdminBookingsManager({
           columns={columns}
           data={bookings}
           isLoading={bookingsQuery.isLoading}
+          isFetching={bookingsQuery.isFetching}
           getRowKey={(booking) => booking.id}
           renderMobileCard={(booking) => (
             <BookingCard booking={booking} dict={dict} lang={lang} />
@@ -317,6 +319,7 @@ export function AdminBookingsManager({
           hasNext={safePagination.has_next}
           hasPrevious={safePagination.has_previous}
           onPageChange={goToPage}
+          isFetching={bookingsQuery.isFetching}
           summary={summary}
           previousLabel={dict.pagination.previous}
           nextLabel={dict.pagination.next}

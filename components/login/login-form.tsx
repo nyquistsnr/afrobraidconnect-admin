@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { getSession, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Mail } from "lucide-react";
@@ -13,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 
 export function LoginForm({
   dict,
@@ -93,42 +91,19 @@ export function LoginForm({
           required
         />
 
-        <div className="flex items-center justify-between pt-1">
+        <div className="pt-1">
           <label className="flex items-center gap-2 cursor-pointer">
             <Checkbox name="remember_me" />
             <span className="text-sm font-medium text-foreground select-none">
               {dict.rememberMe || "Remember me"}
             </span>
           </label>
-          <Link
-            href={`/${lang}/forgot-password`}
-            className="text-sm font-medium text-brand hover:text-brand-hover"
-          >
-            {dict.forgotPassword}
-          </Link>
         </div>
 
         <Button type="submit" disabled={loginMutation.isPending}>
           {loginMutation.isPending ? common.loading : dict.signIn}
         </Button>
       </form>
-
-      <div className="my-6 flex items-center gap-4">
-        <div className="h-px flex-1 bg-border" />
-        <span className="text-xs font-medium text-muted-foreground">
-          {dict.or}
-        </span>
-        <div className="h-px flex-1 bg-border" />
-      </div>
-
-      <GoogleSignInButton
-        lang={lang}
-        label={dict.signInWithGoogle}
-        successMessage={common.toasts.loginSuccess}
-        errorsDict={common.errors}
-        callbackUrl={callbackUrl}
-      />
-
     </div>
   );
 }

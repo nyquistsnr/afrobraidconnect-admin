@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { CalendarCheck, MoreHorizontal, ShieldAlert, ShieldCheck } from "lucide-react";
+import { CalendarCheck, Loader2, MoreHorizontal, ShieldAlert, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -23,6 +23,7 @@ export function UsersTable({
   errorsDict,
   dict,
   isLoading = false,
+  isFetching = false,
 }: {
   users: AdminUserResponse[];
   accessToken: string;
@@ -32,7 +33,10 @@ export function UsersTable({
     viewBookings?: string;
   };
   isLoading?: boolean;
+  /** True while existing rows are being replaced (e.g. pagination) — dims the current rows and shows a spinner instead of swapping to the skeleton. */
+  isFetching?: boolean;
 }) {
+  const showFetchingOverlay = !isLoading && isFetching && users.length > 0;
   const router = useRouter();
   const [suspendModalOpen, setSuspendModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -90,8 +94,17 @@ export function UsersTable({
   return (
     <>
       {/* Desktop Table View */}
-      <div className="hidden overflow-x-auto rounded-xl border border-border bg-card shadow-sm md:block">
-        <table className="w-full text-left text-sm text-foreground">
+      <div className="relative hidden overflow-x-auto rounded-xl border border-border bg-card shadow-sm md:block">
+        {showFetchingOverlay ? (
+          <div className="absolute inset-0 z-10 flex items-start justify-center bg-background/60 pt-16">
+            <Loader2 className="size-6 animate-spin text-brand" aria-hidden="true" />
+          </div>
+        ) : null}
+        <table
+          className={`w-full text-left text-sm text-foreground transition-opacity ${
+            showFetchingOverlay ? "opacity-50" : "opacity-100"
+          }`}
+        >
           <thead className="border-b border-border bg-muted/40 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             <tr>
               <th className="px-6 py-3 font-medium">{dict.name || "Name"}</th>
@@ -183,7 +196,12 @@ export function UsersTable({
       </div>
 
       {/* Mobile Cards View */}
-      <div className="grid grid-cols-1 gap-4 md:hidden">
+      <div className="relative grid grid-cols-1 gap-4 md:hidden">
+        {showFetchingOverlay ? (
+          <div className="absolute inset-0 z-10 flex items-start justify-center bg-background/60 pt-10">
+            <Loader2 className="size-6 animate-spin text-brand" aria-hidden="true" />
+          </div>
+        ) : null}
         {isLoading ? (
           Array.from({ length: 4 }).map((_, index) => (
             <div

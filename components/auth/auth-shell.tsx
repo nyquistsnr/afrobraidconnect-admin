@@ -13,7 +13,7 @@ export function AuthShell({
   children,
 }: {
   lang: Locale;
-  supportEmail: string;
+  supportEmail?: string;
   heroImageAlt: string;
   themeLabels: Record<"light" | "dark" | "system", string>;
   children: React.ReactNode;
@@ -36,14 +36,20 @@ export function AuthShell({
 
         <div className="mx-auto w-full max-w-sm">{children}</div>
 
-        <div className="mx-auto flex w-full max-w-sm flex-col-reverse items-center gap-4 pt-10 text-sm text-muted-foreground sm:flex-row sm:justify-between">
-          <a
-            href={`mailto:${supportEmail}`}
-            className="flex items-center gap-1.5 hover:text-foreground"
-          >
-            <Mail className="size-4" />
-            {supportEmail}
-          </a>
+        <div
+          className={`mx-auto flex w-full max-w-sm flex-col-reverse items-center gap-4 pt-10 text-sm text-muted-foreground sm:flex-row ${
+            supportEmail ? "sm:justify-between" : "sm:justify-end"
+          }`}
+        >
+          {supportEmail ? (
+            <a
+              href={`mailto:${supportEmail}`}
+              className="flex items-center gap-1.5 hover:text-foreground"
+            >
+              <Mail className="size-4" />
+              {supportEmail}
+            </a>
+          ) : null}
           <div className="flex items-center gap-3">
             <ThemeToggle labels={themeLabels} />
             <LanguageSwitcher lang={lang} />

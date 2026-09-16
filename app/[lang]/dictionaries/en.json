@@ -249,8 +249,8 @@
     "usersDescription": "Manage customers, braiders, and other admins."
   },
   "login": {
-    "title": "Welcome Back",
-    "subtitle": "Enter your details to access your account.",
+    "title": "Admin Sign In",
+    "subtitle": "Sign in with your administrator credentials to access the panel.",
     "emailLabel": "Email",
     "emailPlaceholder": "hello@example.com",
     "passwordLabel": "Password",

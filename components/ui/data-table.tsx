@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Loader2 } from "lucide-react";
 
 export interface DataTableColumn<T> {
   key: string;
@@ -17,6 +18,8 @@ export interface DataTableProps<T> {
   /** Card renderer used on narrow viewports instead of the table layout. */
   renderMobileCard: (row: T) => ReactNode;
   isLoading?: boolean;
+  /** True while existing rows are being replaced (e.g. pagination) — dims the current rows and shows a spinner instead of swapping to the skeleton. */
+  isFetching?: boolean;
   skeletonRows?: number;
   emptyState?: ReactNode;
 }
@@ -32,16 +35,27 @@ export function DataTable<T>({
   onRowClick,
   renderMobileCard,
   isLoading = false,
+  isFetching = false,
   skeletonRows = 6,
   emptyState,
 }: DataTableProps<T>) {
   const showEmpty = !isLoading && data.length === 0;
+  const showFetchingOverlay = !isLoading && isFetching && data.length > 0;
 
   return (
     <div className="w-full">
       {/* Desktop / tablet: real table */}
-      <div className="hidden overflow-x-auto md:block">
-        <table className="w-full border-collapse text-sm">
+      <div className="relative hidden overflow-x-auto md:block">
+        {showFetchingOverlay ? (
+          <div className="absolute inset-0 z-10 flex items-start justify-center bg-background/60 pt-16">
+            <Loader2 className="size-6 animate-spin text-brand" aria-hidden="true" />
+          </div>
+        ) : null}
+        <table
+          className={`w-full border-collapse text-sm transition-opacity ${
+            showFetchingOverlay ? "opacity-50" : "opacity-100"
+          }`}
+        >
           <thead>
             <tr className="border-b border-border bg-border/20">
               {columns.map((column) => (
@@ -99,7 +113,12 @@ export function DataTable<T>({
       </div>
 
       {/* Mobile: card list */}
-      <div className="md:hidden">
+      <div className="relative md:hidden">
+        {showFetchingOverlay ? (
+          <div className="absolute inset-0 z-10 flex items-start justify-center bg-background/60 pt-10">
+            <Loader2 className="size-6 animate-spin text-brand" aria-hidden="true" />
+          </div>
+        ) : null}
         {isLoading && (
           <ul className="space-y-3 p-3">
             {Array.from({ length: skeletonRows }).map((_, index) => (
@@ -116,7 +135,11 @@ export function DataTable<T>({
         )}
 
         {!isLoading && data.length > 0 && (
-          <ul className="space-y-3 p-3">
+          <ul
+            className={`space-y-3 p-3 transition-opacity ${
+              showFetchingOverlay ? "opacity-50" : "opacity-100"
+            }`}
+          >
             {data.map((row) => (
               <li key={getRowKey(row)}>{renderMobileCard(row)}</li>
             ))}

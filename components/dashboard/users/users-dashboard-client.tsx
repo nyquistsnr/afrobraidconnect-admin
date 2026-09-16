@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getDictionary } from "@/app/[lang]/dictionaries";
 import { adminUsersApi } from "@/lib/api/admin-users-client";
 import type { AdminInviteResponse, AdminUserResponse, PaginationMeta } from "@/lib/api/types";
@@ -61,6 +61,7 @@ export function UsersDashboardClient({
       };
     },
     enabled: Boolean(accessToken),
+    placeholderData: keepPreviousData,
   });
 
   const users = listQuery.data?.users ?? [];
@@ -144,6 +145,7 @@ export function UsersDashboardClient({
           errorsDict={dict.common.errors}
           dict={usersDict?.table || {}}
           isLoading={listQuery.isLoading}
+          isFetching={listQuery.isFetching}
         />
       )}
 
@@ -158,6 +160,7 @@ export function UsersDashboardClient({
           summary={summary}
           previousLabel={usersDict?.pagination?.previous || "Previous"}
           nextLabel={usersDict?.pagination?.next || "Next"}
+          isFetching={listQuery.isFetching}
         />
       )}
     </div>

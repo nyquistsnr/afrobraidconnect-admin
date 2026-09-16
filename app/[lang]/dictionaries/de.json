@@ -249,8 +249,8 @@
     "usersDescription": "Verwalten Sie Kunden, Flechter und andere Administratoren."
   },
   "login": {
-    "title": "Willkommen zurück",
-    "subtitle": "Geben Sie Ihre Daten ein, um auf Ihr Konto zuzugreifen.",
+    "title": "Admin-Anmeldung",
+    "subtitle": "Melden Sie sich mit Ihren Administrator-Zugangsdaten am Panel an.",
     "emailLabel": "E-Mail",
     "emailPlaceholder": "hello@example.com",
     "passwordLabel": "Passwort",

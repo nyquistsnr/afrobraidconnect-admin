@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Eye, MessageSquareText, Star, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -52,6 +52,7 @@ export function ReviewsManager({
         page_size: 20,
       }),
     enabled: Boolean(accessToken),
+    placeholderData: keepPreviousData,
   });
   const [selectedReview, setSelectedReview] = useState<AdminReview | null>(null);
   const [actingId, setActingId] = useState<string | null>(null);
@@ -272,6 +273,7 @@ export function ReviewsManager({
           columns={columns}
           data={reviews}
           isLoading={reviewsQuery.isLoading}
+          isFetching={reviewsQuery.isFetching}
           getRowKey={(review) => review.id}
           renderMobileCard={(review) => (
             <ReviewCard
@@ -302,6 +304,7 @@ export function ReviewsManager({
           hasNext={pagination.has_next}
           hasPrevious={pagination.has_previous}
           onPageChange={goToPage}
+          isFetching={reviewsQuery.isFetching}
           summary={paginationSummary}
           previousLabel={dict.pagination.previous}
           nextLabel={dict.pagination.next}
