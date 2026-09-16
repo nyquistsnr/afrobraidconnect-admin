@@ -39,6 +39,7 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Input } from "@/components/ui/input";
 import { Select, type SelectOption } from "@/components/ui/select";
 import { formatCurrency, formatDateOnly } from "@/lib/format";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { adminDashboardApi } from "@/lib/api/admin-dashboard-client";
 import type {
   AdminChartPoint,
@@ -205,18 +206,18 @@ export function AdminDashboardPage({
         subtitle={dict.overviewSubtitle}
       >
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <MetricCard icon={CalendarCheck} label={dict.overview.totalBookings} value={extractCount(overview, ["total_bookings"])} />
-          <MetricCard icon={Scissors} label={dict.overview.completed} value={extractCount(overview, ["completed_count", "completed_bookings"])} />
-          <MetricCard icon={CreditCard} label={dict.overview.netPaid} value={extractMoney(overview, ["net_amount_minor", "net_amount_paid", "net_amount"], currency, lang)} />
-          <MetricCard icon={TrendingUp} label={dict.overview.bookingValue} value={extractMoney(overview, ["total_booking_value_minor", "total_booking_value"], currency, lang)} />
-          <MetricCard icon={WalletCards} label={dict.overview.paid} value={extractMoney(overview, ["paid_amount_minor", "total_amount_paid", "paid_amount"], currency, lang)} />
-          <MetricCard icon={RefreshCw} label={dict.overview.refunded} value={extractMoney(overview, ["refunded_amount_minor", "total_amount_refunded", "refunded_amount"], currency, lang)} />
-          <MetricCard icon={Banknote} label={dict.overview.pendingAmount} value={extractMoney(overview, ["pending_payment_amount_minor", "pending_payment_amount"], currency, lang)} />
-          <MetricCard icon={CreditCard} label={dict.overview.braiderEarnings} value={extractMoney(overview, ["braider_earnings_minor", "total_amount_made_by_braider", "braider_earnings"], currency, lang)} />
-          <MetricCard icon={Users} label={dict.overview.uniqueCustomers} value={extractCount(overview, ["unique_customer_count", "unique_customers", "unique_counterpart_count"])} />
-          <MetricCard icon={Users} label={dict.overview.repeatCustomers} value={extractCount(overview, ["repeat_customer_count", "repeat_customers", "repeat_counterpart_count"])} />
-          <MetricCard icon={Scissors} label={dict.overview.uniqueBraiders} value={extractCount(overview, ["unique_braider_count", "unique_braiders"])} />
-          <MetricCard icon={Scissors} label={dict.overview.repeatBraiders} value={extractCount(overview, ["repeat_braider_count", "repeat_braiders"])} />
+          <MetricCard icon={CalendarCheck} label={dict.overview.totalBookings} value={extractCount(overview, ["total_bookings"])} loading={overviewQuery.isLoading} />
+          <MetricCard icon={Scissors} label={dict.overview.completed} value={extractCount(overview, ["completed_count", "completed_bookings"])} loading={overviewQuery.isLoading} />
+          <MetricCard icon={CreditCard} label={dict.overview.netPaid} value={extractMoney(overview, ["net_amount_minor", "net_amount_paid", "net_amount"], currency, lang)} loading={overviewQuery.isLoading} />
+          <MetricCard icon={TrendingUp} label={dict.overview.bookingValue} value={extractMoney(overview, ["total_booking_value_minor", "total_booking_value"], currency, lang)} loading={overviewQuery.isLoading} />
+          <MetricCard icon={WalletCards} label={dict.overview.paid} value={extractMoney(overview, ["paid_amount_minor", "total_amount_paid", "paid_amount"], currency, lang)} loading={overviewQuery.isLoading} />
+          <MetricCard icon={RefreshCw} label={dict.overview.refunded} value={extractMoney(overview, ["refunded_amount_minor", "total_amount_refunded", "refunded_amount"], currency, lang)} loading={overviewQuery.isLoading} />
+          <MetricCard icon={Banknote} label={dict.overview.pendingAmount} value={extractMoney(overview, ["pending_payment_amount_minor", "pending_payment_amount"], currency, lang)} loading={overviewQuery.isLoading} />
+          <MetricCard icon={CreditCard} label={dict.overview.braiderEarnings} value={extractMoney(overview, ["braider_earnings_minor", "total_amount_made_by_braider", "braider_earnings"], currency, lang)} loading={overviewQuery.isLoading} />
+          <MetricCard icon={Users} label={dict.overview.uniqueCustomers} value={extractCount(overview, ["unique_customer_count", "unique_customers", "unique_counterpart_count"])} loading={overviewQuery.isLoading} />
+          <MetricCard icon={Users} label={dict.overview.repeatCustomers} value={extractCount(overview, ["repeat_customer_count", "repeat_customers", "repeat_counterpart_count"])} loading={overviewQuery.isLoading} />
+          <MetricCard icon={Scissors} label={dict.overview.uniqueBraiders} value={extractCount(overview, ["unique_braider_count", "unique_braiders"])} loading={overviewQuery.isLoading} />
+          <MetricCard icon={Scissors} label={dict.overview.repeatBraiders} value={extractCount(overview, ["repeat_braider_count", "repeat_braiders"])} loading={overviewQuery.isLoading} />
         </div>
 
         <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,360px)]">
@@ -236,17 +237,17 @@ export function AdminDashboardPage({
         subtitle={dict.financialsSubtitle}
       >
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <MetricCard icon={Scissors} label={dict.financials.serviceSubtotal} value={extractMoney(financials, ["service_subtotal_minor", "service_subtotal"], currency, lang)} />
-          <MetricCard icon={CreditCard} label={dict.financials.platformFee} value={extractMoney(financials, ["platform_fee_total_minor", "platform_fee_total"], currency, lang)} />
-          <MetricCard icon={Banknote} label={dict.financials.vatTotal} value={extractMoney(financials, ["vat_total_minor", "vat_total"], currency, lang)} />
-          <MetricCard icon={TrendingUp} label={dict.financials.grossBookingValue} value={extractMoney(financials, ["gross_booking_value_minor", "total_booking_value_minor", "total_booking_value"], currency, lang)} />
-          <MetricCard icon={WalletCards} label={dict.financials.paid} value={extractMoney(financials, ["paid_amount_minor", "total_amount_paid"], currency, lang)} />
-          <MetricCard icon={RefreshCw} label={dict.financials.refunded} value={extractMoney(financials, ["refunded_amount_minor", "total_amount_refunded"], currency, lang)} />
-          <MetricCard icon={CreditCard} label={dict.financials.netPaid} value={extractMoney(financials, ["net_amount_minor", "net_amount_paid"], currency, lang)} />
-          <MetricCard icon={Banknote} label={dict.financials.pendingPayment} value={extractMoney(financials, ["pending_payment_amount_minor", "pending_payment_amount"], currency, lang)} />
-          <MetricCard icon={Scissors} label={dict.financials.braiderEarnings} value={extractMoney(financials, ["braider_earnings_minor", "braider_earnings"], currency, lang)} />
-          <MetricCard icon={TrendingUp} label={dict.financials.grossMarginBeforeTax} value={extractMoney(financials, ["gross_margin_before_tax_minor", "gross_margin_before_tax"], currency, lang)} />
-          <MetricCard icon={Banknote} label={dict.financials.estimatedProfitAfterVat} value={extractMoney(financials, ["estimated_profit_after_vat_minor", "estimated_profit_after_vat"], currency, lang)} />
+          <MetricCard icon={Scissors} label={dict.financials.serviceSubtotal} value={extractMoney(financials, ["service_subtotal_minor", "service_subtotal"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={CreditCard} label={dict.financials.platformFee} value={extractMoney(financials, ["platform_fee_total_minor", "platform_fee_total"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={Banknote} label={dict.financials.vatTotal} value={extractMoney(financials, ["vat_total_minor", "vat_total"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={TrendingUp} label={dict.financials.grossBookingValue} value={extractMoney(financials, ["gross_booking_value_minor", "total_booking_value_minor", "total_booking_value"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={WalletCards} label={dict.financials.paid} value={extractMoney(financials, ["paid_amount_minor", "total_amount_paid"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={RefreshCw} label={dict.financials.refunded} value={extractMoney(financials, ["refunded_amount_minor", "total_amount_refunded"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={CreditCard} label={dict.financials.netPaid} value={extractMoney(financials, ["net_amount_minor", "net_amount_paid"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={Banknote} label={dict.financials.pendingPayment} value={extractMoney(financials, ["pending_payment_amount_minor", "pending_payment_amount"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={Scissors} label={dict.financials.braiderEarnings} value={extractMoney(financials, ["braider_earnings_minor", "braider_earnings"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={TrendingUp} label={dict.financials.grossMarginBeforeTax} value={extractMoney(financials, ["gross_margin_before_tax_minor", "gross_margin_before_tax"], currency, lang)} loading={financialsQuery.isLoading} />
+          <MetricCard icon={Banknote} label={dict.financials.estimatedProfitAfterVat} value={extractMoney(financials, ["estimated_profit_after_vat_minor", "estimated_profit_after_vat"], currency, lang)} loading={financialsQuery.isLoading} />
         </div>
       </MetricSection>
 
@@ -255,12 +256,16 @@ export function AdminDashboardPage({
         title={dict.chartsTitle}
         subtitle={dict.chartsSubtitle}
       >
-        <DashboardCharts
-          lang={lang}
-          dict={dict}
-          charts={charts}
-          currency={chartCurrency(charts) || currency}
-        />
+        {chartsQuery.isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <DashboardCharts
+            lang={lang}
+            dict={dict}
+            charts={charts}
+            currency={chartCurrency(charts) || currency}
+          />
+        )}
       </MetricSection>
     </div>
   );
@@ -589,10 +594,12 @@ function MetricCard({
   icon: Icon,
   label,
   value,
+  loading = false,
 }: {
   icon: LucideIcon;
   label: string;
   value: string;
+  loading?: boolean;
 }) {
   return (
     <div className="border border-border bg-background p-4">
@@ -604,7 +611,11 @@ function MetricCard({
           {label}
         </p>
       </div>
-      <p className="mt-4 break-words text-xl font-bold text-foreground">{value}</p>
+      {loading ? (
+        <div className="mt-4 h-6 w-2/3 animate-pulse rounded bg-border/60" />
+      ) : (
+        <p className="mt-4 break-words text-xl font-bold text-foreground">{value}</p>
+      )}
     </div>
   );
 }

@@ -271,6 +271,7 @@ export function ReviewsManager({
         <DataTable
           columns={columns}
           data={reviews}
+          isLoading={reviewsQuery.isLoading}
           getRowKey={(review) => review.id}
           renderMobileCard={(review) => (
             <ReviewCard

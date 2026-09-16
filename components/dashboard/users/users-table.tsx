@@ -22,6 +22,7 @@ export function UsersTable({
   lang,
   errorsDict,
   dict,
+  isLoading = false,
 }: {
   users: AdminUserResponse[];
   accessToken: string;
@@ -30,6 +31,7 @@ export function UsersTable({
   dict: Partial<Dictionary["dashboard"]["users"]["table"]> & {
     viewBookings?: string;
   };
+  isLoading?: boolean;
 }) {
   const router = useRouter();
   const [suspendModalOpen, setSuspendModalOpen] = useState(false);
@@ -100,7 +102,17 @@ export function UsersTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {users.length === 0 ? (
+            {isLoading ? (
+              Array.from({ length: 6 }).map((_, index) => (
+                <tr key={`skeleton-${index}`}>
+                  {Array.from({ length: 5 }).map((__, cellIndex) => (
+                    <td key={cellIndex} className="px-6 py-4">
+                      <div className="h-3.5 w-4/5 animate-pulse rounded bg-border/60" />
+                    </td>
+                  ))}
+                </tr>
+              ))
+            ) : users.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">
                   {dict.empty || "No users found."}
@@ -172,7 +184,18 @@ export function UsersTable({
 
       {/* Mobile Cards View */}
       <div className="grid grid-cols-1 gap-4 md:hidden">
-        {users.length === 0 ? (
+        {isLoading ? (
+          Array.from({ length: 4 }).map((_, index) => (
+            <div
+              key={`skeleton-card-${index}`}
+              className="space-y-2.5 rounded-xl border border-border bg-card p-4 shadow-sm"
+            >
+              <div className="h-3.5 w-2/3 animate-pulse rounded bg-border/60" />
+              <div className="h-3.5 w-1/2 animate-pulse rounded bg-border/60" />
+              <div className="h-3.5 w-1/3 animate-pulse rounded bg-border/60" />
+            </div>
+          ))
+        ) : users.length === 0 ? (
           <div className="rounded-lg border border-border bg-card px-6 py-8 text-center text-muted-foreground shadow-sm">
             {dict.empty || "No users found."}
           </div>

@@ -294,6 +294,7 @@ export function AdminBookingsManager({
         <DataTable
           columns={columns}
           data={bookings}
+          isLoading={bookingsQuery.isLoading}
           getRowKey={(booking) => booking.id}
           renderMobileCard={(booking) => (
             <BookingCard booking={booking} dict={dict} lang={lang} />

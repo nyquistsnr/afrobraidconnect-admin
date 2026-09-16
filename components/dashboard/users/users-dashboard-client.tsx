@@ -143,15 +143,12 @@ export function UsersDashboardClient({
           lang={locale}
           errorsDict={dict.common.errors}
           dict={usersDict?.table || {}}
+          isLoading={listQuery.isLoading}
         />
       )}
 
       {listQuery.isLoading ? (
-        <p className="text-sm text-muted-foreground">
-          {usersDict?.pagination?.summary
-            ? usersDict.pagination.summary.replace("{start}", "0").replace("{end}", "0").replace("{total}", "0")
-            : "Loading..."}
-        </p>
+        <div className="h-4 w-48 animate-pulse rounded bg-border/60" />
       ) : (
         <UsersPagination
           page={pagination.page}
