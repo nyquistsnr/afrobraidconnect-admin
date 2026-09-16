@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { Bell, CheckCheck, Trash2, Loader2, MessageSquare } from "lucide-react";
+import { Bell, CheckCheck, Trash2, MessageSquare } from "lucide-react";
 import { toast } from "react-toastify";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
@@ -138,8 +138,17 @@ export function NotificationsList({
         {/* Notifications List */}
         <div className="min-h-[400px]">
           {isLoading ? (
-            <div className="flex h-[400px] items-center justify-center">
-              <Loader2 className="size-6 animate-spin text-brand" />
+            <div className="divide-y divide-border">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={index} className="flex items-start gap-4 p-5">
+                  <div className="size-10 shrink-0 animate-pulse rounded-full bg-border/60" />
+                  <div className="flex-1 space-y-2 pt-0.5">
+                    <div className="h-3.5 w-1/3 animate-pulse rounded bg-border/60" />
+                    <div className="h-3.5 w-2/3 animate-pulse rounded bg-border/60" />
+                    <div className="h-3 w-1/4 animate-pulse rounded bg-border/60" />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : isError ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -216,14 +225,7 @@ export function NotificationsList({
               onClick={() => fetchNextPage()}
               disabled={isFetchingNextPage}
             >
-              {isFetchingNextPage ? (
-                <>
-                  <Loader2 className="mr-2 size-4 animate-spin" />
-                  {common.loading}
-                </>
-              ) : (
-                "Load More"
-              )}
+              {isFetchingNextPage ? common.loading : "Load More"}
             </Button>
           </div>
         )}

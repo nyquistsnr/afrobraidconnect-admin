@@ -122,11 +122,23 @@ export function NotificationBell({
       </div>
 
       <div className="max-h-80 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        {recentQuery.isError ? (
+        {recentQuery.isLoading ? (
+          <div className="divide-y divide-border">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="flex items-start gap-3 px-4 py-3">
+                <div className="size-8 shrink-0 animate-pulse rounded-full bg-border/60" />
+                <div className="flex-1 space-y-1.5 pt-0.5">
+                  <div className="h-3 w-2/3 animate-pulse rounded bg-border/60" />
+                  <div className="h-3 w-1/2 animate-pulse rounded bg-border/60" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : recentQuery.isError ? (
           <p className="px-4 py-6 text-center text-xs text-muted-foreground">
             {dict.notificationsLoadError}
           </p>
-        ) : !recentQuery.isLoading && notifications.length === 0 ? (
+        ) : notifications.length === 0 ? (
           <p className="px-4 py-6 text-center text-xs text-muted-foreground">
             {dict.notificationsEmpty}
           </p>

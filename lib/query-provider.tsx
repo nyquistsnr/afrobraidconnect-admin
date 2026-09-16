@@ -14,6 +14,13 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
           queries: {
             retry: 1,
             refetchOnWindowFocus: false,
+            // Data already fetched for a given filter/page combination is
+            // considered fresh for 10 minutes, so revisiting a query (tab
+            // switch, back/forward, remount) reuses the cache instead of
+            // re-hitting the backend. gcTime must stay >= staleTime so an
+            // unmounted query isn't evicted before it stops being fresh.
+            staleTime: 10 * 60 * 1000,
+            gcTime: 15 * 60 * 1000,
           },
           mutations: {
             retry: 0,

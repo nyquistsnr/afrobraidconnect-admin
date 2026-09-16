@@ -1,4 +1,4 @@
-import { SkeletonCard, SkeletonLine } from "@/components/ui/loading-spinner";
+import { SkeletonCard, SkeletonLine } from "@/components/ui/skeleton";
 
 export function ScopedBookingsLoading({
   withOnboarding = false,

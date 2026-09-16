@@ -1,4 +1,4 @@
-import { SkeletonLine } from "@/components/ui/loading-spinner";
+import { SkeletonLine } from "@/components/ui/skeleton";
 
 function DetailPanel({ rows = 4 }: { rows?: number }) {
   return (

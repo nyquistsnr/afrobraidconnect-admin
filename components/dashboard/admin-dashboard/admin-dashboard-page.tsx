@@ -39,7 +39,7 @@ import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Input } from "@/components/ui/input";
 import { Select, type SelectOption } from "@/components/ui/select";
 import { formatCurrency, formatDateOnly } from "@/lib/format";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { SkeletonChartPanel } from "@/components/ui/skeleton";
 import { adminDashboardApi } from "@/lib/api/admin-dashboard-client";
 import type {
   AdminChartPoint,
@@ -257,7 +257,11 @@ export function AdminDashboardPage({
         subtitle={dict.chartsSubtitle}
       >
         {chartsQuery.isLoading ? (
-          <LoadingSpinner />
+          <div className="grid gap-4 xl:grid-cols-2">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <SkeletonChartPanel key={index} />
+            ))}
+          </div>
         ) : (
           <DashboardCharts
             lang={lang}
