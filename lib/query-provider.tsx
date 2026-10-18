@@ -20,7 +20,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
             // re-hitting the backend. gcTime must stay >= staleTime so an
             // unmounted query isn't evicted before it stops being fresh.
             staleTime: 10 * 60 * 1000,
-            gcTime: 15 * 60 * 1000,
+            gcTime: 30 * 60 * 1000,
           },
           mutations: {
             retry: 0,

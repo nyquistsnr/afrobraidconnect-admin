@@ -1,10 +1,7 @@
-import { notFound, redirect } from "next/navigation";
-import { getSession } from "@/lib/session";
+import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "@/app/[lang]/dictionaries";
-import { platformSettingsApi } from "@/lib/api/platform-settings-client";
-import type { CountryVatSettings, PlatformSettings } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
-import { PlatformSettingsManager } from "@/components/dashboard/platform-settings/platform-settings-manager";
+import { PlatformSettingsPageClient } from "@/components/dashboard/platform-settings/platform-settings-page-client";
 
 export const metadata = { title: "Platform Settings - Admin" };
 
@@ -17,43 +14,8 @@ export default async function PlatformSettingsPage({
   if (!hasLocale(lang)) notFound();
 
   const locale = lang as Locale;
-  const session = await getSession();
-  if (!session?.accessToken || session.user.userType !== "ADMIN") {
-    redirect(`/${locale}/login`);
-  }
-
   const dict = await getDictionary(locale);
-  let settings: PlatformSettings | null = null;
-  let countryVat: CountryVatSettings[] = [];
-  let initialLoadError = false;
 
-  const [settingsResult, countryVatResult] = await Promise.allSettled([
-    platformSettingsApi.get(session.accessToken, locale),
-    platformSettingsApi.listCountryVat(session.accessToken, locale),
-  ]);
-
-  if (settingsResult.status === "fulfilled") {
-    settings = settingsResult.value;
-  } else {
-    initialLoadError = true;
-    console.error("Failed to load platform settings:", settingsResult.reason);
-  }
-
-  if (countryVatResult.status === "fulfilled") {
-    countryVat = countryVatResult.value;
-  } else {
-    initialLoadError = true;
-    console.error("Failed to load country VAT settings:", countryVatResult.reason);
-  }
-
-  return (
-    <PlatformSettingsManager
-      accessToken={session.accessToken}
-      lang={locale}
-      dict={dict.dashboard.platformSettings}
-      initialSettings={settings}
-      initialCountryVat={countryVat}
-      initialLoadError={initialLoadError}
-    />
-  );
+  // Data is loaded and cached client-side (TanStack Query), so revisits don't refetch.
+  return <PlatformSettingsPageClient lang={locale} dict={dict.dashboard.platformSettings} />;
 }

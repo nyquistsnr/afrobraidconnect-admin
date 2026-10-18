@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { adminKeys } from "@/lib/query-keys";
 import { toast } from "react-toastify";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import type { Locale } from "@/lib/i18n";
@@ -31,7 +31,7 @@ export function ProfileForm({
   accessToken: string;
   lang: Locale;
 }) {
-  const router = useRouter();
+  const queryClient = useQueryClient();
   const [phone, setPhone] = useState<string | undefined>(user.phone_number || undefined);
   const [chatLocale, setChatLocale] = useState<Locale | "">(
     (user.chat_locale as Locale) || ""
@@ -41,9 +41,10 @@ export function ProfileForm({
     mutationFn: async (updates: UserProfileUpdateRequest) => {
       return usersApi.updateMe(accessToken, updates, lang);
     },
-    onSuccess: () => {
+    onSuccess: (updated) => {
       toast.success(dict.successToast);
-      router.refresh();
+      // The PATCH returns the saved profile; cache it so the page needs no refetch.
+      queryClient.setQueryData([...adminKeys.profile, lang], updated);
     },
     onError: (error: Error) => {
       toast.error(getAuthErrorMessage(error.message, common.errors));

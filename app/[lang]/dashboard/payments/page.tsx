@@ -2,13 +2,9 @@ import { notFound, redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import { getAdminPaymentsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
-import { extractPagination } from "@/components/dashboard/admin-commerce/formatters";
-import { AdminPaymentsManager } from "@/components/dashboard/payments/admin-payments-manager";
-import { adminPaymentsApi } from "@/lib/api/admin-payments-client";
+import { AdminPaymentsPageClient } from "@/components/dashboard/payments/admin-payments-page-client";
 import type {
-  AdminPaymentListItem,
   AdminPaymentsListParams,
-  PaginationMeta,
   PaymentPurpose,
   PaymentStatus,
 } from "@/lib/api/types";
@@ -90,42 +86,5 @@ export default async function AdminPaymentsPage({
     page: pageParam(resolvedSearchParams.page),
     page_size: 20,
   };
-  let payments: AdminPaymentListItem[] = [];
-  let pagination: PaginationMeta = {
-    page: filters.page ?? 1,
-    page_size: 20,
-    total_items: 0,
-    total_pages: 0,
-    has_next: false,
-    has_previous: false,
-  };
-  let initialLoadError = false;
-
-  try {
-    const response = await adminPaymentsApi.list(
-      session.accessToken,
-      locale,
-      filters
-    );
-    payments = Array.isArray(response.items) ? response.items : [];
-    pagination = extractPagination(response, filters.page ?? 1, filters.page_size ?? 20, payments.length);
-  } catch (error) {
-    initialLoadError = true;
-    console.warn(
-      "Failed to load admin payments:",
-      error instanceof Error ? error.message : error
-    );
-  }
-
-  return (
-    <AdminPaymentsManager
-      key={JSON.stringify(filters)}
-      lang={locale}
-      dict={dict}
-      payments={payments}
-      pagination={pagination}
-      filters={filters}
-      initialLoadError={initialLoadError}
-    />
-  );
+  return <AdminPaymentsPageClient lang={locale} dict={dict} filters={filters} />;
 }

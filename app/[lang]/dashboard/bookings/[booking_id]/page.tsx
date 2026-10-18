@@ -1,11 +1,7 @@
-import { notFound, redirect } from "next/navigation";
-import { getSession } from "@/lib/session";
+import { notFound } from "next/navigation";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import { getAdminBookingsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
-import { AdminBookingDetail } from "@/components/dashboard/bookings/admin-booking-detail";
-import { ApiError } from "@/lib/api/http";
-import { adminBookingsApi } from "@/lib/api/admin-bookings-client";
-import type { AdminBookingDetail as AdminBookingDetailType } from "@/lib/api/types";
+import { AdminBookingDetailPageClient } from "@/components/dashboard/bookings/admin-booking-detail-page-client";
 import type { Locale } from "@/lib/i18n";
 
 export async function generateMetadata({
@@ -27,36 +23,12 @@ export default async function AdminBookingDetailPage({
   if (!hasLocale(lang)) notFound();
 
   const locale = lang as Locale;
-  const dict = getAdminBookingsDict(locale);
-  const session = await getSession();
-  if (!session?.accessToken || session.user.userType !== "ADMIN") {
-    redirect(`/${locale}/login`);
-  }
-
-  let booking: AdminBookingDetailType;
-
-  try {
-    booking = await adminBookingsApi.get(session.accessToken, locale, bookingId);
-  } catch (error) {
-    if (error instanceof ApiError && error.status === 404) notFound();
-    console.error("Failed to load admin booking detail:", error);
-    return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold text-foreground">
-          {dict.detail.errorTitle}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          {dict.detail.errorDescription}
-        </p>
-      </div>
-    );
-  }
-
+  // Loaded and cached client-side (TanStack Query), so reopening a booking doesn't refetch.
   return (
-    <AdminBookingDetail
-      booking={booking}
+    <AdminBookingDetailPageClient
       lang={locale}
-      dict={dict}
+      dict={getAdminBookingsDict(locale)}
+      bookingId={bookingId}
     />
   );
 }

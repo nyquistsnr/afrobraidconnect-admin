@@ -1,14 +1,11 @@
 import { notFound, redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { getDictionary, hasLocale } from "@/app/[lang]/dictionaries";
-import { ContactSubmissionsManager } from "@/components/dashboard/contact-submissions/contact-submissions-manager";
-import { adminContactSubmissionsApi } from "@/lib/api/admin-contact-submissions-client";
+import { ContactSubmissionsPageClient } from "@/components/dashboard/contact-submissions/contact-submissions-page-client";
 import type {
-  AdminContactSubmission,
   AdminContactSubmissionsListParams,
   ContactSubmissionPlatform,
   ContactSubmissionPurpose,
-  PaginationMeta,
 } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 
@@ -79,47 +76,11 @@ export default async function ContactSubmissionsPage({
   const resolvedSearchParams = await searchParams;
   const filters = parseFilters(resolvedSearchParams);
   const dict = await getDictionary(locale);
-  let submissions: AdminContactSubmission[] = [];
-  let pagination: PaginationMeta = {
-    page: filters.page ?? 1,
-    page_size: filters.page_size ?? 20,
-    total_items: 0,
-    total_pages: 0,
-    has_next: false,
-    has_previous: false,
-  };
-  let initialLoadError = false;
-
-  try {
-    const response = await adminContactSubmissionsApi.list(
-      session.accessToken,
-      locale,
-      filters
-    );
-    submissions = Array.isArray(response.items) ? response.items : [];
-    pagination = response.pagination ?? pagination;
-  } catch (error) {
-    initialLoadError = true;
-    console.warn(
-      "Failed to load admin contact submissions:",
-      error instanceof Error ? error.message : error
-    );
-  }
-
   return (
-    <ContactSubmissionsManager
-      key={`${filters.platform ?? "all"}-${filters.purpose ?? "all"}-${
-        filters.is_read ?? "all"
-      }-${filters.date_from ?? ""}-${filters.date_to ?? ""}-${
-        filters.search ?? ""
-      }-${filters.page ?? 1}`}
-      accessToken={session.accessToken}
+    <ContactSubmissionsPageClient
       lang={locale}
       dict={dict.dashboard.contactSubmissions}
-      submissions={submissions}
-      pagination={pagination}
       filters={filters}
-      initialLoadError={initialLoadError}
     />
   );
 }

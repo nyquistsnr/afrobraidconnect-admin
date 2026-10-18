@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, MessageSquareWarning, Save, X } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { adminKeys, markStale } from "@/lib/query-keys";
 import { toast } from "react-toastify";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { adminChatReportsApi } from "@/lib/api/admin-chat-reports-client";
@@ -58,6 +60,7 @@ export function ChatReportsManager({
 }) {
   const router = useRouter();
   const [reports, setReports] = useState(initialReports);
+  const queryClient = useQueryClient();
   const [selectedReport, setSelectedReport] = useState<AdminChatReport | null>(
     null
   );
@@ -262,6 +265,8 @@ export function ChatReportsManager({
               )
             );
             setSelectedReport(updatedReport);
+            // A status change can move the report between filtered lists, so refetch those on next visit.
+            markStale(queryClient, adminKeys.chatReports);
           }}
         />
       )}

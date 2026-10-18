@@ -1,8 +1,7 @@
 import { redirect } from "next/navigation";
 import { getDictionary } from "@/app/[lang]/dictionaries";
 import { getSession } from "@/lib/session";
-import { usersApi } from "@/lib/api/users-client";
-import { ProfileForm } from "@/components/dashboard/profile-form";
+import { ProfilePageClient } from "@/components/dashboard/profile-page-client";
 import type { Locale } from "@/lib/i18n";
 
 export default async function ProfilePage(props: {
@@ -16,7 +15,6 @@ export default async function ProfilePage(props: {
   }
 
   const dict = await getDictionary(lang);
-  const user = await usersApi.getMe(session.accessToken, lang);
 
   return (
     <div className="mx-auto max-w-2xl pt-4">
@@ -30,12 +28,11 @@ export default async function ProfilePage(props: {
       </div>
 
       <div className="rounded-xl border border-border bg-surface p-6 shadow-sm">
-        <ProfileForm
-          user={user}
+        {/* The profile is loaded and cached client-side (TanStack Query). */}
+        <ProfilePageClient
           logoUrl={session.braider?.logo_url ?? null}
           dict={dict.dashboard.profile}
           common={dict.common}
-          accessToken={session.accessToken}
           lang={lang}
         />
       </div>

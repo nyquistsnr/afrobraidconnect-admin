@@ -85,7 +85,8 @@ export function ReviewsManager({
       toast.success(
         action === "approve" ? dict.approvedToast : dict.rejectedToast
       );
-      queryClient.invalidateQueries({ queryKey: ["admin-reviews"] });
+      // The current list was patched above; other status tabs refetch only when next opened.
+      queryClient.invalidateQueries({ queryKey: ["admin-reviews"], refetchType: "none" });
       return true;
     } catch (error) {
       toast.error(error instanceof Error ? error.message : dict.actionError);

@@ -11,6 +11,8 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
+import { adminKeys } from "@/lib/query-keys";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { platformSettingsApi } from "@/lib/api/platform-settings-client";
 import type {
@@ -68,6 +70,14 @@ export function PlatformSettingsManager({
 }) {
   const [settings, setSettings] = useState(initialSettings ?? fallbackSettings);
   const [countryVat, setCountryVat] = useState(initialCountryVat);
+  const queryClient = useQueryClient();
+  // Mirrors saved server state into the TanStack cache so revisiting this page needs no request.
+  function updateCache(patch: (current: { settings: PlatformSettings | null; countryVat: CountryVatSettings[] }) => Partial<{ settings: PlatformSettings | null; countryVat: CountryVatSettings[] }>) {
+    queryClient.setQueryData<{ settings: PlatformSettings | null; countryVat: CountryVatSettings[]; failed: boolean }>(
+      [...adminKeys.platformSettings, lang],
+      (current) => (current ? { ...current, ...patch(current) } : current)
+    );
+  }
   const [settingsErrors, setSettingsErrors] = useState<SettingsErrors>({});
   const [savingSettings, setSavingSettings] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -167,6 +177,7 @@ export function PlatformSettingsManager({
         deposit_value: settings.deposit_value,
       });
       setSettings(updated);
+      updateCache(() => ({ settings: updated }));
       toast.success(dict.saved);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : dict.saveError);
@@ -184,6 +195,7 @@ export function PlatformSettingsManager({
       ]);
       setSettings(nextSettings);
       setCountryVat(nextCountryVat);
+      updateCache(() => ({ settings: nextSettings, countryVat: nextCountryVat }));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : dict.loadError);
     } finally {
@@ -202,6 +214,9 @@ export function PlatformSettingsManager({
       setCountryVat((current) =>
         current.filter((item) => item.country !== deletingCountry)
       );
+      updateCache((current) => ({
+        countryVat: current.countryVat.filter((item) => item.country !== deletingCountry),
+      }));
       setDeletingCountry(null);
       toast.success(dict.deleted);
     } catch (error) {
@@ -469,6 +484,12 @@ export function PlatformSettingsManager({
                 a.country.localeCompare(b.country)
               );
             });
+            updateCache((current) => ({
+              countryVat: [
+                ...current.countryVat.filter((item) => item.country !== saved.country),
+                saved,
+              ].sort((a, b) => a.country.localeCompare(b.country)),
+            }));
             setVatModal(null);
           }}
         />

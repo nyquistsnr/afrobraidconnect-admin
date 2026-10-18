@@ -3,6 +3,8 @@
 import { useMemo, useState, useEffect, useRef } from "react";
 import { ImagePlus, Languages, Pencil, Plus, Search, Trash2, X } from "lucide-react";
 import { toast } from "react-toastify";
+import { useQueryClient } from "@tanstack/react-query";
+import { adminKeys, markStale } from "@/lib/query-keys";
 import { styleCatalogApi } from "@/lib/api/style-catalog-client";
 import type { AdminAddon, AdminStyle, StyleCategory, TranslationSource } from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
@@ -38,10 +40,14 @@ export function StyleCatalogManager({ accessToken, lang, dict, initialStyles, in
   const [itemModal, setItemModal] = useState<{ kind: "category" | "addon"; item: StyleCategory | AdminAddon | "new" } | null>(null);
   const [busy, setBusy] = useState(false);
   const [deleting, setDeleting] = useState<{ kind: Tab; id: string } | null>(null);
+  const queryClient = useQueryClient();
 
   const refresh = async () => {
     const [nextStyles, nextCategories, nextAddons] = await Promise.all([styleCatalogApi.styles(accessToken, lang, 1, search), styleCatalogApi.categories(accessToken, lang), styleCatalogApi.addons(accessToken, lang)]);
     setStyles(nextStyles.items); setCategories(nextCategories); setAddons(nextAddons);
+    // Write the fresh catalog straight into the cache so the next visit needs no request.
+    if (search) markStale(queryClient, adminKeys.styleCatalog);
+    else queryClient.setQueryData([...adminKeys.styleCatalog, lang], { styles: nextStyles.items, categories: nextCategories, addons: nextAddons });
   };
   
   // The server already rendered the unfiltered list; only refetch once the search actually changes.

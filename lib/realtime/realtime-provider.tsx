@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useAccessToken } from "@/lib/access-token";
 import { useQueryClient, type QueryClient } from "@tanstack/react-query";
 import type { RealtimeEvent } from "@/lib/api/types";
+import { adminKeys, markStale } from "@/lib/query-keys";
 
 const BASE_BACKOFF_MS = 1_000;
 const MAX_BACKOFF_MS = 30_000;
@@ -37,11 +38,24 @@ function playNotificationSound() {
   }
 }
 
+const REALTIME_STALE_ROOTS = [
+  ["admin-dashboard"],
+  ["admin-users"],
+  ["admin-reviews"],
+  adminKeys.bookings,
+  adminKeys.payments,
+  adminKeys.chatReports,
+  adminKeys.contactSubmissions,
+];
+
 function handleRealtimeEvent(queryClient: QueryClient, event: RealtimeEvent) {
   switch (event.type) {
 
     case "notification": {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      // Something happened on the platform (booking, payment, report...). Mark cached admin
+      // pages stale without refetching: nothing is requested until a page is opened again.
+      markStale(queryClient, ...REALTIME_STALE_ROOTS);
       playNotificationSound();
       break;
     }

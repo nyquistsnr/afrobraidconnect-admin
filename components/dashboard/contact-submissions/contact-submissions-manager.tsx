@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { adminKeys, markStale } from "@/lib/query-keys";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Eye,
@@ -74,6 +76,7 @@ export function ContactSubmissionsManager({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [items, setItems] = useState(submissions);
+  const queryClient = useQueryClient();
   const [selected, setSelected] = useState<AdminContactSubmission | null>(null);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const hasActiveFilters = Boolean(
@@ -210,6 +213,7 @@ export function ContactSubmissionsManager({
     setItems((current) =>
       current.map((item) => (item.id === submission.id ? submission : item))
     );
+    markStale(queryClient, adminKeys.contactSubmissions);
   }
 
   return (
