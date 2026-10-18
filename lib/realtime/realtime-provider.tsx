@@ -6,7 +6,7 @@
 // from. Renders nothing; it's push-only from the server, so there's nothing
 // to send after connecting.
 import { useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useAccessToken } from "@/lib/access-token";
 import { useQueryClient, type QueryClient } from "@tanstack/react-query";
 import type { RealtimeEvent } from "@/lib/api/types";
 
@@ -49,8 +49,7 @@ function handleRealtimeEvent(queryClient: QueryClient, event: RealtimeEvent) {
 }
 
 export function RealtimeProvider() {
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken;
+  const accessToken = useAccessToken();
   // Stable for the app's lifetime (QueryProvider creates it once via a
   // useState lazy initializer), so including it below never causes an
   // extra reconnect.

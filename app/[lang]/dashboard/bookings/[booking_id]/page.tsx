@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import { getAdminBookingsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
 import { AdminBookingDetail } from "@/components/dashboard/bookings/admin-booking-detail";
@@ -28,7 +28,7 @@ export default async function AdminBookingDetailPage({
 
   const locale = lang as Locale;
   const dict = getAdminBookingsDict(locale);
-  const session = await auth();
+  const session = await getSession();
   if (!session?.accessToken || session.user.userType !== "ADMIN") {
     redirect(`/${locale}/login`);
   }

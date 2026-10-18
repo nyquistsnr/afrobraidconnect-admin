@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getDictionary } from "@/app/[lang]/dictionaries";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { usersApi } from "@/lib/api/users-client";
 import { ProfileForm } from "@/components/dashboard/profile-form";
 import type { Locale } from "@/lib/i18n";
@@ -9,7 +9,7 @@ export default async function ProfilePage(props: {
   params: Promise<{ lang: Locale }>;
 }) {
   const { lang } = await props.params;
-  const session = await auth();
+  const session = await getSession();
 
   if (!session?.accessToken || session.error === "RefreshAccessTokenError") {
     redirect(`/${lang}/login`);

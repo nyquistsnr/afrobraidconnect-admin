@@ -1,8 +1,6 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { useQuery } from "@tanstack/react-query";
 import { LogOut, Menu, type LucideIcon } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
@@ -52,8 +50,6 @@ export function DashboardHeader({
   onLogoutClick: () => void;
 }) {
   const router = useRouter();
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken;
 
 
 

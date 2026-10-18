@@ -1,7 +1,7 @@
 import { redirect, notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "../../dictionaries";
 import { Locale } from "@/lib/i18n";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { NotificationsList } from "@/components/dashboard/notifications/notifications-list";
 
 export const metadata = {
@@ -16,7 +16,7 @@ export default async function DashboardNotificationsPage(props: {
   if (!hasLocale(lang)) notFound();
 
   const dict = await getDictionary(lang as Locale);
-  const session = await auth();
+  const session = await getSession();
 
   if (!session?.accessToken) {
     redirect(`/${lang}/login`);

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useAccessToken } from "@/lib/access-token";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { CalendarCheck, Eye, Filter, RotateCcw, Search } from "lucide-react";
 import type { AdminBookingsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
@@ -92,8 +92,7 @@ export function AdminBookingsManager({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken;
+  const accessToken = useAccessToken();
   const bookingsQuery = useQuery({
     queryKey: ["admin-bookings", lang, filters],
     queryFn: async () => {

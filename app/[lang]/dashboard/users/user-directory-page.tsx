@@ -23,7 +23,9 @@ export async function renderUserDirectoryPage(
   return (
     <UsersDashboardClient
       locale={locale}
-      dict={dict}
+      // Only the slices this page uses, not the whole ~50 KB dictionary.
+      usersDict={dict.dashboard.users}
+      errorsDict={dict.common.errors}
       page={Number.isFinite(page) && page > 0 ? page : 1}
       section={section}
     />

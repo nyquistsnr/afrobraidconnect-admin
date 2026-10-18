@@ -9,6 +9,7 @@ import { Sidebar } from "@/components/dashboard/sidebar";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { LogoutConfirmModal } from "@/components/dashboard/logout-confirm-modal";
 import { RealtimeProvider } from "@/lib/realtime/realtime-provider";
+import { AccessTokenProvider } from "@/lib/access-token";
 
 export function DashboardShell({
   lang,
@@ -17,6 +18,7 @@ export function DashboardShell({
   logoutSuccessMessage,
   userName,
   userLogo,
+  accessToken,
   children,
 }: {
   lang: Locale;
@@ -25,6 +27,7 @@ export function DashboardShell({
   logoutSuccessMessage: string;
   userName: string;
   userLogo: string | null;
+  accessToken: string;
   children: React.ReactNode;
 }) {
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
@@ -46,6 +49,7 @@ export function DashboardShell({
   }, [lang, logoutSuccessMessage, router]);
 
   return (
+    <AccessTokenProvider accessToken={accessToken}>
     <div className="flex h-screen">
       <RealtimeProvider />
 
@@ -81,5 +85,6 @@ export function DashboardShell({
         dict={dict.logoutModal}
       />
     </div>
+    </AccessTokenProvider>
   );
 }

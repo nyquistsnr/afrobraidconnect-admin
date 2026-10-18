@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { getDictionary } from "@/app/[lang]/dictionaries";
 import { styleCatalogApi } from "@/lib/api/style-catalog-client";
 import type { AdminAddon, AdminStyle, StyleCategory } from "@/lib/api/types";
@@ -11,7 +11,7 @@ export const metadata = { title: "Style Catalog - Admin" };
 export default async function StyleCatalogPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   const locale = lang as Locale;
-  const session = await auth();
+  const session = await getSession();
   if (!session?.accessToken || session.user.userType !== "ADMIN") redirect(`/${locale}/login`);
   const dictionary = await getDictionary(locale);
 

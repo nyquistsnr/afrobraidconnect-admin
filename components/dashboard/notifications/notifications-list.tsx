@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+import { useAccessToken } from "@/lib/access-token";
 import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Bell, CheckCheck, Trash2, MessageSquare } from "lucide-react";
@@ -25,8 +25,7 @@ export function NotificationsList({
   common: Dictionary["common"];
 }) {
   const router = useRouter();
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken;
+  const accessToken = useAccessToken();
   const queryClient = useQueryClient();
 
   const [filter, setFilter] = useState<FilterType>("all");

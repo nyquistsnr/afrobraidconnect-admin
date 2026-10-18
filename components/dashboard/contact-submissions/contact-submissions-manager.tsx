@@ -311,7 +311,6 @@ export function ContactSubmissionsManager({
           onChanged={(submission) => {
             setSelected(submission);
             updateSubmission(submission);
-            router.refresh();
           }}
         />
       ) : null}

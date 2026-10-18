@@ -46,7 +46,6 @@ function LanguageSwitcherInner({
     const newPath = segments.join("/") + (query ? `?${query}` : "");
     
     router.replace(newPath);
-    router.refresh();
   }
 
   const CurrentFlag = flags[lang];

@@ -262,7 +262,6 @@ export function ChatReportsManager({
               )
             );
             setSelectedReport(updatedReport);
-            router.refresh();
           }}
         />
       )}

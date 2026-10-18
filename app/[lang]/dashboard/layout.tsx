@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { getDictionary, hasLocale, locales } from "../dictionaries";
 import { loginPath } from "@/lib/auth-redirect";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
@@ -12,7 +12,7 @@ export default async function DashboardLayout({
 
   if (!hasLocale(lang)) notFound();
 
-  const session = await auth();
+  const session = await getSession();
   if (!session || session.error === "RefreshAccessTokenError") {
     redirect(await loginPath(lang));
   }
@@ -30,6 +30,7 @@ export default async function DashboardLayout({
       logoutSuccessMessage={dict.common.toasts.logoutSuccess}
       userName={userName}
       userLogo={session.braider?.logo_url ?? null}
+      accessToken={session.accessToken}
     >
       {children}
     </DashboardShell>

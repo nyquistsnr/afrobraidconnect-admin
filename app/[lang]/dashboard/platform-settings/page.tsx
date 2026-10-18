@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { getDictionary, hasLocale } from "@/app/[lang]/dictionaries";
 import { platformSettingsApi } from "@/lib/api/platform-settings-client";
 import type { CountryVatSettings, PlatformSettings } from "@/lib/api/types";
@@ -17,7 +17,7 @@ export default async function PlatformSettingsPage({
   if (!hasLocale(lang)) notFound();
 
   const locale = lang as Locale;
-  const session = await auth();
+  const session = await getSession();
   if (!session?.accessToken || session.user.userType !== "ADMIN") {
     redirect(`/${locale}/login`);
   }

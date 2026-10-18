@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { getDictionary, hasLocale } from "@/app/[lang]/dictionaries";
 import { ChatReportsManager } from "@/components/dashboard/chat-reports/chat-reports-manager";
 import { adminChatReportsApi } from "@/lib/api/admin-chat-reports-client";
@@ -46,7 +46,7 @@ export default async function ChatReportsPage({
   if (!hasLocale(lang)) notFound();
 
   const locale = lang as Locale;
-  const session = await auth();
+  const session = await getSession();
   if (!session?.accessToken || session.user.userType !== "ADMIN") {
     redirect(`/${locale}/login`);
   }

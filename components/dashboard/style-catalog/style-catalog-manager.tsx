@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { ImagePlus, Languages, Pencil, Plus, Search, Trash2, X } from "lucide-react";
 import { toast } from "react-toastify";
 import { styleCatalogApi } from "@/lib/api/style-catalog-client";
@@ -44,7 +44,11 @@ export function StyleCatalogManager({ accessToken, lang, dict, initialStyles, in
     setStyles(nextStyles.items); setCategories(nextCategories); setAddons(nextAddons);
   };
   
+  // The server already rendered the unfiltered list; only refetch once the search actually changes.
+  const lastSearch = useRef(search);
   useEffect(() => {
+    if (search === lastSearch.current) return;
+    lastSearch.current = search;
     const timer = setTimeout(async () => {
       try {
         const nextStyles = await styleCatalogApi.styles(accessToken, lang, 1, search);

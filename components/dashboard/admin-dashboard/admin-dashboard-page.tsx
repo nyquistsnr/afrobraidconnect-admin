@@ -3,7 +3,7 @@
 import { useState, useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useAccessToken } from "@/lib/access-token";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Bar,
@@ -116,8 +116,7 @@ export function AdminDashboardPage({
   chartFilters: AdminDashboardChartParams;
 }) {
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken;
+  const accessToken = useAccessToken();
   const [filtersOpen, setFiltersOpen] = useState(hasActiveFilters(filters, chartFilters));
   const enabled = Boolean(accessToken);
   const overviewQuery = useQuery({

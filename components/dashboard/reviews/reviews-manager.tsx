@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useAccessToken } from "@/lib/access-token";
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Eye, MessageSquareText, Star, Trash2, X } from "lucide-react";
 import { useState } from "react";
@@ -41,8 +41,7 @@ export function ReviewsManager({
 }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken;
+  const accessToken = useAccessToken();
   const reviewsQuery = useQuery({
     queryKey: ["admin-reviews", lang, status, page],
     queryFn: () =>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useAccessToken } from "@/lib/access-token";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -59,8 +59,7 @@ export function NotificationBell({
   dict: Dictionary["dashboard"]["header"];
 }) {
   const router = useRouter();
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken;
+  const accessToken = useAccessToken();
   const queryClient = useQueryClient();
 
   const unreadCountQuery = useQuery({

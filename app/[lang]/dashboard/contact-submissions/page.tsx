@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { getDictionary, hasLocale } from "@/app/[lang]/dictionaries";
 import { ContactSubmissionsManager } from "@/components/dashboard/contact-submissions/contact-submissions-manager";
 import { adminContactSubmissionsApi } from "@/lib/api/admin-contact-submissions-client";
@@ -71,7 +71,7 @@ export default async function ContactSubmissionsPage({
   if (!hasLocale(lang)) notFound();
 
   const locale = lang as Locale;
-  const session = await auth();
+  const session = await getSession();
   if (!session?.accessToken || session.user.userType !== "ADMIN") {
     redirect(`/${locale}/login`);
   }

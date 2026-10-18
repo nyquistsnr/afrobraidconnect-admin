@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useAccessToken } from "@/lib/access-token";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { UserCheck, UserX, Users } from "lucide-react";
 import { getDictionary } from "@/app/[lang]/dictionaries";
@@ -40,18 +40,18 @@ const emptyPagination = (page: number): PaginationMeta => ({
 
 export function UsersDashboardClient({
   locale,
-  dict,
+  usersDict,
+  errorsDict,
   page,
   section,
 }: {
   locale: Locale;
-  dict: Dictionary;
+  usersDict: Dictionary["dashboard"]["users"];
+  errorsDict: Dictionary["common"]["errors"];
   page: number;
   section: UserDirectorySection;
 }) {
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken;
-  const usersDict = dict.dashboard.users;
+  const accessToken = useAccessToken();
   const pageDict = usersDict.pages[section];
   const statsDict = usersDict.stats;
   const isInvites = section === "invites";
@@ -139,7 +139,7 @@ export function UsersDashboardClient({
             <InviteAdminModal
               accessToken={accessToken!}
               lang={locale}
-              errorsDict={dict.common.errors}
+              errorsDict={errorsDict}
               dict={usersDict?.inviteAdmin || {}}
             />
           </div>
@@ -148,7 +148,7 @@ export function UsersDashboardClient({
 
       {listQuery.isError || statsQuery.isError ? (
         <div className="border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
-          {dict.common.errors?.generic || "Could not load this data."}
+          {errorsDict?.generic || "Could not load this data."}
         </div>
       ) : null}
 
@@ -182,7 +182,7 @@ export function UsersDashboardClient({
           users={users}
           accessToken={accessToken ?? ""}
           lang={locale}
-          errorsDict={dict.common.errors}
+          errorsDict={errorsDict}
           dict={usersDict?.table || {}}
           isLoading={listQuery.isLoading}
           isFetching={listQuery.isFetching}

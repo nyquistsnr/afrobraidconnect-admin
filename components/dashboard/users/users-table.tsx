@@ -50,7 +50,6 @@ export function UsersTable({
       toast.success(response.status_label || "User suspended successfully.");
       setSuspendModalOpen(false);
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
-      router.refresh();
     },
     onError: (error: unknown) => {
       toast.error(getAuthErrorMessage(errorCode(error), errorsDict));
@@ -64,7 +63,6 @@ export function UsersTable({
     onSuccess: (response) => {
       toast.success(response.status_label || "User unsuspended successfully.");
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
-      router.refresh();
     },
     onError: (error: unknown) => {
       toast.error(getAuthErrorMessage(errorCode(error), errorsDict));

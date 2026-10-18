@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import { getAdminPaymentsDict } from "@/components/dashboard/admin-commerce/admin-dictionaries";
 import { extractPagination } from "@/components/dashboard/admin-commerce/formatters";
@@ -71,7 +71,7 @@ export default async function AdminPaymentsPage({
 
   const locale = lang as Locale;
   const dict = getAdminPaymentsDict(locale);
-  const session = await auth();
+  const session = await getSession();
   if (!session?.accessToken || session.user.userType !== "ADMIN") {
     redirect(`/${locale}/login`);
   }

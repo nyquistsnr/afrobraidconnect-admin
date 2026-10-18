@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/auth";
+import { getSession } from "@/lib/session";
 import { hasLocale } from "@/app/[lang]/dictionaries";
 import {
   chartParamsFromListParams,
@@ -41,7 +41,7 @@ export async function renderScopedBookingsPage({
   if (!hasLocale(lang)) notFound();
 
   const locale = lang as Locale;
-  const session = await auth();
+  const session = await getSession();
   if (!session?.accessToken || session.user.userType !== "ADMIN") {
     redirect(`/${locale}/login`);
   }
@@ -72,6 +72,8 @@ export async function renderScopedBookingsPage({
   let onboardingLoadError = false;
   let chartsLoadError = false;
 
+  // The four loads are independent, so run them concurrently rather than as 4 sequential round-trips.
+  const loadBookings = (async () => {
   try {
     const response =
       scopeKind === "relationship" && braiderId && customerId
@@ -108,7 +110,9 @@ export async function renderScopedBookingsPage({
       error instanceof Error ? error.message : error
     );
   }
+  })();
 
+  const loadStats = (async () => {
   try {
     stats =
       scopeKind === "relationship" && braiderId && customerId
@@ -141,7 +145,9 @@ export async function renderScopedBookingsPage({
       error instanceof Error ? error.message : error
     );
   }
+  })();
 
+  const loadOnboarding = (async () => {
   if (braiderId) {
     try {
       onboarding = await adminBraidersApi.getOnboarding(
@@ -157,7 +163,9 @@ export async function renderScopedBookingsPage({
       );
     }
   }
+  })();
 
+  const loadCharts = (async () => {
   try {
     const chartResult = await fetchScopedCharts({
       accessToken: session.accessToken,
@@ -176,6 +184,9 @@ export async function renderScopedBookingsPage({
       error instanceof Error ? error.message : error
     );
   }
+  })();
+
+  await Promise.all([loadBookings, loadStats, loadOnboarding, loadCharts]);
 
   return (
     <ScopedBookingsPage
