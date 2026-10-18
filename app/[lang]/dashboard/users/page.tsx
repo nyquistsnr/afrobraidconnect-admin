@@ -1,12 +1,14 @@
-import { getDictionary } from "@/app/[lang]/dictionaries";
-import { type Locale } from "@/lib/i18n";
-import { UsersDashboardClient } from "@/components/dashboard/users/users-dashboard-client";
+import { redirect } from "next/navigation";
 
-export const metadata = {
-  title: "User Management - Admin",
+const SECTION_BY_USER_TYPE: Record<string, string> = {
+  ADMIN: "staff",
+  INVITES: "invites",
+  CUSTOMER: "customers",
+  BRAIDER: "braiders",
 };
 
-export default async function UsersDashboardPage({
+// The old combined Users page was split into Staff / Invites / Customers / Braiders; keep old links working.
+export default async function UsersRedirectPage({
   params,
   searchParams,
 }: {
@@ -14,18 +16,7 @@ export default async function UsersDashboardPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { lang } = await params;
-  const locale = lang as Locale;
-  const resolvedSearchParams = await searchParams;
-  const dict = await getDictionary(locale);
-  const page = typeof resolvedSearchParams.page === "string" ? parseInt(resolvedSearchParams.page, 10) : 1;
-  const userType = typeof resolvedSearchParams.user_type === "string" ? resolvedSearchParams.user_type : undefined;
-
-  return (
-    <UsersDashboardClient
-      locale={locale}
-      dict={dict}
-      page={Number.isFinite(page) && page > 0 ? page : 1}
-      userType={userType}
-    />
-  );
+  const { user_type: userType } = await searchParams;
+  const section = (typeof userType === "string" && SECTION_BY_USER_TYPE[userType]) || "staff";
+  redirect(`/${lang}/dashboard/${section}`);
 }

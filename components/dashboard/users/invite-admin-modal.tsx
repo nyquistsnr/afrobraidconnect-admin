@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Mail, Plus } from "lucide-react";
 import { authApi } from "@/lib/api/auth-client";
@@ -23,6 +23,7 @@ export function InviteAdminModal({
   dict: any;
 }) {
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const inviteMutation = useMutation({
     mutationFn: async (email: string) => {
@@ -30,6 +31,7 @@ export function InviteAdminModal({
     },
     onSuccess: (data) => {
       toast.success(data.message || dict.success);
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
       setOpen(false);
     },
     onError: (error: any) => {

@@ -330,7 +330,11 @@
       "platformSettings": "Paramètres de plateforme",
       "chatReports": "Signalements chat",
       "contactSubmissions": "Contact",
-      "reviews": "Avis"
+      "reviews": "Avis",
+      "staff": "Équipe",
+      "invites": "Invitations",
+      "customers": "Clients",
+      "braiders": "Coiffeurs"
     },
     "styleCatalog": {
       "eyebrow": "Gestion du catalogue",
@@ -871,6 +875,31 @@
           "EXPIRED": "Expiré",
           "REVOKED": "Révoqué"
         }
+      },
+      "pages": {
+        "staff": {
+          "title": "Équipe",
+          "description": "Administrateurs qui gèrent la plateforme."
+        },
+        "invites": {
+          "title": "Invitations",
+          "description": "Invitations d'administrateur envoyées et leur statut."
+        },
+        "customers": {
+          "title": "Clients",
+          "description": "Clients qui réservent des services de tressage."
+        },
+        "braiders": {
+          "title": "Coiffeurs",
+          "description": "Coiffeurs proposant leurs services sur la plateforme."
+        }
+      },
+      "stats": {
+        "total": "Total",
+        "active": "Actifs",
+        "inactive": "Inactifs",
+        "invitesActiveHint": "En attente d'acceptation",
+        "invitesInactiveHint": "Acceptées, expirées ou révoquées"
       }
     }
   },

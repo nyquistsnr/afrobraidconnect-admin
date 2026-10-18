@@ -1,11 +1,16 @@
 "use client";
 
-import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { UserCheck, UserX, Users } from "lucide-react";
 import { getDictionary } from "@/app/[lang]/dictionaries";
 import { adminUsersApi } from "@/lib/api/admin-users-client";
-import type { AdminInviteResponse, AdminUserResponse, PaginationMeta } from "@/lib/api/types";
+import type {
+  AdminInviteResponse,
+  AdminUserResponse,
+  AdminUserStatsResponse,
+  PaginationMeta,
+} from "@/lib/api/types";
 import type { Locale } from "@/lib/i18n";
 import { InviteAdminModal } from "@/components/dashboard/users/invite-admin-modal";
 import { InvitesTable } from "@/components/dashboard/users/invites-table";
@@ -14,9 +19,19 @@ import { UsersTable } from "@/components/dashboard/users/users-table";
 
 type Dictionary = Awaited<ReturnType<typeof getDictionary>>;
 
+export type UserDirectorySection = "staff" | "invites" | "customers" | "braiders";
+
+const USER_TYPE_BY_SECTION: Record<Exclude<UserDirectorySection, "invites">, string> = {
+  staff: "ADMIN",
+  customers: "CUSTOMER",
+  braiders: "BRAIDER",
+};
+
+const PAGE_SIZE = 10;
+
 const emptyPagination = (page: number): PaginationMeta => ({
   page,
-  page_size: 10,
+  page_size: PAGE_SIZE,
   total_items: 0,
   total_pages: 0,
   has_next: false,
@@ -27,21 +42,27 @@ export function UsersDashboardClient({
   locale,
   dict,
   page,
-  userType,
+  section,
 }: {
   locale: Locale;
   dict: Dictionary;
   page: number;
-  userType?: string;
+  section: UserDirectorySection;
 }) {
   const { data: session } = useSession();
   const accessToken = session?.accessToken;
   const usersDict = dict.dashboard.users;
+  const pageDict = usersDict.pages[section];
+  const statsDict = usersDict.stats;
+  const isInvites = section === "invites";
+  const userType = isInvites ? undefined : USER_TYPE_BY_SECTION[section];
+
+  // Keys share the "admin-users" prefix so suspend/invite mutations can invalidate lists and stats together.
   const listQuery = useQuery({
-    queryKey: ["admin-users", locale, page, userType ?? ""],
+    queryKey: ["admin-users", "list", locale, section, page],
     queryFn: async () => {
-      if (userType === "INVITES") {
-        const response = await adminUsersApi.getInvites(accessToken!, locale, page, 10);
+      if (isInvites) {
+        const response = await adminUsersApi.getInvites(accessToken!, locale, page, PAGE_SIZE);
         return {
           users: [] as AdminUserResponse[],
           invites: response.items,
@@ -51,7 +72,7 @@ export function UsersDashboardClient({
 
       const response = await adminUsersApi.getUsers(accessToken!, locale, {
         page,
-        page_size: 10,
+        page_size: PAGE_SIZE,
         user_type: userType,
       });
       return {
@@ -64,22 +85,44 @@ export function UsersDashboardClient({
     placeholderData: keepPreviousData,
   });
 
+  const statsQuery = useQuery<AdminUserStatsResponse>({
+    queryKey: ["admin-users", "stats", locale, section],
+    queryFn: () =>
+      isInvites
+        ? adminUsersApi.getInviteStats(accessToken!, locale)
+        : adminUsersApi.getUserStats(accessToken!, locale, userType),
+    enabled: Boolean(accessToken),
+  });
+
   const users = listQuery.data?.users ?? [];
   const invites = listQuery.data?.invites ?? [];
   const pagination = listQuery.data?.pagination ?? emptyPagination(page);
-  const tabs = [
-    { label: usersDict?.tabs?.all || "All", value: "" },
-    { label: usersDict?.tabs?.admin || "Admin", value: "ADMIN" },
-    { label: usersDict?.tabs?.customer || "Customer", value: "CUSTOMER" },
-    { label: usersDict?.tabs?.braider || "Braider", value: "BRAIDER" },
-    { label: usersDict?.tabs?.invites || "Invites", value: "INVITES" },
-  ];
 
   const visibleRows = users.length > 0 || invites.length > 0;
   const summary = (usersDict?.pagination?.summary || "Showing {start} to {end} of {total} results")
     .replace("{start}", String((pagination.page - 1) * pagination.page_size + (visibleRows ? 1 : 0)))
     .replace("{end}", String(Math.min(pagination.page * pagination.page_size, pagination.total_items)))
     .replace("{total}", String(pagination.total_items));
+
+  const stats = [
+    { label: statsDict.total, value: statsQuery.data?.total, icon: Users, tone: "bg-brand/10 text-brand" },
+    {
+      label: statsDict.active,
+      value: statsQuery.data?.active,
+      icon: UserCheck,
+      tone: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+      hint: isInvites ? statsDict.invitesActiveHint : undefined,
+    },
+    {
+      label: statsDict.inactive,
+      value: statsQuery.data?.inactive,
+      icon: UserX,
+      tone: "bg-red-500/10 text-red-600 dark:text-red-400",
+      hint: isInvites ? statsDict.invitesInactiveHint : undefined,
+    },
+  ];
+
+  const showInviteButton = Boolean(accessToken) && (section === "staff" || isInvites);
 
   return (
     <div className="space-y-6">
@@ -88,54 +131,51 @@ export function UsersDashboardClient({
           <p className="text-sm font-medium text-brand">
             {usersDict?.eyebrow || "User management"}
           </p>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            {usersDict?.title || dict.dashboard.sidebar.users || "User Management"}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            {dict.common.usersDescription || "Manage customers, braiders, and other admins."}
-          </p>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">{pageDict.title}</h1>
+          <p className="text-sm text-muted-foreground">{pageDict.description}</p>
         </div>
-        <div className="flex items-center gap-2">
-          {accessToken ? (
+        {showInviteButton ? (
+          <div className="flex items-center gap-2">
             <InviteAdminModal
-              accessToken={accessToken}
+              accessToken={accessToken!}
               lang={locale}
               errorsDict={dict.common.errors}
               dict={usersDict?.inviteAdmin || {}}
             />
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
 
-      {listQuery.isError ? (
+      {listQuery.isError || statsQuery.isError ? (
         <div className="border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
           {dict.common.errors?.generic || "Could not load this data."}
         </div>
       ) : null}
 
-      <div className="border-b border-border">
-        <nav className="-mb-px flex space-x-8 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]" aria-label="Tabs">
-          {tabs.map((tab) => {
-            const isActive = (userType || "") === tab.value;
-            return (
-              <Link
-                key={tab.label}
-                href={tab.value ? `/${locale}/dashboard/users?user_type=${tab.value}` : `/${locale}/dashboard/users`}
-                className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${
-                  isActive
-                    ? "border-brand text-brand"
-                    : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
-                }`}
-                aria-current={isActive ? "page" : undefined}
-              >
-                {tab.label}
-              </Link>
-            );
-          })}
-        </nav>
+      <div className="grid gap-4 sm:grid-cols-3">
+        {stats.map(({ label, value, icon: Icon, tone, hint }) => (
+          <div key={label} className="border border-border bg-background p-4">
+            <div className="flex items-center gap-3">
+              <div className={`p-2 ${tone}`}>
+                <Icon className="size-4" />
+              </div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                {label}
+              </p>
+            </div>
+            {statsQuery.isLoading ? (
+              <div className="mt-4 h-8 w-16 animate-pulse rounded bg-border/60" />
+            ) : (
+              <p className="mt-4 text-2xl font-bold text-foreground">
+                {(value ?? 0).toLocaleString(locale)}
+              </p>
+            )}
+            {hint ? <p className="mt-1 text-xs text-muted-foreground">{hint}</p> : null}
+          </div>
+        ))}
       </div>
 
-      {userType === "INVITES" ? (
+      {isInvites ? (
         <InvitesTable invites={invites} dict={usersDict?.invitesTable || {}} />
       ) : (
         <UsersTable

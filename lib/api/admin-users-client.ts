@@ -1,4 +1,11 @@
-import type { AdminUserResponse, SuspendUserRequest, PaginatedData, AdminInviteResponse } from "@/lib/api/types";
+import type {
+  AdminUserResponse,
+  SuspendUserRequest,
+  PaginatedData,
+  AdminInviteResponse,
+  AdminUserStatsResponse,
+  AdminInviteStatsResponse,
+} from "@/lib/api/types";
 import { apiFetch, apiFetchWithEnvelope, ApiError } from "@/lib/api/http";
 import type { Locale } from "@/lib/i18n";
 
@@ -28,6 +35,22 @@ export const adminUsersApi = {
       lang,
     });
   },
+
+  getUserStats: (accessToken: string, lang: Locale, userType?: string) => {
+    const qs = userType ? `?user_type=${encodeURIComponent(userType)}` : "";
+    return apiFetch<AdminUserStatsResponse>(`${ADMIN_USERS_PATH}/stats${qs}`, {
+      method: "GET",
+      accessToken,
+      lang,
+    });
+  },
+
+  getInviteStats: (accessToken: string, lang: Locale) =>
+    apiFetch<AdminInviteStatsResponse>("/admin/auth/invites/stats", {
+      method: "GET",
+      accessToken,
+      lang,
+    }),
 
   getInvites: (accessToken: string, lang: Locale, page = 1, page_size = 20) => {
     const searchParams = new URLSearchParams();

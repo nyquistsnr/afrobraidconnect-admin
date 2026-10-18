@@ -330,7 +330,11 @@
       "platformSettings": "Plattformeinstellungen",
       "chatReports": "Chat-Meldungen",
       "contactSubmissions": "Kontakt",
-      "reviews": "Bewertungen"
+      "reviews": "Bewertungen",
+      "staff": "Team",
+      "invites": "Einladungen",
+      "customers": "Kunden",
+      "braiders": "Flechter"
     },
     "styleCatalog": {
       "eyebrow": "Katalogverwaltung",
@@ -871,6 +875,31 @@
           "EXPIRED": "Abgelaufen",
           "REVOKED": "Widerrufen"
         }
+      },
+      "pages": {
+        "staff": {
+          "title": "Team",
+          "description": "Admins, die die Plattform verwalten."
+        },
+        "invites": {
+          "title": "Einladungen",
+          "description": "Versendete Admin-Einladungen und ihr Status."
+        },
+        "customers": {
+          "title": "Kunden",
+          "description": "Kunden, die Flechtdienste buchen."
+        },
+        "braiders": {
+          "title": "Flechter",
+          "description": "Flechter, die Dienste auf der Plattform anbieten."
+        }
+      },
+      "stats": {
+        "total": "Gesamt",
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "invitesActiveHint": "Warten auf Annahme",
+        "invitesInactiveHint": "Angenommen, abgelaufen oder widerrufen"
       }
     }
   },

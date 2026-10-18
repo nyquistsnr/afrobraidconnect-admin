@@ -163,6 +163,18 @@ export interface PaginationMeta {
   has_previous: boolean;
 }
 
+export interface AdminUserStatsResponse {
+  total: number;
+  active: number;
+  inactive: number;
+}
+
+export interface AdminInviteStatsResponse extends AdminUserStatsResponse {
+  accepted: number;
+  expired: number;
+  revoked: number;
+}
+
 export interface PaginatedData<T> {
   items: T[];
   pagination: PaginationMeta;

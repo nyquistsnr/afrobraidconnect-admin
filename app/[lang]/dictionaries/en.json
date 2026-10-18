@@ -330,7 +330,11 @@
       "platformSettings": "Platform Settings",
       "chatReports": "Chat Reports",
       "contactSubmissions": "Contact Us",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "staff": "Staff",
+      "invites": "Invites",
+      "customers": "Customers",
+      "braiders": "Braiders"
     },
     "styleCatalog": {
       "eyebrow": "Catalog management",
@@ -871,6 +875,31 @@
           "EXPIRED": "Expired",
           "REVOKED": "Revoked"
         }
+      },
+      "pages": {
+        "staff": {
+          "title": "Staff",
+          "description": "Admins who can manage the platform."
+        },
+        "invites": {
+          "title": "Invites",
+          "description": "Admin invitations you've sent and where they stand."
+        },
+        "customers": {
+          "title": "Customers",
+          "description": "Customers who book braiding services."
+        },
+        "braiders": {
+          "title": "Braiders",
+          "description": "Braiders offering services on the platform."
+        }
+      },
+      "stats": {
+        "total": "Total",
+        "active": "Active",
+        "inactive": "Inactive",
+        "invitesActiveHint": "Awaiting acceptance",
+        "invitesInactiveHint": "Accepted, expired or revoked"
       }
     }
   },

@@ -8,7 +8,10 @@ import {
   LayoutDashboard, 
   LogOut, 
   X,
-  Users,
+  ShieldCheck,
+  MailPlus,
+  UserRound,
+  Sparkles,
   Scissors,
   Settings2,
   MessageSquareWarning,
@@ -33,7 +36,10 @@ export function Sidebar({
 }: {
   lang: Locale;
   dict: Dictionary["dashboard"]["sidebar"] & { 
-    users?: string; 
+    staff?: string;
+    invites?: string;
+    customers?: string;
+    braiders?: string;
     bookings?: string;
     payments?: string;
     payment?: string;
@@ -74,10 +80,28 @@ export function Sidebar({
       active: pathname === `/${lang}/dashboard`,
     },
     {
-      href: `/${lang}/dashboard/users`,
-      label: dict.users || "Users",
-      icon: Users,
-      active: pathname === `/${lang}/dashboard/users`,
+      href: `/${lang}/dashboard/staff`,
+      label: dict.staff || "Staff",
+      icon: ShieldCheck,
+      active: pathname === `/${lang}/dashboard/staff`,
+    },
+    {
+      href: `/${lang}/dashboard/invites`,
+      label: dict.invites || "Invites",
+      icon: MailPlus,
+      active: pathname === `/${lang}/dashboard/invites`,
+    },
+    {
+      href: `/${lang}/dashboard/customers`,
+      label: dict.customers || "Customers",
+      icon: UserRound,
+      active: pathname === `/${lang}/dashboard/customers`,
+    },
+    {
+      href: `/${lang}/dashboard/braiders`,
+      label: dict.braiders || "Braiders",
+      icon: Sparkles,
+      active: pathname === `/${lang}/dashboard/braiders`,
     },
     {
       href: `/${lang}/dashboard/bookings`,

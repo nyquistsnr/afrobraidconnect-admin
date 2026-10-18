@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { CalendarCheck, MoreHorizontal, ShieldAlert, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -38,6 +38,7 @@ export function UsersTable({
 }) {
   const showSkeleton = isLoading || isFetching;
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [suspendModalOpen, setSuspendModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   
@@ -48,6 +49,7 @@ export function UsersTable({
     onSuccess: (response) => {
       toast.success(response.status_label || "User suspended successfully.");
       setSuspendModalOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
       router.refresh();
     },
     onError: (error: unknown) => {
@@ -61,6 +63,7 @@ export function UsersTable({
     },
     onSuccess: (response) => {
       toast.success(response.status_label || "User unsuspended successfully.");
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
       router.refresh();
     },
     onError: (error: unknown) => {
